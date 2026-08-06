@@ -1,0 +1,11 @@
+{
+  "name": "BTREE AX LAB",
+  "short_name": "BTREE AX LAB",
+  "description": "산업 현장 AX·Edge AI·디지털트윈 설계 및 실증",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07111F",
+  "theme_color": "#07111F",
+  "lang": "ko",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
