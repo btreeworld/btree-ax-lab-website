@@ -1,0 +1,64 @@
+{
+  "Header": {
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "logoHome": "Go to {brand} homepage",
+    "primaryNav": "Main menu",
+    "mobileNav": "Mobile main menu"
+  },
+  "LanguageSwitcher": {
+    "label": "Select language"
+  },
+  "Common": {
+    "required": "Required",
+    "optional": "Optional",
+    "selectPlaceholder": "Select",
+    "home": "Home",
+    "breadcrumbLabel": "You are here",
+    "note": "Note: "
+  },
+  "Footer": {
+    "companyInfoTitle": "Company Information",
+    "disclaimerTitle": "Disclaimers",
+    "copyright": "© {year} {legalName}. All rights reserved."
+  },
+  "NotFound": {
+    "eyebrow": "404",
+    "title": "We couldn't find that page",
+    "description": "The address may have changed or the page may have been removed. Try one of the links below.",
+    "goHome": "Go to homepage"
+  },
+  "Cards": {
+    "problem": "Problem",
+    "approach": "Approach",
+    "architecture": "Technical setup",
+    "result": "Result",
+    "deliverables": "Key deliverables",
+    "viewDetails": "View {name} details"
+  },
+  "Form": {
+    "requiredSection": "Required information",
+    "optionalSection": "Optional information",
+    "company": "Company",
+    "name": "Contact name",
+    "email": "Email",
+    "phone": "Phone",
+    "industry": "Industry",
+    "service": "Service of interest",
+    "problem": "Problem you're solving",
+    "problemHint": "Tell us your current situation, what you'd like to improve, and any existing equipment for a more accurate response.",
+    "website": "Company website",
+    "region": "Site location",
+    "budget": "Estimated budget",
+    "timeline": "Desired start time",
+    "existingSystem": "Existing equipment / systems",
+    "existingSystemHint": "Let us know what you currently operate — cameras, sensors, PLCs, monitoring systems, and so on.",
+    "governmentProgram": "We're considering a government support program.",
+    "honeypotLabel": "Leave this field empty",
+    "consentPrivacyLink": "View privacy policy",
+    "submitting": "Sending…",
+    "newInquiry": "Start a new inquiry",
+    "errorSummaryPrefix": " item(s) need your attention."
+  }
+}

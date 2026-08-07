@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
 import { cn } from '@/components/ui/cn';
@@ -36,11 +37,12 @@ export function Badge({
 }
 
 /** 검증 전 콘텐츠를 명시하는 주석 — 마스터 문서 23장 콘텐츠 신뢰성 정책 */
-export function PlaceholderNote({ children }: { children: ReactNode }) {
+export async function PlaceholderNote({ children }: { children: ReactNode }) {
+  const t = await getTranslations('Common');
   return (
     <p className="text-small text-ink-secondary-dark/80">
       <span aria-hidden="true">※ </span>
-      <span className="sr-only">참고: </span>
+      <span className="sr-only">{t('note')}</span>
       {children}
     </p>
   );

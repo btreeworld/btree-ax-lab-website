@@ -1,92 +1,193 @@
 /**
  * 사이트 전역 정보 — 마스터 문서 2장(브랜드), 6장(내비게이션), 18장(SEO)
+ * 언어별 콘텐츠는 Record<Locale, T> 로 관리한다. 새 언어를 추가하려면
+ * 이 파일들의 각 record에 해당 locale 키만 추가하면 된다.
  *
  * ⚠️ TODO 로 표시된 값은 마스터 문서 28장 "오픈 전 반드시 확정할 내용" 항목이다.
- *    임의의 사실을 만들어 채우지 않고 placeholder 를 유지한다.
+ *    임의의 사실을 만들어 채우지 않고 placeholder를 유지한다.
  */
+import type { Locale } from '@/i18n/locales';
+
+type FactStatus = 'verified' | 'placeholder';
+type LegalField = { label: string; value: string; status: FactStatus };
 
 export const site = {
   brand: 'BTREE AX LAB',
-  legalName: '주식회사 비트리',
+  legalName: { ko: '주식회사 비트리', en: 'BTREE Inc.' } satisfies Record<Locale, string>,
   legalNameEn: 'BTREE Inc.',
   byline: 'by BTREE Inc.',
   tagline: 'Industrial AI · Edge AI · Digital Twin',
   sloganKo: '현장을 이해하는 AX 설계',
   sloganEn: 'Designing Intelligence for the Field',
-  brandRelation:
-    'BTREE AX LAB은 주식회사 비트리가 운영하는 산업 현장 AX·Edge AI·디지털트윈 전문 브랜드입니다.',
+  brandRelation: {
+    ko: 'BTREE AX LAB은 주식회사 비트리가 운영하는 산업 현장 AX·Edge AI·디지털트윈 전문 브랜드입니다.',
+    en: 'BTREE AX LAB is a specialist brand for industrial AX, Edge AI, and digital twins, operated by BTREE Inc.',
+  } satisfies Record<Locale, string>,
   /** 도메인 확정 전까지 env 값을 우선 사용한다. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://btree-ax-lab.example.com',
-  locale: 'ko_KR',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://btreeworld.net',
+  locales: { ko: 'ko_KR', en: 'en_US' } satisfies Record<Locale, string>,
 } as const;
 
-/** 법적 정보 — 마스터 문서 6.2 Footer. 확인 전까지 placeholder 를 유지한다. */
-export const legalInfo = {
-  company: { label: '상호', value: '주식회사 비트리', status: 'verified' as const },
-  ceo: { label: '대표자', value: '백성은', status: 'verified' as const },
-  businessNumber: { label: '사업자등록번호', value: '[확인 후 입력]', status: 'placeholder' as const },
-  address: { label: '주소', value: '[본점 이전 완료 후 입력]', status: 'placeholder' as const },
-  email: {
-    label: '대표 이메일',
-    value: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? '[확정 필요]',
-    status: 'placeholder' as const,
+/** 법적 정보 — 마스터 문서 6.2 Footer. 확인 전까지 placeholder를 유지한다. */
+export const legalInfo: Record<Locale, Record<'company' | 'ceo' | 'businessNumber' | 'address' | 'email' | 'phone', LegalField>> = {
+  ko: {
+    company: { label: '상호', value: '주식회사 비트리', status: 'verified' },
+    ceo: { label: '대표자', value: '백성은', status: 'verified' },
+    businessNumber: { label: '사업자등록번호', value: '[확인 후 입력]', status: 'placeholder' },
+    address: { label: '주소', value: '[본점 이전 완료 후 입력]', status: 'placeholder' },
+    email: {
+      label: '대표 이메일',
+      value: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? '[확정 필요]',
+      status: 'placeholder',
+    },
+    phone: {
+      label: '대표 전화',
+      value: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? '[확정 필요]',
+      status: 'placeholder',
+    },
   },
-  phone: {
-    label: '대표 전화',
-    value: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? '[확정 필요]',
-    status: 'placeholder' as const,
+  en: {
+    company: { label: 'Company', value: 'BTREE Inc.', status: 'verified' },
+    ceo: { label: 'CEO', value: 'Baek Seongeun', status: 'verified' },
+    businessNumber: { label: 'Business registration no.', value: '[to be confirmed]', status: 'placeholder' },
+    address: { label: 'Address', value: '[to be confirmed after office relocation]', status: 'placeholder' },
+    email: {
+      label: 'Contact email',
+      value: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? '[to be confirmed]',
+      status: 'placeholder',
+    },
+    phone: {
+      label: 'Contact phone',
+      value: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? '[to be confirmed]',
+      status: 'placeholder',
+    },
   },
-} as const;
+};
 
-/** 전환 행동 — 마스터 문서 1.3. 모든 페이지에서 문구를 통일한다. */
-export const cta = {
-  primary: { label: '유료 AX 진단 신청', href: '/contact?service=ax-diagnosis' },
-  secondary: { label: '프로젝트 상담 요청', href: '/contact' },
-  services: { label: '서비스 살펴보기', href: '/services' },
-} as const;
+/** 전환 행동 — 마스터 문서 1.3. 모든 페이지에서 문구를 통일한다. href는 locale-agnostic(내부에서 로케일 접두사 자동 적용). */
+export const cta: Record<Locale, { primary: { label: string; href: string }; secondary: { label: string; href: string }; services: { label: string; href: string } }> = {
+  ko: {
+    primary: { label: '유료 AX 진단 신청', href: '/contact?service=ax-diagnosis' },
+    secondary: { label: '프로젝트 상담 요청', href: '/contact' },
+    services: { label: '서비스 살펴보기', href: '/services' },
+  },
+  en: {
+    primary: { label: 'Request a Paid AX Diagnosis', href: '/contact?service=ax-diagnosis' },
+    secondary: { label: 'Request a Project Consultation', href: '/contact' },
+    services: { label: 'Explore Services', href: '/services' },
+  },
+};
 
-export const navigation = [
-  { label: '서비스', href: '/services' },
-  { label: '적용 산업', href: '/industries' },
-  { label: '프로젝트 사례', href: '/cases' },
-  { label: '진행 절차', href: '/process' },
-  { label: '회사 소개', href: '/about' },
-] as const;
+export const navigation: Record<Locale, Array<{ label: string; href: string }>> = {
+  ko: [
+    { label: '서비스', href: '/services' },
+    { label: '적용 산업', href: '/industries' },
+    { label: '프로젝트 사례', href: '/cases' },
+    { label: '진행 절차', href: '/process' },
+    { label: '회사 소개', href: '/about' },
+  ],
+  en: [
+    { label: 'Services', href: '/services' },
+    { label: 'Industries', href: '/industries' },
+    { label: 'Case Work', href: '/cases' },
+    { label: 'Process', href: '/process' },
+    { label: 'About', href: '/about' },
+  ],
+};
 
-export const footerNav = {
-  services: {
-    title: '서비스',
-    links: [
-      { label: '산업 현장 AX 진단', href: '/services#ax-diagnosis' },
-      { label: 'AX·디지털트윈 구축 설계', href: '/services#system-design' },
-      { label: 'PoC 실증', href: '/services#poc' },
-      { label: '월간 기술자문', href: '/services#advisory' },
-      { label: '정부과제 기술기획', href: '/services#rnd-planning' },
-    ],
+export const mobileTrackRecordLink: Record<Locale, { label: string; href: string }> = {
+  ko: { label: '대표 및 수행이력', href: '/track-record' },
+  en: { label: 'Founder & Track Record', href: '/track-record' },
+};
+
+/** 브레드크럼 등에서 짧은 내비게이션 라벨이 필요할 때 사용한다. */
+export function navLabel(locale: Locale, href: string): string {
+  const fromMain = navigation[locale].find((item) => item.href === href)?.label;
+  if (fromMain) return fromMain;
+  if (href === mobileTrackRecordLink[locale].href) return mobileTrackRecordLink[locale].label;
+  return href;
+}
+
+export const footerNav: Record<
+  Locale,
+  {
+    services: { title: string; links: Array<{ label: string; href: string }> };
+    company: { title: string; links: Array<{ label: string; href: string }> };
+    legal: { title: string; links: Array<{ label: string; href: string }> };
+  }
+> = {
+  ko: {
+    services: {
+      title: '서비스',
+      links: [
+        { label: '산업 현장 AX 진단', href: '/services#ax-diagnosis' },
+        { label: 'AX·디지털트윈 구축 설계', href: '/services#system-design' },
+        { label: 'PoC 실증', href: '/services#poc' },
+        { label: '월간 기술자문', href: '/services#advisory' },
+        { label: '정부과제 기술기획', href: '/services#rnd-planning' },
+      ],
+    },
+    company: {
+      title: '회사',
+      links: [
+        { label: '회사 소개', href: '/about' },
+        { label: '대표 및 수행이력', href: '/track-record' },
+        { label: '적용 산업', href: '/industries' },
+        { label: '프로젝트 사례', href: '/cases' },
+        { label: '진행 절차·가격', href: '/process' },
+      ],
+    },
+    legal: {
+      title: '법적 고지',
+      links: [
+        { label: '개인정보처리방침', href: '/privacy' },
+        { label: '이용약관', href: '/terms' },
+      ],
+    },
   },
-  company: {
-    title: '회사',
-    links: [
-      { label: '회사 소개', href: '/about' },
-      { label: '대표 및 수행이력', href: '/track-record' },
-      { label: '적용 산업', href: '/industries' },
-      { label: '프로젝트 사례', href: '/cases' },
-      { label: '진행 절차·가격', href: '/process' },
-    ],
+  en: {
+    services: {
+      title: 'Services',
+      links: [
+        { label: 'Industrial AX Diagnosis', href: '/services#ax-diagnosis' },
+        { label: 'AX & Digital Twin Design', href: '/services#system-design' },
+        { label: 'PoC Validation', href: '/services#poc' },
+        { label: 'Monthly Advisory', href: '/services#advisory' },
+        { label: 'Government R&D Planning', href: '/services#rnd-planning' },
+      ],
+    },
+    company: {
+      title: 'Company',
+      links: [
+        { label: 'About', href: '/about' },
+        { label: 'Founder & Track Record', href: '/track-record' },
+        { label: 'Industries', href: '/industries' },
+        { label: 'Case Work', href: '/cases' },
+        { label: 'Process & Pricing', href: '/process' },
+      ],
+    },
+    legal: {
+      title: 'Legal',
+      links: [
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Terms of Service', href: '/terms' },
+      ],
+    },
   },
-  legal: {
-    title: '법적 고지',
-    links: [
-      { label: '개인정보처리방침', href: '/privacy' },
-      { label: '이용약관', href: '/terms' },
-    ],
-  },
-} as const;
+};
 
 /** 면책 문구 — 마스터 문서 21.2 */
-export const disclaimers = [
-  '기술 성능은 현장 조건과 데이터에 따라 달라질 수 있습니다.',
-  '정부지원사업 선정은 보장하지 않습니다.',
-  '사례 수치는 검증된 결과만 표시합니다.',
-  '견적은 사전 진단과 범위 확정 후 변경될 수 있습니다.',
-] as const;
+export const disclaimers: Record<Locale, string[]> = {
+  ko: [
+    '기술 성능은 현장 조건과 데이터에 따라 달라질 수 있습니다.',
+    '정부지원사업 선정은 보장하지 않습니다.',
+    '사례 수치는 검증된 결과만 표시합니다.',
+    '견적은 사전 진단과 범위 확정 후 변경될 수 있습니다.',
+  ],
+  en: [
+    'Technical performance depends on site conditions and available data.',
+    'Government support program selection is not guaranteed.',
+    'Case results shown are limited to verified outcomes.',
+    'Quotes may change after the initial diagnosis and scope confirmation.',
+  ],
+};

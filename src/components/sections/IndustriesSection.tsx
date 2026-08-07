@@ -1,20 +1,22 @@
+import { getLocale } from 'next-intl/server';
+
 import { IndustryCard } from '@/components/cards/IndustryCard';
 import { Section, SectionHeader } from '@/components/ui/Section';
+import { homeSectionCopy } from '@/content/home';
 import { industries } from '@/content/industries';
+import type { Locale } from '@/i18n/locales';
 
 /** Section 05 — Industries (마스터 문서 7.5) */
-export function IndustriesSection() {
+export async function IndustriesSection() {
+  const locale = (await getLocale()) as Locale;
+  const copy = homeSectionCopy[locale].industries;
+
   return (
     <Section ariaLabelledby="industries-title" id="industries" tone="dark-alt">
-      <SectionHeader
-        description="같은 기술이라도 현장의 운영방식, 기존 설비, 인력 구조에 따라 필요한 구성이 달라집니다."
-        eyebrow="INDUSTRIES"
-        id="industries-title"
-        title="기술이 아니라 현장의 운영방식에 맞춥니다"
-      />
+      <SectionHeader description={copy.description} eyebrow={copy.eyebrow} id="industries-title" title={copy.title} />
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {industries.map((industry) => (
+        {industries[locale].map((industry) => (
           <IndustryCard industry={industry} key={industry.slug} />
         ))}
       </div>

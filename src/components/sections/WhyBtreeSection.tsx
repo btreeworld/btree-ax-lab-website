@@ -1,21 +1,21 @@
+import { getLocale } from 'next-intl/server';
+
 import { Icon } from '@/components/ui/Icon';
 import { Section, SectionHeader } from '@/components/ui/Section';
-import { differentiators } from '@/content/home';
+import { differentiators, homeSectionCopy } from '@/content/home';
+import type { Locale } from '@/i18n/locales';
 
 /** Section 06 — Why BTREE (마스터 문서 7.6) */
-export function WhyBtreeSection() {
+export async function WhyBtreeSection() {
+  const locale = (await getLocale()) as Locale;
+  const copy = homeSectionCopy[locale].why;
+
   return (
     <Section ariaLabelledby="why-title" id="why" tone="light">
-      <SectionHeader
-        description="컨설팅 보고서에서 멈추지도, 요구사항 없이 개발부터 시작하지도 않습니다."
-        eyebrow="WHY BTREE AX LAB"
-        id="why-title"
-        title="보고서와 개발 사이를 연결합니다"
-        tone="light"
-      />
+      <SectionHeader description={copy.description} eyebrow={copy.eyebrow} id="why-title" title={copy.title} tone="light" />
 
       <ul className="grid gap-x-10 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
-        {differentiators.map((item, index) => (
+        {differentiators[locale].map((item, index) => (
           <li className="flex gap-4" key={item.title}>
             <span
               aria-hidden="true"
@@ -25,9 +25,7 @@ export function WhyBtreeSection() {
             </span>
             <div>
               <h3 className="text-h4 text-ink-primary-light">
-                <span className="mr-2 font-display text-small text-accent-deep">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
+                <span className="mr-2 font-display text-small text-accent-deep">{String(index + 1).padStart(2, '0')}</span>
                 {item.title}
               </h3>
               <p className="mt-2 text-body text-ink-secondary-light">{item.description}</p>

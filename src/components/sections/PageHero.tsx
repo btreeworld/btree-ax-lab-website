@@ -1,9 +1,10 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 import { Container, Eyebrow } from '@/components/ui/Section';
+import { Link } from '@/i18n/navigation';
 
 /** 하위 페이지 공통 Hero + Breadcrumb (마스터 문서 15.1 Breadcrumb / 18.4) */
-export function PageHero({
+export async function PageHero({
   eyebrow,
   title,
   description,
@@ -16,6 +17,7 @@ export function PageHero({
   breadcrumb: ReadonlyArray<{ name: string; path: string }>;
   children?: React.ReactNode;
 }) {
+  const t = await getTranslations('Common');
   const titleLines = Array.isArray(title) ? title : [title];
   const descriptionLines = Array.isArray(description) ? description : description ? [description] : [];
 
@@ -24,7 +26,7 @@ export function PageHero({
       <div aria-hidden="true" className="grid-overlay pointer-events-none absolute inset-0 opacity-50" />
 
       <Container className="relative">
-        <nav aria-label="현재 위치">
+        <nav aria-label={t('breadcrumbLabel')}>
           <ol className="flex flex-wrap items-center gap-2 text-small text-ink-secondary-dark">
             {breadcrumb.map((item, index) => (
               <li className="flex items-center gap-2" key={item.path}>

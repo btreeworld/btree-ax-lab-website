@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next';
 
 import { site } from '@/content/site';
+import { locales } from '@/i18n/locales';
+import { routing } from '@/i18n/routing';
 
 const routes: Array<{ path: string; priority: number; changeFrequency: 'weekly' | 'monthly' }> = [
   { path: '/', priority: 1, changeFrequency: 'weekly' },
@@ -15,13 +17,23 @@ const routes: Array<{ path: string; priority: number; changeFrequency: 'weekly' 
   { path: '/terms', priority: 0.3, changeFrequency: 'monthly' },
 ];
 
+function localizedPath(path: string, locale: (typeof locales)[number]): string {
+  if (locale === routing.defaultLocale) return path;
+  return path === '/' ? `/${locale}` : `/${locale}${path}`;
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
-  return routes.map((route) => ({
-    url: new URL(route.path, site.url).toString(),
-    lastModified,
-    changeFrequency: route.changeFrequency,
-    priority: route.priority,
-  }));
+  return routes.flatMap((route) =>
+    locales.map((locale) => ({
+      url: new URL(localizedPath(route.path, locale), site.url).toString(),
+      lastModified,
+      changeFrequency: route.changeFrequency,
+      priority: route.priority,
+      alternates: {
+        languages: Object.fromEntries(locales.map((l) => [l, new URL(localizedPath(route.path, l), site.url).toString()])),
+      },
+    })),
+  );
 }

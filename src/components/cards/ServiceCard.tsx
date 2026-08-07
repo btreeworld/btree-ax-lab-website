@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server';
+
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { TextLink } from '@/components/ui/TextLink';
 import type { Service } from '@/types';
@@ -12,7 +14,8 @@ const serviceIcons: Record<string, IconName> = {
   'rnd-planning': 'twin',
 };
 
-export function ServiceCard({ service, tone = 'dark' }: { service: Service; tone?: 'dark' | 'light' }) {
+export async function ServiceCard({ service, tone = 'dark' }: { service: Service; tone?: 'dark' | 'light' }) {
+  const t = await getTranslations('Cards');
   const dark = tone === 'dark';
   const deliverables = service.deliverables.slice(0, 3);
 
@@ -53,7 +56,7 @@ export function ServiceCard({ service, tone = 'dark' }: { service: Service; tone
             dark ? 'text-ink-secondary-dark/70' : 'text-ink-secondary-light/70'
           }`}
         >
-          대표 산출물
+          {t('deliverables')}
         </h4>
         <ul className="mt-3 flex flex-col gap-2">
           {deliverables.map((item) => (
@@ -101,7 +104,7 @@ export function ServiceCard({ service, tone = 'dark' }: { service: Service; tone
           href={`/services#${service.slug}`}
           tone={tone}
         >
-          {service.name} 상세보기
+          {t('viewDetails', { name: service.name })}
         </TextLink>
       </div>
     </article>

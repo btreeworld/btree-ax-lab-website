@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
+import { defaultLocale, isLocale } from '@/i18n/locales';
 import { sendAdminNotification, sendCustomerAcknowledgement } from '@/lib/email';
-import { contactSchema } from '@/lib/validation';
+import { buildContactSchema } from '@/lib/validation';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -66,7 +67,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, message: '잘못된 요청입니다.' }, { status: 400 });
   }
 
-  const parsed = contactSchema.safeParse(payload);
+  const rawLocale =
+    typeof payload === 'object' && payload !== null && 'locale' in payload
+      ? String((payload as { locale: unknown }).locale)
+      : '';
+  const requestLocale = isLocale(rawLocale) ? rawLocale : defaultLocale;
+
+  const parsed = buildContactSchema(requestLocale).safeParse(payload);
   if (!parsed.success) {
     return NextResponse.json(
       {

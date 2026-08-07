@@ -125,7 +125,9 @@ export type FaqItem = {
 
 export type ProcessStep = {
   step: string;
+  /** 항상 대문자 영단어로 표기하는 보조 라벨 — 두 언어 화면에서 동일하게 노출된다 (예: DIAGNOSE). */
   labelEn: string;
-  labelKo: string;
+  /** 현재 locale로 번역된 주 제목 (예: '현장 진단' / 'Diagnose'). */
+  label: string;
   description: string;
 };

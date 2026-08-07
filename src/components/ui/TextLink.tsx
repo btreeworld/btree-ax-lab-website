@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 import { cn } from '@/components/ui/cn';
+import { Link } from '@/i18n/navigation';
 import { trackEvent, type AnalyticsEvent, type AnalyticsPayload } from '@/lib/analytics';
 
 /**

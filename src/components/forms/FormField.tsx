@@ -18,6 +18,8 @@ export function FieldWrapper({
   id,
   label,
   required,
+  requiredLabel = 'Required',
+  optionalLabel = 'Optional',
   error,
   hint,
   children,
@@ -26,6 +28,8 @@ export function FieldWrapper({
   id: string;
   label: string;
   required?: boolean;
+  requiredLabel?: string;
+  optionalLabel?: string;
   error?: string;
   hint?: string;
   children: ReactNode;
@@ -36,11 +40,11 @@ export function FieldWrapper({
       <label className="text-small font-semibold text-ink-primary-light" htmlFor={id}>
         {label}
         {required ? (
-          <span className="ml-1 text-state-error" title="필수 입력">
-            *<span className="sr-only">필수</span>
+          <span className="ml-1 text-state-error" title={requiredLabel}>
+            *<span className="sr-only">{requiredLabel}</span>
           </span>
         ) : (
-          <span className="ml-1 text-ink-secondary-light">(선택)</span>
+          <span className="ml-1 text-ink-secondary-light">({optionalLabel})</span>
         )}
       </label>
       {children}

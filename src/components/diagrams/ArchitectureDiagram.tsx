@@ -1,5 +1,8 @@
+import { getLocale } from 'next-intl/server';
+
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { architectureLayers } from '@/content/home';
+import type { Locale } from '@/i18n/locales';
 
 /**
  * 아키텍처 다이어그램 — 마스터 문서 7.7
@@ -14,10 +17,13 @@ const layerIcons: Record<string, IconName> = {
   twin: 'twin',
 };
 
-export function ArchitectureDiagram() {
+export async function ArchitectureDiagram() {
+  const locale = (await getLocale()) as Locale;
+  const layers = architectureLayers[locale];
+
   return (
     <ol className="flex flex-col">
-      {architectureLayers.map((layer, index) => (
+      {layers.map((layer, index) => (
         <li key={layer.id}>
           <div className="group rounded-card border border-line-dark bg-bg-elevated/50 p-6 transition-colors hover:border-accent/50 md:p-7">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
@@ -26,12 +32,8 @@ export function ArchitectureDiagram() {
                   <Icon className="h-5 w-5" name={layerIcons[layer.id] ?? 'edge'} />
                 </span>
                 <div>
-                  <p className="font-display text-label uppercase tracking-[0.18em] text-accent">
-                    {layer.label}
-                  </p>
-                  <p className="mt-1 text-[15px] font-semibold text-ink-primary-dark">
-                    {layer.labelKo}
-                  </p>
+                  <p className="font-display text-label uppercase tracking-[0.18em] text-accent">{layer.label}</p>
+                  <p className="mt-1 text-[15px] font-semibold text-ink-primary-dark">{layer.sublabel}</p>
                 </div>
               </div>
 
@@ -52,7 +54,7 @@ export function ArchitectureDiagram() {
           </div>
 
           {/* 계층 간 연결선 */}
-          {index < architectureLayers.length - 1 ? (
+          {index < layers.length - 1 ? (
             <div aria-hidden="true" className="flex h-10 items-center justify-center lg:justify-start lg:pl-[46px]">
               <svg
                 className="h-10 w-4 text-accent/50"

@@ -21,7 +21,9 @@ export type IconName =
   | 'shield'
   | 'leaf'
   | 'building'
-  | 'check';
+  | 'check'
+  | 'graduation'
+  | 'briefcase';
 
 const paths: Record<IconName, ReactElement> = {
   search: (
@@ -116,6 +118,18 @@ const paths: Record<IconName, ReactElement> = {
     </>
   ),
   check: <path d="m5 12.5 4.5 4.5L19 7.5" />,
+  graduation: (
+    <>
+      <path d="m12 4.5 9 4.5-9 4.5-9-4.5z" />
+      <path d="M7 11v5c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-5M20.5 9.5v6" />
+    </>
+  ),
+  briefcase: (
+    <>
+      <rect height="12" rx="1.6" width="18" x="3" y="8" />
+      <path d="M8.5 8V6a1.5 1.5 0 0 1 1.5-1.5h4A1.5 1.5 0 0 1 15.5 6v2M3 13.5h18" />
+    </>
+  ),
 };
 
 export function Icon({

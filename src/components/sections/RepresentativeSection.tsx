@@ -1,16 +1,22 @@
 import Image from 'next/image';
+import { getLocale } from 'next-intl/server';
 
-import { Button } from '@/components/ui/Button';
 import { PlaceholderNote } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { Eyebrow, Section } from '@/components/ui/Section';
-import { representative } from '@/content/representative-profile';
+import type { Locale } from '@/i18n/locales';
+import { representative, representativePhoto } from '@/content/representative-profile';
 import { cta } from '@/content/site';
 
 /**
  * Section 10 — Representative & Evidence of Execution (마스터 문서 7.10)
  * 개인 브랜딩이 아니라 "누가 직접 진단·설계하고 기술적 책임을 지는가"에 답하는 신뢰 증거 영역이다.
  */
-export function RepresentativeSection() {
+export async function RepresentativeSection() {
+  const locale = (await getLocale()) as Locale;
+  const rep = representative[locale];
+  const ctaContent = cta[locale];
+
   return (
     <Section ariaLabelledby="representative-title" id="representative" tone="dark">
       <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
@@ -24,7 +30,7 @@ export function RepresentativeSection() {
           <Eyebrow>WHO DESIGNS YOUR SYSTEM</Eyebrow>
 
           <h2 className="mt-5 text-h2 text-ink-primary-dark" id="representative-title">
-            {representative.sectionTitle.map((line) => (
+            {rep.sectionTitle.map((line) => (
               <span className="block" key={line}>
                 {line}
               </span>
@@ -32,32 +38,30 @@ export function RepresentativeSection() {
           </h2>
 
           <p className="mt-6 text-[15px] font-semibold text-accent">
-            {representative.name} | {representative.title} · AX Architect
+            {rep.name} | {rep.title} · AX Architect
           </p>
 
-          <p className="mt-4 text-body text-ink-secondary-dark">{representative.homeIntro}</p>
+          <p className="mt-4 text-body text-ink-secondary-dark">{rep.homeIntro}</p>
 
           {/* Trust Metrics — 검증된 지표만 표시 */}
           <dl className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line-dark bg-white/5 lg:grid-cols-4">
-            {representative.trustMetrics.map((metric) => (
+            {rep.trustMetrics.map((metric) => (
               <div className="bg-bg-primary px-4 py-5" key={metric.label}>
                 <dt className="sr-only">{metric.label}</dt>
                 <dd>
                   <span className="block font-display text-h3 text-accent">{metric.value}</span>
-                  <span className="mt-2 block text-[13px] leading-snug text-ink-secondary-dark">
-                    {metric.label}
-                  </span>
+                  <span className="mt-2 block text-[13px] leading-snug text-ink-secondary-dark">{metric.label}</span>
                 </dd>
               </div>
             ))}
           </dl>
 
           <div className="mt-4">
-            <PlaceholderNote>{representative.trustMetricsNote}</PlaceholderNote>
+            <PlaceholderNote>{rep.trustMetricsNote}</PlaceholderNote>
           </div>
 
           <ul className="mt-8 flex flex-col gap-2.5">
-            {representative.homeHighlights.map((item) => (
+            {rep.homeHighlights.map((item) => (
               <li className="flex items-start gap-3 text-body text-ink-secondary-dark" key={item}>
                 <span aria-hidden="true" className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
                 {item}
@@ -67,15 +71,10 @@ export function RepresentativeSection() {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Button href="/track-record" withArrow>
-              백성은 대표와 수행이력 보기
+              {rep.viewTrackRecordCta}
             </Button>
-            <Button
-              event="cta_project_consulting_click"
-              eventPayload={{ section: 'representative' }}
-              href={cta.secondary.href}
-              variant="secondary"
-            >
-              {cta.secondary.label}
+            <Button event="cta_project_consulting_click" eventPayload={{ section: 'representative' }} href={ctaContent.secondary.href} variant="secondary">
+              {ctaContent.secondary.label}
             </Button>
           </div>
         </div>
@@ -86,22 +85,23 @@ export function RepresentativeSection() {
 
 /**
  * 대표 사진 — 마스터 문서 11.6
- * 고해상도 원본 확보 전까지 placeholder 를 유지한다. AI 생성 인물 이미지로 대체하지 않는다.
- * public/images/baek-seongeun-profile.webp 를 추가한 뒤
- * content/representative-profile.ts 의 photo.status 를 'verified' 로 변경하면 실제 사진이 노출된다.
+ * public/images/baek-seongeun-profile.webp 를 사용한다.
+ * 향후 사진을 교체하려면 파일을 덮어쓰고 representative-profile.ts 의 representativePhoto 를 그대로 두면 된다.
+ * status가 'placeholder'로 되돌아가면 자리표시자 UI가 다시 노출된다.
  */
-export function RepresentativePhoto({ className }: { className?: string }) {
-  const { photo, name, title } = representative;
+export async function RepresentativePhoto({ className }: { className?: string }) {
+  const locale = (await getLocale()) as Locale;
+  const rep = representative[locale];
 
-  if (photo.status !== 'placeholder') {
+  if (representativePhoto.status !== 'placeholder') {
     return (
       <Image
-        alt={photo.alt}
+        alt={representativePhoto.alt[locale]}
         className={className ?? 'w-full rounded-panel object-cover'}
         height={1000}
         priority={false}
         sizes="(max-width: 1024px) 100vw, 40vw"
-        src={photo.src}
+        src={representativePhoto.src}
         width={800}
       />
     );
@@ -126,15 +126,11 @@ export function RepresentativePhoto({ className }: { className?: string }) {
           <path d="M4.5 20.5a7.5 7.5 0 0 1 15 0" />
         </svg>
         <p className="relative mt-5 px-6 text-center text-small text-ink-secondary-dark">
-          {name} {title}
+          {rep.name} {rep.title}
           <br />
-          공식 프로필 사진 영역
+          {rep.photoPlaceholderCaption}
         </p>
       </div>
-      <figcaption className="mt-3 text-[13px] text-state-warning">
-        <span aria-hidden="true">※ </span>
-        {photo.note}
-      </figcaption>
     </figure>
   );
 }

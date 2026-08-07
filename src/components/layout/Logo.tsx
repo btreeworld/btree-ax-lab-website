@@ -1,22 +1,17 @@
-import Link from 'next/link';
-
+import { Link } from '@/i18n/navigation';
 import { site } from '@/content/site';
 
 /**
  * 로고 — 마스터 문서 6.1
- * 헤더에는 BTREE AX LAB 을 우선 노출하고 보조 문구로 by BTREE Inc. 를 함께 표기한다.
+ * 헤더에는 BTREE AX LAB을 우선 노출하고 보조 문구로 by BTREE Inc. 를 함께 표기한다.
  * 워드마크 이미지 제작 전까지 타이포그래피 기반 로고를 사용한다 (28장: 로고 제작 필요).
  */
-export function Logo({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
+export function Logo({ tone = 'dark', ariaLabel }: { tone?: 'dark' | 'light'; ariaLabel: string }) {
   const textColor = tone === 'dark' ? 'text-ink-primary-dark' : 'text-ink-primary-light';
   const subColor = tone === 'dark' ? 'text-ink-secondary-dark' : 'text-ink-secondary-light';
 
   return (
-    <Link
-      aria-label={`${site.brand} 홈으로 이동`}
-      className="flex items-center gap-3 rounded-button py-1"
-      href="/"
-    >
+    <Link aria-label={ariaLabel} className="flex items-center gap-3 rounded-button py-1" href="/">
       <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center">
         <svg
           className="h-9 w-9"
@@ -37,9 +32,7 @@ export function Logo({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
         </svg>
       </span>
       <span className="flex flex-col leading-none">
-        <span className={`font-display text-[17px] font-bold tracking-tight ${textColor}`}>
-          {site.brand}
-        </span>
+        <span className={`font-display text-[17px] font-bold tracking-tight ${textColor}`}>{site.brand}</span>
         <span className={`mt-1 text-[11px] font-medium tracking-wide ${subColor}`}>{site.byline}</span>
       </span>
     </Link>

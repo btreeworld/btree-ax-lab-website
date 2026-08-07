@@ -1,24 +1,26 @@
+import { getLocale } from 'next-intl/server';
+
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Section, SectionHeader } from '@/components/ui/Section';
-import { pricingNote, pricingPlans } from '@/content/pricing';
+import { pricingNote, pricingPlans, pricingSectionCopy } from '@/content/pricing';
 import { cta } from '@/content/site';
+import type { Locale } from '@/i18n/locales';
 
 /** Section 09 — Pricing Preview (마스터 문서 7.9) */
-export function PricingSection() {
+export async function PricingSection() {
+  const locale = (await getLocale()) as Locale;
+  const copy = pricingSectionCopy[locale];
+  const plans = pricingPlans[locale];
+  const ctaContent = cta[locale];
+
   return (
     <Section ariaLabelledby="pricing-title" id="pricing" tone="light">
-      <SectionHeader
-        description="전체 구축을 먼저 결정하지 않아도 됩니다. 필요한 단계의 서비스부터 시작할 수 있습니다."
-        eyebrow="PRICING"
-        id="pricing-title"
-        title="필요한 단계부터 시작하십시오"
-        tone="light"
-      />
+      <SectionHeader description={copy.description} eyebrow={copy.eyebrow} id="pricing-title" title={copy.title} tone="light" />
 
       <div className="grid gap-5 lg:grid-cols-3">
-        {pricingPlans.map((plan) => (
+        {plans.map((plan) => (
           <article
             className={`flex h-full flex-col rounded-card border p-6 md:p-8 ${
               plan.highlighted
@@ -29,7 +31,7 @@ export function PricingSection() {
           >
             <div className="flex items-start justify-between gap-3">
               <h3 className="text-h4 text-ink-primary-light">{plan.name}</h3>
-              {plan.highlighted ? <Badge tone="neutral-light">권장</Badge> : null}
+              {plan.highlighted ? <Badge tone="neutral-light">{copy.highlightedBadge}</Badge> : null}
             </div>
 
             <p className="mt-3 text-small text-ink-secondary-light">{plan.description}</p>
@@ -47,7 +49,7 @@ export function PricingSection() {
 
             <div className="mt-auto pt-8">
               <p className="text-h3 text-ink-primary-light">{plan.price}</p>
-              <p className="mt-1 text-small text-ink-secondary-light">부가세 별도</p>
+              <p className="mt-1 text-small text-ink-secondary-light">{copy.vatNote}</p>
             </div>
           </article>
         ))}
@@ -55,19 +57,14 @@ export function PricingSection() {
 
       <div className="mt-10 flex flex-col gap-6 rounded-card border border-line-light bg-surface-white p-6 md:flex-row md:items-center md:justify-between md:p-8">
         <div>
-          {pricingNote.map((line) => (
+          {pricingNote[locale].map((line) => (
             <p className="text-small text-ink-secondary-light" key={line}>
               {line}
             </p>
           ))}
         </div>
-        <Button
-          className="shrink-0"
-          event="cta_ax_diagnosis_click"
-          eventPayload={{ section: 'pricing' }}
-          href={cta.primary.href}
-        >
-          {cta.primary.label}
+        <Button className="shrink-0" event="cta_ax_diagnosis_click" eventPayload={{ section: 'pricing' }} href={ctaContent.primary.href}>
+          {ctaContent.primary.label}
         </Button>
       </div>
     </Section>

@@ -1,0 +1,64 @@
+{
+  "Header": {
+    "skipToContent": "본문 바로가기",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기",
+    "logoHome": "{brand} 홈으로 이동",
+    "primaryNav": "주요 메뉴",
+    "mobileNav": "모바일 주요 메뉴"
+  },
+  "LanguageSwitcher": {
+    "label": "언어 선택"
+  },
+  "Common": {
+    "required": "필수",
+    "optional": "선택",
+    "selectPlaceholder": "선택해 주세요",
+    "home": "홈",
+    "breadcrumbLabel": "현재 위치",
+    "note": "참고: "
+  },
+  "Footer": {
+    "companyInfoTitle": "회사 정보",
+    "disclaimerTitle": "면책 안내",
+    "copyright": "© {year} {legalName}. All rights reserved."
+  },
+  "NotFound": {
+    "eyebrow": "404",
+    "title": "요청하신 페이지를 찾을 수 없습니다",
+    "description": "주소가 변경되었거나 삭제된 페이지일 수 있습니다. 아래 메뉴에서 필요한 정보를 확인해 주세요.",
+    "goHome": "홈으로 이동"
+  },
+  "Cards": {
+    "problem": "문제",
+    "approach": "접근",
+    "architecture": "기술 구성",
+    "result": "결과",
+    "deliverables": "대표 산출물",
+    "viewDetails": "{name} 상세보기"
+  },
+  "Form": {
+    "requiredSection": "필수 정보",
+    "optionalSection": "선택 정보",
+    "company": "회사명",
+    "name": "담당자명",
+    "email": "이메일",
+    "phone": "연락처",
+    "industry": "산업 분야",
+    "service": "희망 서비스",
+    "problem": "해결하려는 문제",
+    "problemHint": "현재 상황, 개선하고 싶은 부분, 기존 설비를 함께 알려주시면 더 정확히 안내할 수 있습니다.",
+    "website": "회사 웹사이트",
+    "region": "현장 지역",
+    "budget": "예상 예산",
+    "timeline": "희망 시작 시기",
+    "existingSystem": "기존 장비·시스템",
+    "existingSystemHint": "카메라, 센서, PLC, 관제 시스템 등 현재 운영 중인 장비를 알려주세요.",
+    "governmentProgram": "정부지원사업 연계를 검토하고 있습니다.",
+    "honeypotLabel": "이 항목은 비워 두세요",
+    "consentPrivacyLink": "개인정보처리방침 보기",
+    "submitting": "전송 중…",
+    "newInquiry": "새 문의 작성하기",
+    "errorSummaryPrefix": "개 항목을 확인해 주세요."
+  }
+}

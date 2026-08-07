@@ -1,10 +1,19 @@
+import type { Locale } from '@/i18n/locales';
+
+const edgeLabels: Record<Locale, [string, string]> = {
+  ko: ['AI 추론 · 이벤트', '수집 · 로컬 저장'],
+  en: ['AI inference · events', 'Collect · local store'],
+};
+
 /**
  * Hero 비주얼 — 마스터 문서 7.1 Visual Direction
  * 공장·온실·카메라·센서 노드가 한 화면에서 연결되는 선형 다이어그램.
  * 3D 지구본·AI 두뇌·휴머노이드 로봇 이미지를 사용하지 않는다.
  * 장식 그래픽이므로 aria-hidden 처리하고, 정보는 본문 텍스트로 전달한다.
  */
-export function FieldVisual({ className }: { className?: string }) {
+export function FieldVisual({ className, locale = 'ko' }: { className?: string; locale?: Locale }) {
+  const [edgeLabel1, edgeLabel2] = edgeLabels[locale];
+
   return (
     <svg
       aria-hidden="true"
@@ -90,10 +99,10 @@ export function FieldVisual({ className }: { className?: string }) {
         <rect fill="#0E2438" height="44" rx="10" stroke="#2AD4D9" strokeOpacity="0.45" width="128" x="86" y="199" />
         <rect fill="#0E2438" height="44" rx="10" stroke="#2AD4D9" strokeOpacity="0.45" width="128" x="306" y="199" />
         <text fill="#CFE9EB" fontFamily="var(--font-sans)" fontSize="12" x="106" y="226">
-          AI 추론 · 이벤트
+          {edgeLabel1}
         </text>
         <text fill="#CFE9EB" fontFamily="var(--font-sans)" fontSize="12" x="326" y="226">
-          수집 · 로컬 저장
+          {edgeLabel2}
         </text>
       </g>
 

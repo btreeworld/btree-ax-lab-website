@@ -1,45 +1,81 @@
 /** FAQ — 마스터 문서 7.11. FAQPage JSON-LD 는 이 데이터가 실제 화면에 보일 때만 사용한다. */
+import type { Locale } from '@/i18n/locales';
 import type { FaqItem } from '@/types';
 
-export const faqs: FaqItem[] = [
-  {
-    question: '아직 구체적인 요구사항이 없어도 상담할 수 있나요?',
-    answer:
-      '가능합니다. 오히려 요구사항이 정리되지 않은 단계에서 AX 진단을 통해 문제와 우선순위를 먼저 정의하는 것이 좋습니다.',
-  },
-  {
-    question: '기존 CCTV나 센서를 활용할 수 있나요?',
-    answer:
-      '장비의 프로토콜, 해상도, 네트워크, 데이터 접근 가능성을 검토한 뒤 재사용 여부를 판단합니다. 진단 단계에서 기존 설비 활용 가능성을 함께 확인합니다.',
-  },
-  {
-    question: '진단을 받으면 반드시 구축까지 계약해야 하나요?',
-    answer:
-      '아닙니다. 진단 결과만 활용하거나 다른 개발사와 구축을 진행할 수도 있습니다. 단, 산출물의 사용 범위는 계약조건을 따릅니다.',
-  },
-  {
-    question: '정부지원사업과 연계할 수 있나요?',
-    answer:
-      '사업 공고와 기업 자격에 따라 가능한 방향을 검토할 수 있습니다. 다만 지원사업 선정이나 자금 확보를 보장하지는 않습니다.',
-  },
-  {
-    question: 'PoC는 어느 정도 기간이 걸리나요?',
-    answer:
-      '일반적으로 범위와 데이터 준비 상태에 따라 달라집니다. 사전 진단과 설계 후 일정과 검증 기준을 제안합니다.',
-  },
-  {
-    question: '소프트웨어 개발만 의뢰할 수 있나요?',
-    answer:
-      '가능합니다. 다만 요구사항이 불명확한 경우 먼저 구축 설계를 진행하는 것을 원칙으로 합니다.',
-  },
-  {
-    question: '지역 제한이 있나요?',
-    answer:
-      '원격 진단은 전국에서 가능하며, 현장 진단과 설치는 지역과 일정에 따라 출장비가 추가될 수 있습니다.',
-  },
-  {
-    question: '무료 상담에서는 무엇을 확인하나요?',
-    answer:
-      '약 30분 동안 문제, 목표, 현장 조건과 서비스 적합성을 확인합니다. 상세 설계와 기술 제안은 유료 진단 범위에 포함됩니다.',
-  },
-];
+export const faqs: Record<Locale, FaqItem[]> = {
+  ko: [
+    {
+      question: '아직 구체적인 요구사항이 없어도 상담할 수 있나요?',
+      answer:
+        '가능합니다. 오히려 요구사항이 정리되지 않은 단계에서 AX 진단을 통해 문제와 우선순위를 먼저 정의하는 것이 좋습니다.',
+    },
+    {
+      question: '기존 CCTV나 센서를 활용할 수 있나요?',
+      answer:
+        '장비의 프로토콜, 해상도, 네트워크, 데이터 접근 가능성을 검토한 뒤 재사용 여부를 판단합니다. 진단 단계에서 기존 설비 활용 가능성을 함께 확인합니다.',
+    },
+    {
+      question: '진단을 받으면 반드시 구축까지 계약해야 하나요?',
+      answer:
+        '아닙니다. 진단 결과만 활용하거나 다른 개발사와 구축을 진행할 수도 있습니다. 단, 산출물의 사용 범위는 계약조건을 따릅니다.',
+    },
+    {
+      question: '정부지원사업과 연계할 수 있나요?',
+      answer: '사업 공고와 기업 자격에 따라 가능한 방향을 검토할 수 있습니다. 다만 지원사업 선정이나 자금 확보를 보장하지는 않습니다.',
+    },
+    {
+      question: 'PoC는 어느 정도 기간이 걸리나요?',
+      answer: '일반적으로 범위와 데이터 준비 상태에 따라 달라집니다. 사전 진단과 설계 후 일정과 검증 기준을 제안합니다.',
+    },
+    {
+      question: '소프트웨어 개발만 의뢰할 수 있나요?',
+      answer: '가능합니다. 다만 요구사항이 불명확한 경우 먼저 구축 설계를 진행하는 것을 원칙으로 합니다.',
+    },
+    {
+      question: '지역 제한이 있나요?',
+      answer: '원격 진단은 전국에서 가능하며, 현장 진단과 설치는 지역과 일정에 따라 출장비가 추가될 수 있습니다.',
+    },
+    {
+      question: '무료 상담에서는 무엇을 확인하나요?',
+      answer: '약 30분 동안 문제, 목표, 현장 조건과 서비스 적합성을 확인합니다. 상세 설계와 기술 제안은 유료 진단 범위에 포함됩니다.',
+    },
+  ],
+  en: [
+    {
+      question: 'Can we talk even without concrete requirements yet?',
+      answer:
+        "Yes — in fact it's better to start there. The AX diagnosis is designed to define the problem and priorities before requirements are firm.",
+    },
+    {
+      question: 'Can we reuse our existing CCTV or sensors?',
+      answer:
+        "We review protocol, resolution, network, and data accessibility to determine reuse potential. This is assessed as part of the diagnosis.",
+    },
+    {
+      question: 'If we get a diagnosis, are we obligated to contract the full build?',
+      answer:
+        'No. You can use the diagnosis results on their own or take them to another developer. Usage rights for the deliverables follow the contract terms.',
+    },
+    {
+      question: 'Can this be tied to a government support program?',
+      answer:
+        "We can review possible directions based on the specific program announcement and your eligibility, but we don't guarantee selection or funding.",
+    },
+    {
+      question: 'How long does a PoC take?',
+      answer: 'It generally depends on scope and data readiness. We propose a schedule and validation criteria after the initial diagnosis and design.',
+    },
+    {
+      question: 'Can we hire you for software development only?',
+      answer: "Yes. If requirements aren't clear yet, we recommend starting with the system design service first.",
+    },
+    {
+      question: 'Are there regional restrictions?',
+      answer: 'Remote diagnosis is available nationwide. On-site diagnosis and installation may add travel costs depending on region and schedule.',
+    },
+    {
+      question: 'What does the free consultation cover?',
+      answer: 'About 30 minutes to confirm the problem, goals, site conditions, and service fit. Detailed design and technical proposals are part of the paid diagnosis.',
+    },
+  ],
+};
