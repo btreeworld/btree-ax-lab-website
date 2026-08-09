@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { ArchitectureSection } from '@/components/sections/ArchitectureSection';
 import { CasesSection } from '@/components/sections/CasesSection';
-import { FaqSection } from '@/components/sections/FaqSection';
 import { FinalCtaSection } from '@/components/sections/FinalCtaSection';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { IndustriesSection } from '@/components/sections/IndustriesSection';
@@ -16,11 +15,13 @@ import { RepresentativeSection } from '@/components/sections/RepresentativeSecti
 import { ServicesSection } from '@/components/sections/ServicesSection';
 import { WhyBtreeSection } from '@/components/sections/WhyBtreeSection';
 import { locales, type Locale } from '@/i18n/locales';
-import { faqJsonLd, serviceJsonLd } from '@/lib/seo';
+import { serviceJsonLd } from '@/lib/seo';
 
 /**
  * 홈 페이지 — 마스터 문서 7장
- * 섹션 순서는 문서의 Section 01~12를 그대로 따른다.
+ * 섹션 순서는 문서의 Section 01~12를 따르되, FAQ(Section 11)는 텍스트 감축을 위해
+ * 홈에서 제외했다 — 컴포넌트·콘텐츠(FaqSection, content/faq.ts)는 삭제하지 않고 보존한다
+ * (재사용 가능성 보존, 사용자 확인: "불필요한 내용들은 모두 삭제해도 좋아").
  */
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
@@ -40,11 +41,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <CasesSection />
       <PricingSection />
       <RepresentativeSection />
-      <FaqSection />
       <FinalCtaSection section="home-final-cta" />
 
-      {/* FAQ는 실제 화면에 노출되므로 FAQPage 구조화 데이터를 함께 제공한다 (18.4). */}
-      <JsonLd data={[...serviceJsonLd(locale), faqJsonLd(locale)]} />
+      <JsonLd data={serviceJsonLd(locale)} />
     </>
   );
 }

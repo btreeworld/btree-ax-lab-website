@@ -174,7 +174,7 @@ export const industries: Record<Locale, Industry[]> = {
 };
 
 /** 홈 Section 05 에 사용하는 카드 요약 (적용 영역 3~4개만 노출 — 13.6) */
-export const industryCardCapabilityLimit = 4;
+export const industryCardCapabilityLimit = 3;
 
 type IndustriesPageCopy = {
   heroEyebrow: string;

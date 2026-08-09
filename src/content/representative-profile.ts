@@ -140,8 +140,7 @@ export const representative: Record<Locale, RepresentativeContent> = {
     role: 'AX Architect / AI·Digital Twin R&D Lead',
     field: 'ICT 융복합',
     contactPolicy: '회사 대표 이메일 사용',
-    homeIntro:
-      '2005년 영상처리·인공지능 연구를 시작해 지능형 영상보안, 스마트시티·IoT 관제, 디지털트윈, 스마트팜, 바이오 로봇과 의료 AI 분야의 기술개발을 수행해 왔습니다. 국립군산대학교에서 컴퓨터정보공학 학사와 영상처리·인공지능 석사를 취득했으며, 건양대학교 의료인공지능 박사과정을 이수하고 있습니다. 현장의 카메라·센서·설비 데이터를 Edge AI와 디지털트윈 운영화면으로 연결하는 통합 아키텍처를 직접 설계합니다.',
+    homeIntro: '2005년부터 영상처리·AI를 연구하며 디지털트윈·Edge AI 통합 아키텍처를 직접 설계합니다.',
     academicStatusOptions: [
       '건양대학교 의료인공지능 박사과정에 재학 중입니다.',
       '건양대학교 의료인공지능 박사과정을 수료했습니다.',
@@ -225,8 +224,7 @@ export const representative: Record<Locale, RepresentativeContent> = {
     role: 'AX Architect / AI & Digital Twin R&D Lead',
     field: 'ICT Convergence',
     contactPolicy: 'Uses the company contact email',
-    homeIntro:
-      'Starting with video processing and AI research in 2005, he has developed intelligent video security, smart city/IoT monitoring, digital twins, smart farms, bio-robotics, and medical AI. He holds a B.S. in Computer Information Engineering and an M.S. in Video Processing and AI from Kunsan National University, and is currently in the Ph.D. program in Medical AI at Konyang University. He personally designs the integrated architecture that connects field camera, sensor, and equipment data to Edge AI and digital twin operating screens.',
+    homeIntro: 'Researching video processing and AI since 2005, he personally designs digital twin and Edge AI integration architecture.',
     academicStatusOptions: [
       'He is currently enrolled in the Ph.D. program in Medical AI at Konyang University.',
       'He has completed coursework for the Ph.D. program in Medical AI at Konyang University.',

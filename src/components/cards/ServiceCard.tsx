@@ -17,7 +17,7 @@ const serviceIcons: Record<string, IconName> = {
 export async function ServiceCard({ service, tone = 'dark' }: { service: Service; tone?: 'dark' | 'light' }) {
   const t = await getTranslations('Cards');
   const dark = tone === 'dark';
-  const deliverables = service.deliverables.slice(0, 3);
+  const deliverables = service.deliverables.slice(0, 2);
 
   return (
     <article

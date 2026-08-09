@@ -58,19 +58,19 @@ export const problemSection: Record<Locale, ProblemContent> = {
     cards: [
       {
         title: '무엇부터 해야 할지 모릅니다',
-        description: 'AI, 센서, 로봇, 디지털트윈 중 우리 현장에 무엇이 필요한지 판단하기 어렵습니다.',
+        description: 'AI·센서·로봇 중 우리 현장에 무엇이 필요한지 판단하기 어렵습니다.',
       },
       {
         title: '기존 설비와 연결이 걱정됩니다',
-        description: '오래된 장비와 분리된 데이터를 새로운 시스템에 어떻게 연결할지 불확실합니다.',
+        description: '오래된 장비와 분리된 데이터를 어떻게 연결할지 불확실합니다.',
       },
       {
         title: '비용과 성과를 예측하기 어렵습니다',
-        description: '전체 구축비는 큰데 실제 효과와 성능을 미리 확인하기 어렵습니다.',
+        description: '구축비는 큰데 실제 효과를 미리 확인하기 어렵습니다.',
       },
       {
         title: '컨설팅과 개발이 분리되어 있습니다',
-        description: '보고서와 실제 구현 사이의 간극 때문에 프로젝트가 지연되거나 방향을 잃습니다.',
+        description: '보고서와 실제 구현 사이의 간극으로 프로젝트가 지연됩니다.',
       },
     ],
     closing: [
@@ -86,19 +86,19 @@ export const problemSection: Record<Locale, ProblemContent> = {
     cards: [
       {
         title: 'Where do we even start?',
-        description: "It's hard to judge whether AI, sensors, robotics, or digital twins fit your site.",
+        description: "Hard to judge whether AI, sensors, or robotics fit your site.",
       },
       {
         title: 'Will it connect to existing equipment?',
-        description: "It's unclear how to connect aging equipment and siloed data to a new system.",
+        description: "Unclear how to connect aging, siloed equipment to a new system.",
       },
       {
         title: 'Cost and outcomes are hard to predict',
-        description: 'Full builds are expensive, and the real impact is hard to confirm in advance.',
+        description: 'Builds are expensive and the real impact is hard to confirm early.',
       },
       {
         title: 'Consulting and development are disconnected',
-        description: 'The gap between reports and actual implementation delays projects or derails direction.',
+        description: 'The report-to-build gap delays projects and derails direction.',
       },
     ],
     closing: [
@@ -166,13 +166,13 @@ export const processSteps: Record<Locale, ProcessStep[]> = {
 
 type Differentiator = { title: string; description: string };
 
-/** 7.6 Section 06 — Why BTREE */
+/**
+ * 7.6 Section 06 — Why BTREE
+ * 원래 6개 중 AI·Edge·디지털트윈 기술 역량이 가장 잘 드러나는 3개만 홈에 노출한다
+ * (사용자 피드백: 기술적 장점이 텍스트에 묻혀 드러나지 않음 — 3D 아키텍처 씬이 나머지를 시연으로 대체).
+ */
 export const differentiators: Record<Locale, Differentiator[]> = {
   ko: [
-    {
-      title: '현장을 먼저 봅니다',
-      description: '기술을 정하기 전에 현재 업무와 설비, 실제 운영자의 문제를 확인합니다.',
-    },
     {
       title: '구현 가능한 수준으로 설계합니다',
       description: '발표용 개념이 아니라 개발팀이 사용할 수 있는 요구사항과 아키텍처를 만듭니다.',
@@ -182,23 +182,11 @@ export const differentiators: Record<Locale, Differentiator[]> = {
       description: '네트워크, 개인정보, 응답속도와 기존 설비를 고려해 Cloud와 Edge를 조합합니다.',
     },
     {
-      title: '검증기준을 먼저 정합니다',
-      description: '정확도, 지연시간, 탐지 범위 등 프로젝트 성공 기준을 설계 단계에서 합의합니다.',
-    },
-    {
       title: '다양한 기술을 통합합니다',
       description: 'AI 모델, 카메라, 센서, 게이트웨이, 알림과 디지털트윈을 하나의 흐름으로 연결합니다.',
     },
-    {
-      title: '단계적으로 투자합니다',
-      description: '진단과 PoC를 통해 위험을 확인한 뒤 본 구축 여부를 결정할 수 있습니다.',
-    },
   ],
   en: [
-    {
-      title: 'We look at the site first',
-      description: 'Before choosing technology, we confirm current operations, equipment, and real operator problems.',
-    },
     {
       title: 'We design at an implementable level',
       description: 'Not slideware — requirements and architecture your development team can actually use.',
@@ -208,21 +196,13 @@ export const differentiators: Record<Locale, Differentiator[]> = {
       description: 'We combine Cloud and Edge based on network, privacy, latency, and existing equipment.',
     },
     {
-      title: 'We define validation criteria first',
-      description: 'Accuracy, latency, detection range — success criteria are agreed on during design, not after.',
-    },
-    {
       title: 'We integrate diverse technologies',
       description: 'AI models, cameras, sensors, gateways, alerts, and digital twins connected into one flow.',
-    },
-    {
-      title: 'We invest in stages',
-      description: 'Diagnosis and PoC reduce risk before you commit to a full build.',
     },
   ],
 };
 
-type ArchitectureLayer = {
+export type ArchitectureLayer = {
   id: string;
   /** 항상 대문자 영단어 — 두 언어 화면에서 동일하게 노출된다 (예: FIELD). */
   label: string;
@@ -301,17 +281,11 @@ type ArchitectureSectionContent = { title: string; description: string[] };
 export const architectureSection: Record<Locale, ArchitectureSectionContent> = {
   ko: {
     title: '현장 데이터가 의사결정으로 연결되는 구조',
-    description: [
-      '특정 플랫폼이나 장비를 먼저 강요하지 않습니다.',
-      '고객의 기존 환경과 목표에 맞춰 필요한 기술 조합을 설계합니다.',
-    ],
+    description: ['드래그로 회전하고 스크롤해 직접 확인해 보십시오.'],
   },
   en: {
     title: 'A structure that connects field data to decisions',
-    description: [
-      "We don't push a specific platform or device from the start.",
-      "We design the right combination of technology for your existing environment and goals.",
-    ],
+    description: ['Drag to rotate, scroll to move through it.'],
   },
 };
 
@@ -333,7 +307,7 @@ export const homeSectionCopy: Record<
     services: {
       eyebrow: 'SERVICES',
       title: '현장 진단부터 실증과 운영까지',
-      description: '현재 단계에 필요한 서비스만 선택하고, 검증된 결과를 기반으로 다음 단계로 확장할 수 있습니다.',
+      description: '필요한 단계만 선택하고, 검증된 결과로 다음 단계를 확장하십시오.',
       comparisonLink: '전체 서비스 비교표 보기',
     },
     process: {
@@ -344,7 +318,7 @@ export const homeSectionCopy: Record<
     industries: {
       eyebrow: 'INDUSTRIES',
       title: '기술이 아니라 현장의 운영방식에 맞춥니다',
-      description: '같은 기술이라도 현장의 운영방식, 기존 설비, 인력 구조에 따라 필요한 구성이 달라집니다.',
+      description: '같은 기술도 현장 운영방식과 설비에 따라 필요한 구성이 달라집니다.',
     },
     why: {
       eyebrow: 'WHY BTREE AX LAB',
@@ -354,7 +328,7 @@ export const homeSectionCopy: Record<
     cases: {
       eyebrow: 'PROJECT EXPERIENCE',
       title: '기술이 아니라 문제 해결 과정으로 보여드립니다',
-      description: '완성된 제품이 아니라, 문제를 어떻게 구조화하고 검증했는지를 기준으로 정리했습니다.',
+      description: '완성된 제품이 아니라 문제를 해결한 과정을 기준으로 정리했습니다.',
     },
     faq: {
       eyebrow: 'FAQ',
@@ -366,7 +340,7 @@ export const homeSectionCopy: Record<
     services: {
       eyebrow: 'SERVICES',
       title: 'From field diagnosis to validation and operations',
-      description: 'Choose only the service you need for your current stage, and expand based on verified results.',
+      description: 'Choose only the stage you need, and expand based on verified results.',
       comparisonLink: 'View the Full Service Comparison',
     },
     process: {
@@ -377,7 +351,7 @@ export const homeSectionCopy: Record<
     industries: {
       eyebrow: 'INDUSTRIES',
       title: "We fit the site's way of operating, not the other way around",
-      description: 'The same technology needs a different setup depending on operations, existing equipment, and staffing.',
+      description: 'The same technology needs a different setup depending on operations and equipment.',
     },
     why: {
       eyebrow: 'WHY BTREE AX LAB',
@@ -387,7 +361,7 @@ export const homeSectionCopy: Record<
     cases: {
       eyebrow: 'PROJECT EXPERIENCE',
       title: 'We show the process of solving a problem, not just the technology',
-      description: 'Organized around how the problem was structured and validated, not just the finished product.',
+      description: 'Organized around how each problem was solved, not the finished product.',
     },
     faq: {
       eyebrow: 'FAQ',

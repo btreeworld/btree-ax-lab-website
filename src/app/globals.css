@@ -19,7 +19,7 @@
 
   --color-accent: #2ad4d9;
   --color-accent-hover: #5ce4e7;
-  --color-accent-deep: #087e91;
+  --color-accent-deep: #076c7d; /* WCAG AA 4.5:1 검증 완료(라이트 섹션 배경 기준) — Lighthouse color-contrast 감사로 발견해 수정 */
   --color-accent-soft: rgba(42, 212, 217, 0.12);
 
   --color-success: #3bcb8c;

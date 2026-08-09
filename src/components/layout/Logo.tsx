@@ -5,13 +5,17 @@ import { site } from '@/content/site';
  * 로고 — 마스터 문서 6.1
  * 헤더에는 BTREE AX LAB을 우선 노출하고 보조 문구로 by BTREE Inc. 를 함께 표기한다.
  * 워드마크 이미지 제작 전까지 타이포그래피 기반 로고를 사용한다 (28장: 로고 제작 필요).
+ *
+ * aria-label을 별도로 주지 않는다 — 링크에 이미 보이는 텍스트(브랜드명 + 태그라인)가 있으므로,
+ * 그 텍스트가 그대로 접근성 이름이 되도록 둔다. aria-label로 덮어쓰면 화면에 보이는 문구와
+ * 접근성 이름이 달라져 WCAG 2.5.3(Label in Name)을 위반한다(Lighthouse label-content-name-mismatch 감사로 발견).
  */
-export function Logo({ tone = 'dark', ariaLabel }: { tone?: 'dark' | 'light'; ariaLabel: string }) {
+export function Logo({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
   const textColor = tone === 'dark' ? 'text-ink-primary-dark' : 'text-ink-primary-light';
   const subColor = tone === 'dark' ? 'text-ink-secondary-dark' : 'text-ink-secondary-light';
 
   return (
-    <Link aria-label={ariaLabel} className="flex items-center gap-3 rounded-button py-1" href="/">
+    <Link className="flex items-center gap-3 rounded-button py-1" href="/">
       <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center">
         <svg
           className="h-9 w-9"

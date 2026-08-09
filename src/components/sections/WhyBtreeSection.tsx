@@ -14,7 +14,7 @@ export async function WhyBtreeSection() {
     <Section ariaLabelledby="why-title" id="why" tone="light">
       <SectionHeader description={copy.description} eyebrow={copy.eyebrow} id="why-title" title={copy.title} tone="light" />
 
-      <ul className="grid gap-x-10 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid gap-x-10 gap-y-8 sm:grid-cols-3">
         {differentiators[locale].map((item, index) => (
           <li className="flex gap-4" key={item.title}>
             <span

@@ -18,7 +18,7 @@ export async function CasesSection() {
 
       <div className="grid gap-5 lg:grid-cols-3">
         {cases[locale].map((caseStudy) => (
-          <CaseCard caseStudy={caseStudy} key={caseStudy.slug} />
+          <CaseCard caseStudy={caseStudy} compact key={caseStudy.slug} />
         ))}
       </div>
 

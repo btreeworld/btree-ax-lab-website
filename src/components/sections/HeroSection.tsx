@@ -1,6 +1,7 @@
 import { getLocale } from 'next-intl/server';
 
 import { FieldVisual } from '@/components/diagrams/FieldVisual';
+import { HeroSceneLoader } from '@/components/three/HeroSceneLoader';
 import { Button } from '@/components/ui/Button';
 import { Container, Eyebrow } from '@/components/ui/Section';
 import { hero } from '@/content/home';
@@ -58,7 +59,14 @@ export async function HeroSection() {
           <div className="lg:col-span-5">
             {/* 모바일에서는 그래픽을 단순화해 숨기고 정보는 아래 Trust Strip 으로 전달한다. */}
             <div className="hidden sm:block">
-              <FieldVisual className="mx-auto h-auto w-full max-w-[520px]" locale={locale} />
+              {/*
+                고정 종횡비 래퍼 — SVG(즉시 렌더, LCP-safe 폴백)와 3D Canvas(지연 마운트)가
+                같은 박스 크기를 공유해 마운트/언마운트 시 레이아웃 시프트가 생기지 않도록 한다.
+              */}
+              <div className="relative mx-auto aspect-[520/440] w-full max-w-[520px]">
+                <FieldVisual className="absolute inset-0 h-full w-full" locale={locale} />
+                <HeroSceneLoader />
+              </div>
             </div>
           </div>
         </div>

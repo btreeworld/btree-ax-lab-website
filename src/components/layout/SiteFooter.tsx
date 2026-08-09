@@ -10,7 +10,6 @@ import { Link } from '@/i18n/navigation';
 export async function SiteFooter() {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations('Footer');
-  const tHeader = await getTranslations('Header');
   const year = new Date().getFullYear();
   const legal = legalInfo[locale];
   const legalRows = Object.values(legal);
@@ -21,7 +20,7 @@ export async function SiteFooter() {
       <Container className="py-14 md:py-16">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <Logo ariaLabel={tHeader('logoHome', { brand: site.brand })} />
+            <Logo />
             <p className="mt-5 max-w-[360px] text-small text-ink-secondary-dark">{site.brandRelation[locale]}</p>
             <p className="mt-4 text-label uppercase tracking-[0.16em] text-accent">{site.tagline}</p>
           </div>

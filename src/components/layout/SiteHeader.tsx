@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { cn } from '@/components/ui/cn';
 import { Link, usePathname } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/locales';
-import { cta, mobileTrackRecordLink, navigation, site } from '@/content/site';
+import { cta, mobileTrackRecordLink, navigation } from '@/content/site';
 
 /**
  * 헤더 — 마스터 문서 6.1
@@ -68,7 +68,7 @@ export function SiteHeader() {
       )}
     >
       <div className="container-page flex h-16 items-center justify-between gap-6 lg:h-[76px]">
-        <Logo ariaLabel={t('logoHome', { brand: site.brand })} />
+        <Logo />
 
         <nav aria-label={t('primaryNav')} className="hidden lg:block">
           <ul className="flex items-center gap-1">

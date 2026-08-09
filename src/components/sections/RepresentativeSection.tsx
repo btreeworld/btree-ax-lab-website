@@ -61,7 +61,7 @@ export async function RepresentativeSection() {
           </div>
 
           <ul className="mt-8 flex flex-col gap-2.5">
-            {rep.homeHighlights.map((item) => (
+            {rep.homeHighlights.slice(0, 2).map((item) => (
               <li className="flex items-start gap-3 text-body text-ink-secondary-dark" key={item}>
                 <span aria-hidden="true" className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
                 {item}
