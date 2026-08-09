@@ -5,7 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Html, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-import { Beam, PulsingNode, TravelingPacket, useDutyCyclePulse } from '@/components/three/primitives';
+import { Beam, EdgedMesh, PulsingNode, TravelingPacket, useDutyCyclePulse } from '@/components/three/primitives';
 import { threeColors } from '@/lib/three-tokens';
 
 /**
@@ -118,35 +118,6 @@ export function HeroScene({ labels }: { labels: Record<NodeId, string> }) {
         target={[0, 0.35, 0]}
       />
     </Canvas>
-  );
-}
-
-/**
- * 조명 없이도 저폴리 형태가 또렷하게 보이도록, 채워진 메시 위에 얇은 엣지 와이어프레임을 겹친다.
- * 두 메시가 같은 geometry를 공유해 메모리 비용이 늘지 않는다.
- */
-function EdgedMesh({
-  geometry,
-  color = threeColors.structure,
-  position,
-  rotation,
-}: {
-  geometry: THREE.BufferGeometry;
-  color?: number;
-  position?: [number, number, number];
-  rotation?: [number, number, number];
-}) {
-  const edges = useMemo(() => new THREE.EdgesGeometry(geometry), [geometry]);
-
-  return (
-    <group position={position} rotation={rotation}>
-      <mesh geometry={geometry}>
-        <meshBasicMaterial color={color} />
-      </mesh>
-      <lineSegments geometry={edges}>
-        <lineBasicMaterial color={threeColors.accent} opacity={0.45} transparent />
-      </lineSegments>
-    </group>
   );
 }
 

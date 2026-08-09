@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@react-three/drei": "^10.7.8",
     "@react-three/fiber": "^9.7.0",
+    "@react-three/postprocessing": "3.0.4",
     "next": "15.5.22",
     "next-intl": "^4.13.5",
     "react": "19.0.0",

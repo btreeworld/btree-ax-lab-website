@@ -11,6 +11,8 @@ type HeroContent = {
   headline: string[];
   description: string[];
   trustStrip: string[];
+  /** 홈 3D 월드 BOOT 스테이지의 스크롤 유도 문구 — 섹션형 폴백에서는 쓰지 않는다. */
+  scrollPrompt: string;
 };
 
 /** 7.1 Section 01 — Hero */
@@ -28,6 +30,7 @@ export const hero: Record<Locale, HeroContent> = {
       'Edge 기반 데이터 처리',
       '정부과제 기술기획 지원',
     ],
+    scrollPrompt: '스크롤하여 현장으로 들어갑니다.',
   },
   en: {
     eyebrow: 'INDUSTRIAL AI · EDGE AI · DIGITAL TWIN',
@@ -42,6 +45,7 @@ export const hero: Record<Locale, HeroContent> = {
       'Edge-based data processing',
       'Government R&D planning support',
     ],
+    scrollPrompt: 'Scroll to enter the field.',
   },
 };
 

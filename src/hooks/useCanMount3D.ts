@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { THREE_MIN_VIEWPORT_WIDTH } from '@/lib/three-tokens';
+import { supportsWebGL } from '@/lib/webgl';
 
 /**
  * 3D 씬 마운트 가능 여부 — 마스터 문서 13.9(과도한 3D·모션 제한)와
@@ -45,20 +46,4 @@ export function useCanMount3D(): boolean {
   }, []);
 
   return canMount;
-}
-
-let cachedWebglSupport: boolean | null = null;
-
-function supportsWebGL(): boolean {
-  if (cachedWebglSupport !== null) return cachedWebglSupport;
-
-  try {
-    const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
-    cachedWebglSupport = Boolean(gl);
-  } catch {
-    cachedWebglSupport = false;
-  }
-
-  return cachedWebglSupport;
 }

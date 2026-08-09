@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -97,6 +97,36 @@ export function PulsingNode({ position, radius = 0.16, color = threeColors.accen
       <icosahedronGeometry args={[radius, 0]} />
       <meshBasicMaterial color={color} opacity={0.75} ref={materialRef} transparent />
     </mesh>
+  );
+}
+
+/**
+ * 조명 없이도 저폴리 형태가 또렷하게 보이도록, 채워진 메시 위에 얇은 엣지 와이어프레임을 겹친다.
+ * 두 메시가 같은 geometry를 공유해 메모리 비용이 늘지 않는다. (Hero/FIELD 스테이션 공용 — HeroScene.tsx
+ * 원본에서 이 파일로 이동, MeshBasicMaterial만 쓰는 조명 없는 구조물 표현 방식은 그대로 유지.)
+ */
+export function EdgedMesh({
+  geometry,
+  color = threeColors.structure,
+  position,
+  rotation,
+}: {
+  geometry: THREE.BufferGeometry;
+  color?: number;
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+}) {
+  const edges = useMemo(() => new THREE.EdgesGeometry(geometry), [geometry]);
+
+  return (
+    <group position={position} rotation={rotation}>
+      <mesh geometry={geometry}>
+        <meshBasicMaterial color={color} />
+      </mesh>
+      <lineSegments geometry={edges}>
+        <lineBasicMaterial color={threeColors.accent} opacity={0.45} transparent />
+      </lineSegments>
+    </group>
   );
 }
 

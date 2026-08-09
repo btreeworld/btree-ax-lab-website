@@ -60,6 +60,12 @@
     @apply bg-bg-primary font-sans text-body text-ink-primary-dark antialiased;
     word-break: keep-all; /* 한글 단어 중간 줄바꿈 금지 — 13.3 Headline Rules */
     overflow-wrap: break-word;
+    /* 홈 3D 월드(Terrain 그리드)와 같은 시각 언어를 하위 문서형 페이지에도 아주 옅게 —
+       구조를 바꾸지 않고 배경 텍스처만 통일한다. 텍스트 위에서도 방해되지 않도록 2.5% 불투명도. */
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 120px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 120px);
+    background-attachment: fixed;
   }
 
   h1,

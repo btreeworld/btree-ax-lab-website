@@ -16,6 +16,17 @@ export const threeColors = {
   textSecondaryDark: 0xa8b7c9, // --color-text-secondary-dark
   borderDark: 0xffffff, // --color-border-dark 의 base color (opacity 는 머티리얼에서 별도 조절)
   warning: 0xf2b84b, // --color-warning
+  error: 0xef6b6b, // --color-error — GAP 스테이션의 끊긴 스트림 표시에 사용
+
+  /** ---- 홈 3D 월드("디지털트윈 안으로") 전용 팔레트 — globals.css 토큰 없음 ---- */
+  /** 부팅 시퀀스의 포인트클라우드 기본색. accent보다 채도를 낮춰 장시간 응시해도 피로하지 않게 했다. */
+  pointCloud: 0x3f8fa8,
+  /** 지면 그리드 라인 — bgPrimary 위에서 거의 보이지 않을 정도로 은은하게 */
+  groundGrid: 0x1c3348,
+  /** 홀로그래픽 패널(인월드 대시보드) 프레임 */
+  holoFrame: 0x2ad4d9,
+  /** 안개 색 — bgPrimary와 동일해야 지평선이 배경에 자연스럽게 녹아든다 */
+  fog: 0x07111f,
 } as const;
 
 /** Hero/아키텍처 씬에서 공유하는 마운트 기준 — Tailwind 기본 breakpoint(sm=640px)와 동일하게 맞춘다. */
