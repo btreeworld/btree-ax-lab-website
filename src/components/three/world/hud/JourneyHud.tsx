@@ -146,21 +146,6 @@ export function JourneyHud({ progress, quality }: { progress: JourneyProgress; q
           <h1 className="mt-5 font-display text-display-l tracking-[-0.02em] text-ink-primary-dark [text-shadow:0_2px_28px_rgba(3,9,16,0.9)]">BTREE AX LAB</h1>
           <p className="mt-5 text-pretty text-body-l text-ink-secondary-dark [text-shadow:0_2px_18px_rgba(3,9,16,0.95)]">{h.scrollPrompt}</p>
         </div>
-        <div aria-hidden className="fixed inset-x-0 bottom-16 hidden px-12 md:block">
-          <div className="mx-auto max-w-4xl">
-            <div className="relative h-px bg-white/20">
-              <div className="absolute inset-y-0 left-0 w-[4%] bg-accent shadow-[0_0_16px_rgba(42,212,217,0.75)]" />
-              <div className="absolute inset-x-0 -top-1.5 flex justify-between">
-                {['현장', '단절', 'Edge', '플랫폼', '디지털트윈', '운영자'].map((label, index) => (
-                  <span className="flex flex-col items-center gap-3" key={label}>
-                    <span className={`h-3 w-3 rounded-full border ${index === 0 ? 'border-accent bg-accent shadow-[0_0_14px_rgba(42,212,217,0.8)]' : 'border-white/30 bg-[#718095]'}`} />
-                    <span className={`text-small ${index === 0 ? 'text-accent' : 'text-ink-secondary-dark'}`}>{label}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
       </JourneyStage>
 
       {/* 01 FIELD */}
