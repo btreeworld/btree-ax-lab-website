@@ -50,7 +50,22 @@ export function JourneyStage({
       ref={elRef}
       style={{ alignItems, opacity: 0, willChange: 'opacity, transform' }}
     >
-      <div className="max-w-xl" style={{ textAlign }}>
+      {/* 가독성 스크림 — 데스크톱은 텍스트와 3D가 좌우로 나뉘지만, 세로 화면에서는 둘이
+          정면으로 겹쳐 본문이 지오메트리 위에서 읽히지 않는다. 텍스트 뒤쪽에만 아주 옅은
+          수직 그라디언트를 깔아 대비를 확보하고, 넓은 화면에서는 불필요하므로 끈다. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 sm:hidden"
+        style={{
+          background:
+            'linear-gradient(to bottom, transparent 0%, rgba(7,17,31,0.72) 18%, rgba(7,17,31,0.72) 82%, transparent 100%)',
+        }}
+      />
+
+      {/* 측정폭(measure): 대제목이 text-h2(최대 38px)라 max-w-xl(576px)에서는 한 줄에
+          한글 15자 남짓밖에 안 들어가 제목이 과도하게 여러 줄로 쪼개졌다. 42rem으로 넓혀
+          제목은 시원하게, 본문 문단은 각자 max-w로 따로 좁혀 가독 폭을 유지한다. */}
+      <div className="relative max-w-2xl" style={{ textAlign }}>
         {children}
       </div>
     </div>

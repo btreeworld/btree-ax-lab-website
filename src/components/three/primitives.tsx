@@ -101,30 +101,45 @@ export function PulsingNode({ position, radius = 0.16, color = threeColors.accen
 }
 
 /**
- * 조명 없이도 저폴리 형태가 또렷하게 보이도록, 채워진 메시 위에 얇은 엣지 와이어프레임을 겹친다.
- * 두 메시가 같은 geometry를 공유해 메모리 비용이 늘지 않는다. (Hero/FIELD 스테이션 공용 — HeroScene.tsx
- * 원본에서 이 파일로 이동, MeshBasicMaterial만 쓰는 조명 없는 구조물 표현 방식은 그대로 유지.)
+ * 채워진 메시 위에 얇은 엣지 와이어프레임을 겹친 구조물 표현. 두 메시가 같은 geometry를
+ * 공유해 메모리 비용이 늘지 않는다.
+ *
+ * 재질은 `MeshStandardMaterial`(조명 반응)이다. 원래는 조명 계산을 아예 피하려고
+ * `MeshBasicMaterial`을 썼는데, 무조명 재질은 면의 방향을 무시해서 정육면체의 여섯 면이
+ * 전부 같은 색으로 칠해진다 — 형태가 엣지 선으로만 읽히고 아무리 디테일을 넣어도 납작해
+ * 보이는 원인이었다. 조명을 받게 하면 면마다 명암이 생겨 볼륨이 살아난다.
+ *
+ * 엣지 불투명도를 낮춘 것도 같은 이유: 예전엔 엣지가 형태를 읽히게 하는 유일한 수단이라
+ * 진하게 그려야 했지만, 이제 명암이 그 역할을 하므로 엣지는 청록 림라이트 정도로만 남긴다.
  */
 export function EdgedMesh({
   geometry,
   color = threeColors.structure,
   position,
   rotation,
+  roughness = 0.62,
+  metalness = 0.62,
+  edgeOpacity = 0.22,
+  map,
 }: {
   geometry: THREE.BufferGeometry;
   color?: number;
   position?: [number, number, number];
   rotation?: [number, number, number];
+  roughness?: number;
+  metalness?: number;
+  edgeOpacity?: number;
+  map?: THREE.Texture | null;
 }) {
   const edges = useMemo(() => new THREE.EdgesGeometry(geometry), [geometry]);
 
   return (
     <group position={position} rotation={rotation}>
       <mesh geometry={geometry}>
-        <meshBasicMaterial color={color} />
+        <meshStandardMaterial color={color} map={map ?? null} metalness={metalness} roughness={roughness} />
       </mesh>
       <lineSegments geometry={edges}>
-        <lineBasicMaterial color={threeColors.accent} opacity={0.45} transparent />
+        <lineBasicMaterial color={threeColors.accent} opacity={edgeOpacity} transparent />
       </lineSegments>
     </group>
   );

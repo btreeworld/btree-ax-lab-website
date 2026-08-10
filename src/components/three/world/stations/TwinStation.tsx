@@ -1,60 +1,75 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import { useLocale } from 'next-intl';
 import * as THREE from 'three';
 
-import { EdgedMesh, PulsingNode } from '@/components/three/primitives';
+import { PulsingNode } from '@/components/three/primitives';
 import { DataStream } from '@/components/three/world/DataStream';
 import { HoloPanel } from '@/components/three/world/HoloPanel';
+import { Factory, Greenhouse } from '@/components/three/world/props/FieldProps';
+import { HoloPedestal } from '@/components/three/world/props/TwinProps';
 import { architectureLayers } from '@/content/home';
 import type { Locale } from '@/i18n/locales';
 import { TWIN_LAYOUT } from '@/lib/journey';
 import { threeColors } from '@/lib/three-tokens';
 
 /**
- * TWIN 스테이션 — 여정의 클라이맥스. FIELD를 그대로 축소 복제한 "진짜 쌍둥이"를 보여준다
- * (FieldStation과 같은 지오메트리 조합, 축척만 다름 — "디지털트윈"이라는 컨셉을 문자 그대로
- * 반복해서 증명한다). 대형 홀로 패널이 그 옆에서 실시간 상태를 보여준다.
+ * TWIN 스테이션 — 여정의 클라이맥스.
+ *
+ * FIELD와 **완전히 같은 컴포넌트**(Factory/Greenhouse)를 축소해서 투사대 위에 띄운다.
+ * 다른 모양의 건물을 놓으면 "또 다른 현장"으로 보이지만, 같은 컴포넌트를 쓰면
+ * "아까 그 현장의 사본"이라는 게 형태로 증명된다 — 디지털트윈 카피의 시각적 근거.
+ * 홀로그램답게 천천히 자전한다.
  */
 export function TwinStation() {
   const locale = useLocale() as Locale;
-  const twinNodes = architectureLayers[locale][3].nodes; // ['현황 시각화', '이상 알림', ...]
-  const { replicaCenter, replicaScale: s, panel } = TWIN_LAYOUT;
-  const [rx, ry, rz] = replicaCenter;
+  const twinNodes = architectureLayers[locale][3].nodes;
+  const replicaRef = useRef<THREE.Group>(null);
 
-  const factoryGeometry = useMemo(() => new THREE.BoxGeometry(3.6 * s, 2.2 * s, 2.8 * s), [s]);
-  const greenhouseBodyGeometry = useMemo(() => new THREE.BoxGeometry(2.6 * s, 1.6 * 0.75 * s, 2.2 * s), [s]);
-  const greenhouseRoofGeometry = useMemo(() => new THREE.ConeGeometry(2.6 * s * 0.72, 1.6 * 0.5 * s, 4), [s]);
+  const { replicaCenter, panel } = TWIN_LAYOUT;
+  const [rx, , rz] = replicaCenter;
 
-  const factoryY = (2.2 * s) / 2;
-  const factoryPos: [number, number, number] = [rx - 2.4 * s, factoryY, rz + 1.2 * s];
+  // 투사대 위로 띄우는 높이 — HoloPedestal의 광추 안에 들어가도록.
+  // TWIN 카메라는 [11,10,-26]에서 15유닛쯤 떨어져 내려다보므로, 여정의 클라이맥스가
+  // 또렷하게 읽히려면 복제본과 투사대를 다른 스테이션보다 크게 잡아야 한다.
+  // 카메라 시선이 y=2.5를 향하므로 복제본을 그 높이까지 띄운다 — 바닥 가까이 두면
+  // 위에서 내려다보는 각도가 되어 톱니 지붕·아치 같은 실루엣이 뭉개진다.
+  const floatY = 2.2;
+  const scale = 0.7;
 
-  const greenhouseBodyY = (1.6 * 0.75 * s) / 2;
-  const greenhouseRoofY = 1.6 * 0.75 * s + (1.6 * 0.5 * s) / 2;
-  const greenhousePos: [number, number, number] = [rx + 2.8 * s, 0, rz - 0.5 * s];
+  useFrame((_, delta) => {
+    if (replicaRef.current) replicaRef.current.rotation.y += delta * 0.12;
+  });
 
   return (
     <group>
-      <EdgedMesh geometry={factoryGeometry} position={factoryPos} />
-      <group position={greenhousePos}>
-        <EdgedMesh geometry={greenhouseBodyGeometry} position={[0, greenhouseBodyY, 0]} />
-        <EdgedMesh geometry={greenhouseRoofGeometry} position={[0, greenhouseRoofY, 0]} rotation={[0, Math.PI / 4, 0]} />
+      <HoloPedestal baseRadius={1.4} coneHeight={4.2} position={replicaCenter} topRadius={3.2} />
+
+      {/* 투사된 사본 — FIELD와 동일한 프롭을 축소 배치 */}
+      <group position={[rx, floatY, rz]} ref={replicaRef} scale={scale}>
+        <Factory position={[-2.4, 0, 0.6]} />
+        <Greenhouse length={2.4} position={[2.8, 0, -0.6]} radius={1.2} />
+
+        {/* 트윈 위에서 뜨는 상태·경보 표시 */}
+        <PulsingNode color={threeColors.accentHover} phaseOffsetMs={0} position={[-2.4, 3.0, 0.6]} radius={0.16} />
+        <PulsingNode color={threeColors.warning} phaseOffsetMs={700} position={[2.8, 2.0, -0.6]} radius={0.14} />
       </group>
 
-      {/* 라이브 상태를 알리는 노드 — 실제 현장(FieldStation)에서 만들어진 신호가 여기 반영된다는 뜻 */}
-      <PulsingNode color={threeColors.accentHover} phaseOffsetMs={0} position={[factoryPos[0], factoryY * 2 + 0.15, factoryPos[2]]} radius={0.08} />
-      <PulsingNode color={threeColors.warning} phaseOffsetMs={600} position={[greenhousePos[0], greenhouseBodyY * 2 + 0.1, greenhousePos[2]]} radius={0.07} />
+      {/* 트윈 → 대시보드 패널로 흐르는 실시간 피드 */}
+      <DataStream color={threeColors.accentHover} count={10} from={[rx, floatY + 1.4, rz]} speed={0.5} to={panel.center} />
 
-      <DataStream color={threeColors.accentHover} count={10} from={[rx, ry + 1.2, rz]} speed={0.5} to={panel.center} />
-
+      {/* 패널 방위각은 TWIN 카메라 웨이포인트([11,10,-26])를 향하도록 계산했다:
+          atan2(11-5.4, -26-(-30.5)) ≈ 0.9rad. 기존 -PI/6은 카메라와 거의 직각이라
+          패널이 옆면(얇은 판)으로만 보였다. */}
       <HoloPanel
         barCount={4}
+        height={1.35}
         label={`${twinNodes[0]} · ${twinNodes[1]}`}
         position={panel.center}
-        rotation={[0, -Math.PI / 6, 0]}
+        rotation={[0, 0.9, 0]}
         width={2.1}
-        height={1.35}
       />
     </group>
   );

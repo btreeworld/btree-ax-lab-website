@@ -18,6 +18,7 @@ import { PlatformStation } from '@/components/three/world/stations/PlatformStati
 import { TwinStation } from '@/components/three/world/stations/TwinStation';
 import { Terrain } from '@/components/three/world/Terrain';
 import { useJourneyProgress } from '@/components/three/world/useJourneyProgress';
+import { WorldLighting } from '@/components/three/world/WorldLighting';
 import type { JourneyQuality } from '@/components/three/world/useJourneyQuality';
 import { JOURNEY_SCROLL_VH, WAYPOINTS } from '@/lib/journey';
 import { threeColors } from '@/lib/three-tokens';
@@ -40,16 +41,23 @@ export function JourneyWorld({ quality }: { quality: JourneyQuality }) {
     <div className="relative">
       <div aria-hidden className="fixed inset-0 z-0">
         <Canvas
-          camera={{ position: WAYPOINTS[0].cameraPosition, fov: 50 }}
+          /* fov는 수직 화각이라, 세로로 긴 모바일 화면에서는 수평 화각이 크게 좁아져
+             공장·온실처럼 옆으로 퍼진 설비가 화면 밖으로 잘려 나간다. lite(모바일)에서는
+             화각을 넓혀 같은 카메라 경로로도 스테이션 전체가 프레임에 들어오게 한다. */
+          camera={{ position: WAYPOINTS[0].cameraPosition, fov: quality === 'lite' ? 70 : 50 }}
           dpr={dpr}
           frameloop="always"
           gl={{ alpha: false, antialias: quality === 'full' }}
         >
           <color args={[threeColors.bgPrimary]} attach="background" />
-          <fog args={[threeColors.fog, 14, 55]} attach="fog" />
+          {/* 안개 범위를 좁게 잡는다 — 스테이션들이 Z축을 따라 늘어서 있어서, 멀리 잡으면
+              FIELD에서 EDGE·PLATFORM·OPERATOR 설비가 한꺼번에 보여 화면이 어지러워진다.
+              한 번에 한 스테이션에 집중되도록 30 유닛 근처에서 배경에 녹아들게 한다. */}
+          <fog args={[threeColors.fog, 9, 32]} attach="fog" />
           <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => quality === 'full' && setDpr(1.5)} />
 
           <CameraRig progressRef={progress.ref} />
+          <WorldLighting quality={quality} />
           <Terrain />
           <PointCloudScan progressRef={progress.ref} />
           <FieldStation />

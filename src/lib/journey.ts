@@ -95,10 +95,14 @@ export const GAP_LAYOUT = {
   spread: [3.2, 1.6, 2.4] as [number, number, number],
 };
 
-/** EDGE 스테이션 — 추론 코어의 위치와 반경. */
+/**
+ * EDGE 스테이션 — 추론 코어의 위치와 반경.
+ * 패널은 +X(화면 오른쪽)에 둔다 — EDGE 단계의 HUD 텍스트가 왼쪽 정렬이라, 패널을 -X에 두면
+ * 3D 라벨과 헤드라인이 화면에서 겹쳐 읽힌다.
+ */
 export const EDGE_LAYOUT = {
   core: { center: [0, 1.6, -9] as [number, number, number], radius: 1.0 },
-  panel: { center: [-2.1, 1.9, -9.5] as [number, number, number] },
+  panel: { center: [2.4, 2.0, -9.5] as [number, number, number] },
 };
 
 /** PLATFORM 스테이션 — 여러 현장의 스트림이 정렬되는 레인. */
@@ -116,8 +120,14 @@ export const TWIN_LAYOUT = {
   panel: { center: [5.4, 3.4, -30.5] as [number, number, number] },
 };
 
-/** OPERATOR 스테이션 — 콘솔 데스크와 대표 프로필 패널. */
+/**
+ * OPERATOR 스테이션 — 콘솔 데스크와 가격 안내 패널.
+ * 패널은 카메라([2.5,2.4,-38])에서 5유닛 이상 떨어뜨린다 — 3유닛 거리에 두었더니
+ * 화면 절반을 덮어 콘솔과 HUD 텍스트를 모두 가렸다.
+ */
 export const OPERATOR_LAYOUT = {
   deskCenter: [0, 0, -42] as [number, number, number],
-  panel: { center: [1.9, 2.3, -41] as [number, number, number] },
+  // OPERATOR의 HUD 텍스트는 우측 정렬이라 패널을 +X에 두면 글자와 겹치고, 1440 폭에서는
+  // 화면 밖으로 잘리기까지 한다. 텍스트 반대편(-X)에 놓아 좌: 3D / 우: 텍스트로 분리한다.
+  panel: { center: [-2.6, 2.6, -42.5] as [number, number, number] },
 };

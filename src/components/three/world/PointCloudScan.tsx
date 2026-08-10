@@ -11,40 +11,64 @@ const POINT_COUNT = 2600;
 const BOOT_END = stationProgress(1); // FIELD 웨이포인트 지점에서 완전히 수렴
 const FADE_OUT_END = BOOT_END + stationProgress(1) * 0.7; // 그 직후 걷힌다
 
-/** 두 박스(공장·온실)의 12개 모서리를 따라 점을 고르게 흩뿌린다 — 수렴했을 때 와이어프레임처럼 보인다. */
-function sampleBoxEdges(count: number, target: Float32Array) {
-  const boxes = [FIELD_LAYOUT.factory, FIELD_LAYOUT.greenhouse];
+/**
+ * 점들이 수렴할 목표 좌표 — FieldStation의 **실제 실루엣**을 따라간다.
+ * 공장은 박스 모서리, 온실은 아치 곡선을 샘플링한다. 예전에는 둘 다 박스 모서리로 찍었는데,
+ * 온실이 아치 프롭으로 바뀌면서 수렴한 점군이 실제 온실과 어긋난 상자형 케이지로 보였다.
+ */
+function sampleFieldSilhouette(count: number, target: Float32Array) {
+  const factory = FIELD_LAYOUT.factory;
+  const [gx, , gz] = FIELD_LAYOUT.greenhouse.center;
+  const greenhouseRadius = 1.2; // FieldStation의 Greenhouse radius와 동일
+  const greenhouseLength = 2.4; // FieldStation의 Greenhouse length와 동일
+
   for (let i = 0; i < count; i++) {
-    const box = boxes[i % boxes.length];
-    const [cx, cy, cz] = box.center;
-    const [sx, sy, sz] = box.size;
-    const hx = sx / 2;
-    const hy = sy / 2;
-    const hz = sz / 2;
-
-    const edge = Math.floor(Math.random() * 12);
-    const u = Math.random() * 2 - 1; // -1..1
-    let x = 0;
-    let y = 0;
-    let z = 0;
-    if (edge < 4) {
-      x = u * hx;
-      y = edge < 2 ? -hy : hy;
-      z = edge % 2 === 0 ? -hz : hz;
-    } else if (edge < 8) {
-      z = u * hz;
-      y = edge < 6 ? -hy : hy;
-      x = edge % 2 === 0 ? -hx : hx;
-    } else {
-      y = u * hy;
-      x = edge % 2 === 0 ? -hx : hx;
-      z = edge < 10 ? -hz : hz;
-    }
-
     const idx = i * 3;
-    target[idx] = cx + x;
-    target[idx + 1] = cy + hy + y; // center.y=0을 바닥으로 취급, hy만큼 띄운다
-    target[idx + 2] = cz + z;
+
+    if (i % 2 === 0) {
+      // ── 공장: 박스 12개 모서리
+      const [cx, cy, cz] = factory.center;
+      const [sx, sy, sz] = factory.size;
+      const hx = sx / 2;
+      const hy = sy / 2;
+      const hz = sz / 2;
+
+      const edge = Math.floor(Math.random() * 12);
+      const u = Math.random() * 2 - 1;
+      let x = 0;
+      let y = 0;
+      let z = 0;
+      if (edge < 4) {
+        x = u * hx;
+        y = edge < 2 ? -hy : hy;
+        z = edge % 2 === 0 ? -hz : hz;
+      } else if (edge < 8) {
+        z = u * hz;
+        y = edge < 6 ? -hy : hy;
+        x = edge % 2 === 0 ? -hx : hx;
+      } else {
+        y = u * hy;
+        x = edge % 2 === 0 ? -hx : hx;
+        z = edge < 10 ? -hz : hz;
+      }
+
+      target[idx] = cx + x;
+      target[idx + 1] = cy + hy + y; // center.y=0을 바닥으로 취급
+      target[idx + 2] = cz + z;
+    } else {
+      // ── 온실: 반원 아치 + 바닥 모서리
+      const alongZ = (Math.random() - 0.5) * greenhouseLength;
+      if (Math.random() < 0.78) {
+        const theta = Math.random() * Math.PI; // 0..π → 위쪽 반원
+        target[idx] = gx + Math.cos(theta) * greenhouseRadius;
+        target[idx + 1] = Math.sin(theta) * greenhouseRadius;
+        target[idx + 2] = gz + alongZ;
+      } else {
+        target[idx] = gx + (Math.random() < 0.5 ? -greenhouseRadius : greenhouseRadius);
+        target[idx + 1] = 0.02;
+        target[idx + 2] = gz + alongZ;
+      }
+    }
   }
 }
 
@@ -71,7 +95,7 @@ export function PointCloudScan({ progressRef }: { progressRef: React.RefObject<n
     }
 
     const targetArr = new Float32Array(POINT_COUNT * 3);
-    sampleBoxEdges(POINT_COUNT, targetArr);
+    sampleFieldSilhouette(POINT_COUNT, targetArr);
 
     return { positions: scatterArr.slice(), scatter: scatterArr, target: targetArr };
   }, []);
