@@ -62,7 +62,6 @@ export function buildMetadata({
 export function organizationJsonLd(locale: Locale) {
   const legal = legalInfo[locale];
   const hasEmail = !legal.email.value.startsWith('[');
-  const hasPhone = !legal.phone.value.startsWith('[');
 
   return {
     '@context': 'https://schema.org',
@@ -73,15 +72,15 @@ export function organizationJsonLd(locale: Locale) {
     url: site.url,
     description: site.brandRelation[locale],
     slogan: locale === 'ko' ? site.sloganKo : site.sloganEn,
-    ...(hasEmail || hasPhone
+    // 대표 전화는 노출하지 않기로 했으므로(legalInfo에 phone 필드 없음) telephone 필드도 넣지 않는다.
+    ...(hasEmail
       ? {
           contactPoint: {
             '@type': 'ContactPoint',
             contactType: 'sales',
             areaServed: 'KR',
             availableLanguage: locales,
-            ...(hasEmail ? { email: legal.email.value } : {}),
-            ...(hasPhone ? { telephone: legal.phone.value } : {}),
+            email: legal.email.value,
           },
         }
       : {}),

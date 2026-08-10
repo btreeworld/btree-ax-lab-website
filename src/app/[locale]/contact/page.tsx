@@ -97,10 +97,6 @@ export default async function ContactPage({
                     <dt className="text-ink-secondary-light">{legal.email.label}</dt>
                     <dd className={legal.email.status === 'placeholder' ? 'text-state-warning' : ''}>{legal.email.value}</dd>
                   </div>
-                  <div className="flex gap-2">
-                    <dt className="text-ink-secondary-light">{legal.phone.label}</dt>
-                    <dd className={legal.phone.status === 'placeholder' ? 'text-state-warning' : ''}>{legal.phone.value}</dd>
-                  </div>
                 </dl>
               </div>
             </div>

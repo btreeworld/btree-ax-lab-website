@@ -28,38 +28,36 @@ export const site = {
   locales: { ko: 'ko_KR', en: 'en_US' } satisfies Record<Locale, string>,
 } as const;
 
-/** 법적 정보 — 마스터 문서 6.2 Footer. 확인 전까지 placeholder를 유지한다. */
-export const legalInfo: Record<Locale, Record<'company' | 'ceo' | 'businessNumber' | 'address' | 'email' | 'phone', LegalField>> = {
+/**
+ * 법적 정보 — 마스터 문서 6.2 Footer.
+ * 대표 전화는 의도적으로 노출하지 않는다(2026-08 대표 확인) — 필드 자체를 없애서 footer/JSON-LD
+ * 등 Object.values(legal)로 순회하는 모든 곳에서 자동으로 빠지게 한다.
+ */
+export const legalInfo: Record<Locale, Record<'company' | 'ceo' | 'businessNumber' | 'address' | 'email', LegalField>> = {
   ko: {
     company: { label: '상호', value: '주식회사 비트리', status: 'verified' },
     ceo: { label: '대표자', value: '백성은', status: 'verified' },
-    businessNumber: { label: '사업자등록번호', value: '[확인 후 입력]', status: 'placeholder' },
-    address: { label: '주소', value: '[본점 이전 완료 후 입력]', status: 'placeholder' },
+    businessNumber: { label: '사업자등록번호', value: '264-88-01673', status: 'verified' },
+    address: { label: '주소', value: '대전광역시 동구 옛신탄진로 10-10 102호', status: 'verified' },
     email: {
       label: '대표 이메일',
-      value: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? '[확정 필요]',
-      status: 'placeholder',
-    },
-    phone: {
-      label: '대표 전화',
-      value: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? '[확정 필요]',
-      status: 'placeholder',
+      value: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? 'back@btreeworld.net',
+      status: 'verified',
     },
   },
   en: {
     company: { label: 'Company', value: 'BTREE Inc.', status: 'verified' },
     ceo: { label: 'CEO', value: 'Baek Seongeun', status: 'verified' },
-    businessNumber: { label: 'Business registration no.', value: '[to be confirmed]', status: 'placeholder' },
-    address: { label: 'Address', value: '[to be confirmed after office relocation]', status: 'placeholder' },
+    businessNumber: { label: 'Business registration no.', value: '264-88-01673', status: 'verified' },
+    address: {
+      label: 'Address',
+      value: '#102, 10-10 Yetsintanjin-ro, Dong-gu, Daejeon, Republic of Korea',
+      status: 'verified',
+    },
     email: {
       label: 'Contact email',
-      value: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? '[to be confirmed]',
-      status: 'placeholder',
-    },
-    phone: {
-      label: 'Contact phone',
-      value: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? '[to be confirmed]',
-      status: 'placeholder',
+      value: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? 'back@btreeworld.net',
+      status: 'verified',
     },
   },
 };

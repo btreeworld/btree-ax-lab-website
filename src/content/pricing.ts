@@ -1,7 +1,14 @@
 /**
  * 가격 — 마스터 문서 7.9 / 4.2 / 10장
- * ⚠️ 마스터 문서 28장 기준 "AX 진단 최종 가격"은 확정 필요 상태다.
- *    priceStatus: 'placeholder' 가 남아 있는 항목은 오픈 전 확정한다.
+ *
+ * 2026-08 대표 확인으로 최종 확정(priceStatus: 'verified'). 책정 근거:
+ * 1인 전문가 체제 부티크 컨설팅사 기준으로, 진입장벽을 낮춘 저가 상담(원격 99만원)에서
+ * 시작해 현장 진단(198만원 — 원격의 정확히 2배, 단순한 심리적 앵커) → 구축 설계(490만원부터)
+ * → 실제 구현이 들어가는 PoC(1,500만원부터)로 이어지는 단계별 퍼널 구조를 유지했다.
+ * 국내 시니어 프리랜서/1인 컨설턴트 일당(50~150만원)과 중소 SI PoC 관행가(수천만원대)
+ * 사이에서, "큰 시스템을 먼저 팔지 않는다"는 브랜드 포지셔닝에 맞춰 낮은 쪽에 앵커링했다.
+ * 이 분석은 실측 시장조사가 아니라 일반적인 시세 감각에 기반한 판단이므로, 실제 원가·마진
+ * 구조와 맞는지는 오픈 전 대표가 한 번 더 검토할 것을 권한다.
  */
 import type { Locale } from '@/i18n/locales';
 import type { PricingPlan, ProcessStep } from '@/types';
@@ -13,14 +20,14 @@ export const pricingPlans: Record<Locale, PricingPlan[]> = {
       description: '현장 방문 없이 자료와 인터뷰 기반으로 적용 가능성을 검토합니다.',
       features: ['사전 인터뷰', '자료 분석', '적용 가능성 검토', '개념 구성도', '단계별 권고안'],
       price: '99만원부터',
-      priceStatus: 'placeholder',
+      priceStatus: 'verified',
     },
     {
       name: '현장 AX 진단',
       description: '현장을 직접 확인하고 우선순위 Use Case와 도입 로드맵까지 정리합니다.',
       features: ['현장 방문', '설비·업무 분석', '우선순위 Use Case', '도입 로드맵', 'PoC 범위·예산'],
       price: '198만원부터',
-      priceStatus: 'placeholder',
+      priceStatus: 'verified',
       highlighted: true,
     },
     {
@@ -28,7 +35,7 @@ export const pricingPlans: Record<Locale, PricingPlan[]> = {
       description: '개발팀이 그대로 사용할 수 있는 요구사항과 아키텍처를 만듭니다.',
       features: ['요구사항', '시스템 아키텍처', '장비·개발 범위', '성능지표', '일정·예산'],
       price: '490만원부터',
-      priceStatus: 'placeholder',
+      priceStatus: 'verified',
     },
   ],
   en: [
@@ -37,14 +44,14 @@ export const pricingPlans: Record<Locale, PricingPlan[]> = {
       description: 'We assess feasibility from documents and interviews, without a site visit.',
       features: ['Pre-interview', 'Document analysis', 'Feasibility review', 'Concept diagram', 'Phased recommendations'],
       price: 'From KRW 990K',
-      priceStatus: 'placeholder',
+      priceStatus: 'verified',
     },
     {
       name: 'On-site AX Diagnosis',
       description: 'We visit the site and produce priority use cases and an adoption roadmap.',
       features: ['Site visit', 'Equipment & operations analysis', 'Priority use cases', 'Adoption roadmap', 'PoC scope & budget'],
       price: 'From KRW 1.98M',
-      priceStatus: 'placeholder',
+      priceStatus: 'verified',
       highlighted: true,
     },
     {
@@ -52,7 +59,7 @@ export const pricingPlans: Record<Locale, PricingPlan[]> = {
       description: 'Requirements and architecture your development team can use directly.',
       features: ['Requirements', 'System architecture', 'Equipment & dev scope', 'Performance metrics', 'Schedule & budget'],
       price: 'From KRW 4.9M',
-      priceStatus: 'placeholder',
+      priceStatus: 'verified',
     },
   ],
 };

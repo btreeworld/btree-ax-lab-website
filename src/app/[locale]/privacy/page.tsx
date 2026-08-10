@@ -62,7 +62,9 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
             </div>
             <div className="flex gap-3">
               <dt className="text-ink-secondary-dark">{locale === 'ko' ? '시행일' : 'Effective date'}</dt>
-              <dd className="text-state-warning">{policy.effectiveDate}</dd>
+              <dd className={policy.effectiveDate.startsWith('[') ? 'text-state-warning' : 'text-ink-primary-dark'}>
+                {policy.effectiveDate}
+              </dd>
             </div>
           </dl>
 

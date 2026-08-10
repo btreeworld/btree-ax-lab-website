@@ -55,7 +55,10 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
           </div>
 
           <p className="mb-10 text-body text-ink-secondary-dark">
-            {locale === 'ko' ? '시행일' : 'Effective date'}: <span className="text-state-warning">{terms.effectiveDate}</span>
+            {locale === 'ko' ? '시행일' : 'Effective date'}:{' '}
+            <span className={terms.effectiveDate.startsWith('[') ? 'text-state-warning' : 'text-ink-primary-dark'}>
+              {terms.effectiveDate}
+            </span>
           </p>
 
           {terms.sections.map((section) => (

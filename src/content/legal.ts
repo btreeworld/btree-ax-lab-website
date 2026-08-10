@@ -2,7 +2,8 @@
  * 개인정보처리방침 · 이용약관 초안 — 마스터 문서 22장
  *
  * ⚠️ 법무 검토 전 초안이다. 게시 전 반드시 전문가 검토를 거친다.
- *    사업자등록번호, 주소, 대표 이메일·전화, 시행일은 확정 후 입력한다.
+ *    시행일(2019-11-01)과 개인정보 보호책임자(성명·연락처)는 2026-08 대표 확인으로 확정했다.
+ *    보유 기간(3장)과 위탁업체 목록(5장)은 여전히 대괄호 placeholder이며 별도 확인이 필요하다.
  */
 import type { Locale } from '@/i18n/locales';
 
@@ -16,7 +17,7 @@ export const legalNotice: Record<Locale, string> = {
 
 export const privacyPolicy: Record<Locale, LegalDoc> = {
   ko: {
-    effectiveDate: '[시행일 확정 필요]',
+    effectiveDate: '2019년 11월 1일',
     sections: [
       {
         title: '1. 수집하는 개인정보 항목',
@@ -55,7 +56,7 @@ export const privacyPolicy: Record<Locale, LegalDoc> = {
       },
       {
         title: '8. 개인정보 보호책임자',
-        body: ['성명: [확정 필요]', '연락처: [대표 이메일 확정 필요]', '이용자는 개인정보 보호와 관련한 문의를 위 연락처로 접수할 수 있습니다.'],
+        body: ['성명: 백성은', '연락처: back@btreeworld.net', '이용자는 개인정보 보호와 관련한 문의를 위 연락처로 접수할 수 있습니다.'],
       },
       {
         title: '9. 쿠키 및 분석 도구',
@@ -72,7 +73,7 @@ export const privacyPolicy: Record<Locale, LegalDoc> = {
     ],
   },
   en: {
-    effectiveDate: '[Effective date to be confirmed]',
+    effectiveDate: 'November 1, 2019',
     sections: [
       {
         title: '1. Personal Information We Collect',
@@ -128,7 +129,7 @@ export const privacyPolicy: Record<Locale, LegalDoc> = {
       },
       {
         title: '8. Data Protection Officer',
-        body: ['Name: [to be confirmed]', 'Contact: [company contact email to be confirmed]', 'Inquiries related to data protection can be directed to the contact above.'],
+        body: ['Name: Baek Seongeun', 'Contact: back@btreeworld.net', 'Inquiries related to data protection can be directed to the contact above.'],
       },
       {
         title: '9. Cookies and Analytics Tools',
@@ -151,7 +152,7 @@ export const privacyPolicy: Record<Locale, LegalDoc> = {
 
 export const termsOfService: Record<Locale, LegalDoc> = {
   ko: {
-    effectiveDate: '[시행일 확정 필요]',
+    effectiveDate: '2019년 11월 1일',
     sections: [
       {
         title: '제1조 (목적)',
@@ -197,7 +198,7 @@ export const termsOfService: Record<Locale, LegalDoc> = {
     ],
   },
   en: {
-    effectiveDate: '[Effective date to be confirmed]',
+    effectiveDate: 'November 1, 2019',
     sections: [
       {
         title: 'Article 1 (Purpose)',
