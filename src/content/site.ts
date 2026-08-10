@@ -173,19 +173,3 @@ export const footerNav: Record<
     },
   },
 };
-
-/** 면책 문구 — 마스터 문서 21.2 */
-export const disclaimers: Record<Locale, string[]> = {
-  ko: [
-    '기술 성능은 현장 조건과 데이터에 따라 달라질 수 있습니다.',
-    '정부지원사업 선정은 보장하지 않습니다.',
-    '사례 수치는 검증된 결과만 표시합니다.',
-    '견적은 사전 진단과 범위 확정 후 변경될 수 있습니다.',
-  ],
-  en: [
-    'Technical performance depends on site conditions and available data.',
-    'Government support program selection is not guaranteed.',
-    'Case results shown are limited to verified outcomes.',
-    'Quotes may change after the initial diagnosis and scope confirmation.',
-  ],
-};

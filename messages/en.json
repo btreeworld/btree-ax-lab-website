@@ -19,7 +19,6 @@
   },
   "Footer": {
     "companyInfoTitle": "Company Information",
-    "disclaimerTitle": "Disclaimers",
     "copyright": "© {year} {legalName}. All rights reserved."
   },
   "NotFound": {

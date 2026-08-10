@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 
 import { Logo } from '@/components/layout/Logo';
 import { Container } from '@/components/ui/Section';
-import { disclaimers, footerNav, legalInfo, site } from '@/content/site';
+import { footerNav, legalInfo, site } from '@/content/site';
 import type { Locale } from '@/i18n/locales';
 import { Link } from '@/i18n/navigation';
 
@@ -56,15 +56,6 @@ export async function SiteFooter() {
               </div>
             ))}
           </dl>
-        </div>
-
-        <div className="mt-8 border-t border-line-dark pt-8">
-          <h2 className="sr-only">{t('disclaimerTitle')}</h2>
-          <ul className="flex flex-col gap-1.5 text-[13px] leading-relaxed text-ink-secondary-dark/70">
-            {disclaimers[locale].map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
         </div>
 
         <div className="mt-8 flex flex-col gap-4 border-t border-line-dark pt-8 sm:flex-row sm:items-center sm:justify-between">

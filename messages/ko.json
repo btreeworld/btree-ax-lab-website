@@ -19,7 +19,6 @@
   },
   "Footer": {
     "companyInfoTitle": "회사 정보",
-    "disclaimerTitle": "면책 안내",
     "copyright": "© {year} {legalName}. All rights reserved."
   },
   "NotFound": {
