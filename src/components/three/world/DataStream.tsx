@@ -31,6 +31,11 @@ export function DataStream({
   const offsets = useMemo(() => Array.from({ length: count }, (_, i) => i / count), [count]);
   const start = useMemo(() => new THREE.Vector3(...from), [from]);
   const end = useMemo(() => new THREE.Vector3(...to), [to]);
+  const curve = useMemo(() => new THREE.LineCurve3(start, end), [start, end]);
+  const orientation = useMemo(() => {
+    const direction = end.clone().sub(start).normalize();
+    return new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), direction);
+  }, [start, end]);
 
   useFrame((state) => {
     const mesh = meshRef.current;
@@ -41,7 +46,8 @@ export function DataStream({
       const t = (offsets[i] + t0) % 1;
       dummy.position.lerpVectors(start, end, t);
       const fade = Math.sin(t * Math.PI); // 양 끝에서 작아지고 중간에서 커진다
-      dummy.scale.setScalar(0.45 + fade * 0.75);
+      dummy.quaternion.copy(orientation);
+      dummy.scale.setScalar(0.58 + fade * 0.48);
       dummy.updateMatrix();
       mesh.setMatrixAt(i, dummy.matrix);
     }
@@ -49,9 +55,15 @@ export function DataStream({
   });
 
   return (
-    <instancedMesh args={[undefined, undefined, count]} ref={meshRef}>
-      <sphereGeometry args={[size, 6, 6]} />
-      <meshBasicMaterial color={color} opacity={0.85} transparent />
-    </instancedMesh>
+    <group>
+      <mesh>
+        <tubeGeometry args={[curve, 1, size * 0.16, 5, false]} />
+        <meshBasicMaterial color={color} opacity={0.22} transparent />
+      </mesh>
+      <instancedMesh args={[undefined, undefined, count]} ref={meshRef}>
+        <boxGeometry args={[size * 0.55, size * 0.55, size * 4.2]} />
+        <meshBasicMaterial color={color} opacity={0.88} transparent />
+      </instancedMesh>
+    </group>
   );
 }

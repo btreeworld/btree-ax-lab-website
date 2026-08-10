@@ -4,7 +4,8 @@ import { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-import { WAYPOINTS } from '@/lib/journey';
+import type { JourneyQuality } from '@/components/three/world/useJourneyQuality';
+import { MOBILE_WAYPOINTS, WAYPOINTS } from '@/lib/journey';
 
 /**
  * 카메라를 스플라인 위에서 스크롤 진행률에 따라 이동시킨다.
@@ -16,33 +17,34 @@ import { WAYPOINTS } from '@/lib/journey';
  * position/lookAt 두 커브를 분리한 이유: 위치 이동 경로와 시선 방향을 독립적으로 설계해야
  * "지나가면서 본다"가 아니라 "다가가며 응시한다" 같은 연출이 가능하다.
  */
-export function CameraRig({ progressRef }: { progressRef: React.RefObject<number> }) {
-  const { camera } = useThree();
+export function CameraRig({ progressRef, quality }: { progressRef: React.RefObject<number>; quality: JourneyQuality }) {
+  const { camera, scene } = useThree();
+  const waypoints = quality === 'lite' ? MOBILE_WAYPOINTS : WAYPOINTS;
 
   const positionCurve = useMemo(
     () =>
       new THREE.CatmullRomCurve3(
-        WAYPOINTS.map((w) => new THREE.Vector3(...w.cameraPosition)),
+        waypoints.map((w) => new THREE.Vector3(...w.cameraPosition)),
         false,
         'catmullrom',
         0.5,
       ),
-    [],
+    [waypoints],
   );
   const lookAtCurve = useMemo(
     () =>
       new THREE.CatmullRomCurve3(
-        WAYPOINTS.map((w) => new THREE.Vector3(...w.lookAt)),
+        waypoints.map((w) => new THREE.Vector3(...w.lookAt)),
         false,
         'catmullrom',
         0.5,
       ),
-    [],
+    [waypoints],
   );
 
-  const targetPosition = useRef(new THREE.Vector3(...WAYPOINTS[0].cameraPosition));
-  const targetLookAt = useRef(new THREE.Vector3(...WAYPOINTS[0].lookAt));
-  const currentLookAt = useRef(new THREE.Vector3(...WAYPOINTS[0].lookAt));
+  const targetPosition = useRef(new THREE.Vector3(...waypoints[0].cameraPosition));
+  const targetLookAt = useRef(new THREE.Vector3(...waypoints[0].lookAt));
+  const currentLookAt = useRef(new THREE.Vector3(...waypoints[0].lookAt));
 
   useFrame((_, delta) => {
     const t = progressRef.current ?? 0;
@@ -54,6 +56,13 @@ export function CameraRig({ progressRef }: { progressRef: React.RefObject<number
     camera.position.lerp(targetPosition.current, damp);
     currentLookAt.current.lerp(targetLookAt.current, damp);
     camera.lookAt(currentLookAt.current);
+
+    // 첫 화면은 서비스 전체 파이프라인을 조망하는 디지털트윈 커맨드 뷰다.
+    // 스크롤로 현장에 진입하면 안개를 좁혀 각 스테이션에 다시 집중시킨다.
+    if (scene.fog instanceof THREE.Fog) {
+      scene.fog.near = quality === 'lite' ? 7 : 9;
+      scene.fog.far = quality === 'lite' ? 30 : 36;
+    }
   });
 
   return null;

@@ -5,6 +5,7 @@ import { useLocale } from 'next-intl';
 
 import { JourneyStage } from '@/components/three/world/hud/JourneyStage';
 import type { JourneyProgress } from '@/components/three/world/useJourneyProgress';
+import type { JourneyQuality } from '@/components/three/world/useJourneyQuality';
 import { Eyebrow } from '@/components/ui/Section';
 import { cta } from '@/content/site';
 import { cases } from '@/content/cases';
@@ -63,7 +64,7 @@ function StageTitle({ children, tone = 'primary' }: { children: ReactNode; tone?
   return <p className={`text-balance font-display text-h2 tracking-[-0.015em] ${color}`}>{children}</p>;
 }
 
-export function JourneyHud({ progress }: { progress: JourneyProgress }) {
+export function JourneyHud({ progress, quality }: { progress: JourneyProgress; quality: JourneyQuality }) {
   const locale = useLocale() as Locale;
   const h = hero[locale];
   const problem = problemSection[locale];
@@ -76,13 +77,90 @@ export function JourneyHud({ progress }: { progress: JourneyProgress }) {
   const topCases = cases[locale].slice(0, 2);
   const startingPlan = pricingPlans[locale][0];
 
+  if (quality === 'lite') {
+    return (
+      <>
+        <JourneyStage align="center" index={0} mobile mobilePlacement="center" progress={progress}>
+          <div className="-translate-y-24">
+            <Eyebrow>INDUSTRIAL AI · EDGE AI · DIGITAL TWIN</Eyebrow>
+            <h1 className="mt-4 whitespace-nowrap font-display text-[clamp(2.35rem,12vw,3.4rem)] tracking-[-0.035em] text-ink-primary-dark">
+              BTREE AX LAB
+            </h1>
+            <p className="mt-4 text-body text-ink-secondary-dark">{h.scrollPrompt}</p>
+          </div>
+        </JourneyStage>
+
+        <JourneyStage index={1} mobile progress={progress}>
+          <Eyebrow>01 · FIELD</Eyebrow>
+          <h2 className="mt-3 text-balance font-display text-[1.85rem] font-semibold leading-[1.25] tracking-[-0.025em] text-ink-primary-dark">
+            {h.headline[0]}
+            <span className="block text-accent">{h.headline[1]}</span>
+          </h2>
+          <p className="mt-4 line-clamp-3 text-pretty text-small leading-relaxed text-ink-secondary-dark">
+            {h.description.join(' ')}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2 text-xs text-ink-secondary-dark">
+            {h.trustStrip.slice(0, 3).map((item) => (
+              <span className="rounded-badge border border-white/10 bg-bg-elevated/70 px-2.5 py-1" key={item}>{item}</span>
+            ))}
+          </div>
+        </JourneyStage>
+
+        <JourneyStage index={2} mobile progress={progress}>
+          <Eyebrow>02 · EDGE · DIGITAL TWIN</Eyebrow>
+          <h2 className="mt-3 text-balance font-display text-[1.85rem] font-semibold leading-[1.25] tracking-[-0.025em] text-ink-primary-dark">
+            현장에서 판단하고,
+            <span className="block text-accent">디지털트윈으로 검증합니다.</span>
+          </h2>
+          <p className="mt-4 line-clamp-3 text-pretty text-small leading-relaxed text-ink-secondary-dark">
+            {layers[1].description} {layers[3].description}
+          </p>
+          <div className="mt-4 flex gap-2 text-xs font-semibold text-accent">
+            <span>EDGE AI</span><span>·</span><span>PLATFORM</span><span>·</span><span>DIGITAL TWIN</span>
+          </div>
+        </JourneyStage>
+
+        <JourneyStage index={3} mobile progress={progress}>
+          <Eyebrow>{finalCtaCopy.eyebrow}</Eyebrow>
+          <h2 className="mt-3 text-balance font-display text-[1.8rem] font-semibold leading-[1.25] tracking-[-0.025em] text-ink-primary-dark">
+            {finalCtaCopy.headline.join(' ')}
+          </h2>
+          <p className="mt-3 text-small text-ink-secondary-dark">{rep.name} · {startingPlan.name} {startingPlan.price}</p>
+          <a
+            className="mt-5 inline-flex min-h-11 items-center rounded-badge bg-accent px-5 py-3 font-semibold text-bg-primary"
+            href={ctaCopy.primary.href}
+          >
+            {ctaCopy.primary.label}
+          </a>
+        </JourneyStage>
+      </>
+    );
+  }
+
   return (
     <>
       {/* 00 BOOT */}
       <JourneyStage align="center" index={0} progress={progress}>
-        <Eyebrow>INDUSTRIAL AI · EDGE AI · DIGITAL TWIN</Eyebrow>
-        <h1 className="mt-5 font-display text-display-l tracking-[-0.02em] text-ink-primary-dark">BTREE AX LAB</h1>
-        <p className="mt-5 text-pretty text-body-l text-ink-secondary-dark">{h.scrollPrompt}</p>
+        <div className="-translate-y-16 sm:-translate-y-20">
+          <Eyebrow>INDUSTRIAL AI · EDGE AI · DIGITAL TWIN</Eyebrow>
+          <h1 className="mt-5 font-display text-display-l tracking-[-0.02em] text-ink-primary-dark [text-shadow:0_2px_28px_rgba(3,9,16,0.9)]">BTREE AX LAB</h1>
+          <p className="mt-5 text-pretty text-body-l text-ink-secondary-dark [text-shadow:0_2px_18px_rgba(3,9,16,0.95)]">{h.scrollPrompt}</p>
+        </div>
+        <div aria-hidden className="fixed inset-x-0 bottom-16 hidden px-12 md:block">
+          <div className="mx-auto max-w-4xl">
+            <div className="relative h-px bg-white/20">
+              <div className="absolute inset-y-0 left-0 w-[4%] bg-accent shadow-[0_0_16px_rgba(42,212,217,0.75)]" />
+              <div className="absolute inset-x-0 -top-1.5 flex justify-between">
+                {['현장', '단절', 'Edge', '플랫폼', '디지털트윈', '운영자'].map((label, index) => (
+                  <span className="flex flex-col items-center gap-3" key={label}>
+                    <span className={`h-3 w-3 rounded-full border ${index === 0 ? 'border-accent bg-accent shadow-[0_0_14px_rgba(42,212,217,0.8)]' : 'border-white/30 bg-[#718095]'}`} />
+                    <span className={`text-small ${index === 0 ? 'text-accent' : 'text-ink-secondary-dark'}`}>{label}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </JourneyStage>
 
       {/* 01 FIELD */}

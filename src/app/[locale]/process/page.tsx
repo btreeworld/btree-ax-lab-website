@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/layout/JsonLd';
 import { FinalCtaSection } from '@/components/sections/FinalCtaSection';
 import { PageHero } from '@/components/sections/PageHero';
 import { PricingSection } from '@/components/sections/PricingSection';
+import { VisualNarrative } from '@/components/sections/VisualNarrative';
 import { PlaceholderNote } from '@/components/ui/Badge';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { processDetail, processPageCopy, refundPolicyDraft } from '@/content/pricing';
@@ -46,6 +47,26 @@ export default async function ProcessPage({ params }: { params: Promise<{ locale
   return (
     <>
       <PageHero breadcrumb={breadcrumb} description={copy.heroDescription} eyebrow={copy.heroEyebrow} title={copy.heroTitle} />
+
+      <VisualNarrative
+        description={locale === 'ko' ? '각 단계는 다음 단계의 투자 판단에 필요한 증거를 만듭니다. 진단 결과만으로 곧바로 대형 구축을 권하지 않습니다.' : 'Each stage creates the evidence needed for the next investment decision. We do not jump from diagnosis straight into a large deployment.'}
+        eyebrow="DELIVERY JOURNEY"
+        image="/images/visuals/project-process.png"
+        imageAlt={locale === 'ko' ? '현장 진단, 시스템 설계, PoC 검증, 운영으로 이어지는 프로젝트 절차' : 'Project journey from field diagnosis and system design to PoC verification and operations'}
+        points={locale === 'ko' ? [
+          { title: '진단', description: '현장 데이터와 제약, 기대 효과를 함께 확인합니다.' },
+          { title: '설계', description: '구현 범위·아키텍처·검증 지표를 구체화합니다.' },
+          { title: 'PoC', description: '실제 환경에서 성능과 운영 가능성을 검증합니다.' },
+          { title: '운영', description: '모니터링·개선·확장 가능한 체계로 전환합니다.' },
+        ] : [
+          { title: 'Diagnosis', description: 'Review field data, constraints, and expected value together.' },
+          { title: 'Design', description: 'Specify scope, architecture, and validation metrics.' },
+          { title: 'PoC', description: 'Validate performance and operability in the real environment.' },
+          { title: 'Operations', description: 'Move into a monitorable, improvable, scalable system.' },
+        ]}
+        priority
+        title={locale === 'ko' ? '불확실성을 단계별로 줄이는 프로젝트 방식' : 'A project method that reduces uncertainty stage by stage'}
+      />
 
       {/* 전체 절차 — 마스터 문서 10.2 */}
       <Section ariaLabelledby="process-detail-title" tone="dark">

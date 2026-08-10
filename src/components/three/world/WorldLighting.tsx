@@ -25,14 +25,14 @@ export function WorldLighting({ quality }: { quality: JourneyQuality }) {
     <>
       {/* 필 — 하늘/바닥 두 방향의 은은한 기저광. 완전한 암부가 생기지 않게 바닥을 들어올린다.
           어두운 씬이라 필을 인색하게 주면 카메라 반대편 면이 배경과 붙어 실루엣이 사라진다. */}
-      <hemisphereLight args={[0x3d7f9e, 0x0d1826, isFull ? 1.35 : 1.6]} />
-      <ambientLight intensity={0.35} />
+      <hemisphereLight args={[0x4d91ae, 0x070b12, isFull ? 1.18 : 1.45]} />
+      <ambientLight intensity={isFull ? 0.28 : 0.34} />
 
       {/* 키 — 카메라가 대체로 -Z를 보므로 좌상단 앞쪽에서 넣는다. */}
-      <directionalLight color={0xdff3ff} intensity={isFull ? 1.5 : 1.8} position={[6, 9, 8]} />
+      <directionalLight color={0xdff3ff} intensity={isFull ? 1.75 : 2.1} position={[6, 9, 8]} />
 
       {/* 림 — 반대편에서 청록으로 실루엣 가장자리를 훑어 배경과 분리시킨다. */}
-      {isFull ? <directionalLight color={threeColors.accent} intensity={0.7} position={[-8, 4, -10]} /> : null}
+      {isFull ? <directionalLight color={threeColors.accent} intensity={1.05} position={[-8, 4, -10]} /> : null}
 
       {isFull ? (
         <Environment frames={1} resolution={128}>

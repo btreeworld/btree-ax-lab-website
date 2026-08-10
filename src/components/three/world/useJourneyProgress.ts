@@ -26,11 +26,10 @@ export function useJourneyProgress(): JourneyProgress {
   useEffect(() => {
     let rafId: number | null = null;
 
-    // 여정 스페이서가 페이지의 유일한 스크롤 콘텐츠이므로, 문서 전체 스크롤 가능 거리를
-    // 그대로 진행률의 분모로 쓴다 — vh를 따로 하드코딩해 스페이서 실측 높이와 어긋날 일이 없다.
     function computeAndNotify() {
       rafId = null;
-      const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      const spacer = document.querySelector<HTMLElement>('[data-journey-spacer]');
+      const max = Math.max((spacer?.offsetHeight ?? document.documentElement.scrollHeight) - window.innerHeight, 1);
       const next = Math.min(Math.max(window.scrollY / max, 0), 1);
       progressRef.current = next;
       listenersRef.current.forEach((listener) => listener(next));

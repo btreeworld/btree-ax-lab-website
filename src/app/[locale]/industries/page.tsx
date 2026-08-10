@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { FinalCtaSection } from '@/components/sections/FinalCtaSection';
 import { PageHero } from '@/components/sections/PageHero';
+import { VisualNarrative } from '@/components/sections/VisualNarrative';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Section, SectionHeader } from '@/components/ui/Section';
@@ -43,6 +44,26 @@ export default async function IndustriesPage({ params }: { params: Promise<{ loc
   return (
     <>
       <PageHero breadcrumb={breadcrumb} description={copy.heroDescription} eyebrow={copy.heroEyebrow} title={copy.heroTitle} />
+
+      <VisualNarrative
+        description={locale === 'ko' ? '산업은 달라도 핵심은 같습니다. 현장을 감지하고, 가까운 곳에서 판단하고, 운영 가능한 정보로 바꾸는 것입니다.' : 'Different industries share the same core: sense the field, decide close to it, and turn signals into operable information.'}
+        eyebrow="APPLICATION LANDSCAPE"
+        image="/images/visuals/industry-landscape.png"
+        imageAlt={locale === 'ko' ? '제조, 산업안전, 스마트팜 현장이 Edge AI로 연결된 모습' : 'Manufacturing, industrial safety, and smart farming connected through Edge AI'}
+        points={locale === 'ko' ? [
+          { title: '스마트 제조', description: '검사·이상탐지·설비 상태를 실시간으로 연결합니다.' },
+          { title: '산업 안전', description: '위험 행동과 환경 신호를 현장에서 빠르게 판단합니다.' },
+          { title: '스마트팜', description: '생육·기후·설비 데이터를 하나의 운영 흐름으로 만듭니다.' },
+          { title: '공통 데이터 코어', description: '산업별 데이터를 Edge와 플랫폼에서 일관되게 관리합니다.' },
+        ] : [
+          { title: 'Smart manufacturing', description: 'Connect inspection, anomalies, and equipment health in real time.' },
+          { title: 'Industrial safety', description: 'Detect risky behavior and environmental signals at the edge.' },
+          { title: 'Smart farming', description: 'Unify crop, climate, and equipment data into one workflow.' },
+          { title: 'Shared data core', description: 'Manage industry data consistently across Edge and platform.' },
+        ]}
+        priority
+        title={locale === 'ko' ? '제조·안전·농업을 연결하는 하나의 AX 원리' : 'One AX principle across manufacturing, safety, and agriculture'}
+      />
 
       {industryList.map((industry, index) => (
         <Section ariaLabelledby={`${industry.slug}-title`} id={industry.slug} key={industry.slug} tone={index % 2 === 0 ? 'dark' : 'dark-alt'}>

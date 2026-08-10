@@ -28,7 +28,7 @@ export function FieldStation() {
       <ShadowBlob position={[fx, 0, fz]} radius={3.2} />
       <ShadowBlob opacity={0.85} position={[gx, 0, gz]} radius={2.2} />
       <ShadowBlob opacity={0.6} position={plcPos} radius={0.8} />
-      <ShadowBlob opacity={0.6} position={[fx + 1.1, 0, fz + 1.6]} radius={0.7} />
+      <ShadowBlob opacity={0.72} position={[fx + 2.7, 0, fz + 2.1]} radius={0.9} />
 
       {/* 제조 — 톱니 지붕 공장동 */}
       <Factory depth={FIELD_LAYOUT.factory.size[2]} position={FIELD_LAYOUT.factory.center} width={FIELD_LAYOUT.factory.size[0]} />
@@ -43,7 +43,7 @@ export function FieldStation() {
       <SensorPost position={sensorPos} />
 
       {/* 로봇 — 공장 앞 매니퓰레이터 */}
-      <RobotArm position={[fx + 1.1, 0, fz + 1.6]} scale={0.9} />
+      <RobotArm position={[fx + 2.7, 0, fz + 2.1]} scale={1.2} />
 
       {/* 기존 설비 — PLC 제어반 */}
       <PlcCabinet position={plcPos} rotation={[0, 0.3, 0]} />

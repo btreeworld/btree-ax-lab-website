@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/layout/JsonLd';
 import { FinalCtaSection } from '@/components/sections/FinalCtaSection';
 import { PageHero } from '@/components/sections/PageHero';
 import { RepresentativePhoto } from '@/components/sections/RepresentativeSection';
+import { VisualNarrative } from '@/components/sections/VisualNarrative';
 import { Accordion } from '@/components/ui/Accordion';
 import { Badge, PlaceholderNote } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -85,6 +86,25 @@ export default async function TrackRecordPage({ params }: { params: Promise<{ lo
           {ctaContent.secondary.label}
         </Button>
       </PageHero>
+
+      <VisualNarrative
+        description={locale === 'ko' ? '연구·사업·컨설팅 이력은 서로 분리된 목록이 아니라, 현장 데이터를 이해하고 시스템으로 구현해 운영까지 연결해 온 하나의 축적 과정입니다.' : 'Research, business, and consulting records form one accumulated path from understanding field data to implementation and operation.'}
+        eyebrow="EXPERIENCE MAP"
+        image="/images/visuals/proven-systems.png"
+        imageAlt={locale === 'ko' ? '다양한 산업 AI 프로젝트와 연구 결과가 하나의 기술 코어로 연결된 경험 지도' : 'Experience map connecting industrial AI projects and research to one technology core'}
+        points={locale === 'ko' ? [
+          { title: '국가 R&D', description: 'AI·디지털트윈·콘텐츠 기술을 연구 과제로 검증했습니다.' },
+          { title: '산업 프로젝트', description: '제조·안전·농업 현장의 문제를 시스템으로 구현했습니다.' },
+          { title: '연구와 지식', description: '논문·저서·강의로 기술을 구조화하고 전달했습니다.' },
+          { title: '실행 책임', description: '기획부터 PoC, 운영 협의까지 연결해 왔습니다.' },
+        ] : [
+          { title: 'National R&D', description: 'Validated AI, digital twin, and content technologies through research.' },
+          { title: 'Industry projects', description: 'Implemented systems for manufacturing, safety, and agriculture.' },
+          { title: 'Research knowledge', description: 'Structured and shared knowledge through papers, books, and lectures.' },
+          { title: 'Delivery ownership', description: 'Connected planning, PoC, and operational coordination.' },
+        ]}
+        title={locale === 'ko' ? '연구에서 현장 운영까지 이어진 경험의 지도' : 'An experience map from research to field operations'}
+      />
 
       {/* 섹션 내비게이션 */}
       <div className="sticky top-16 z-40 border-y border-line-dark bg-bg-primary/95 backdrop-blur-md lg:top-[76px]">

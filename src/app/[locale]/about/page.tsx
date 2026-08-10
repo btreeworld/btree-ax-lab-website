@@ -7,13 +7,14 @@ import { JsonLd } from '@/components/layout/JsonLd';
 import { FinalCtaSection } from '@/components/sections/FinalCtaSection';
 import { PageHero } from '@/components/sections/PageHero';
 import { RepresentativePhoto } from '@/components/sections/RepresentativeSection';
-import { Badge } from '@/components/ui/Badge';
+import { VisualNarrative } from '@/components/sections/VisualNarrative';
 import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { about, aboutPageCopy } from '@/content/about';
 import { representative } from '@/content/representative-profile';
-import { navLabel, site } from '@/content/site';
+import { navLabel } from '@/content/site';
 import { locales, type Locale } from '@/i18n/locales';
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo';
 
@@ -57,30 +58,43 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
     <>
       <PageHero breadcrumb={breadcrumb} eyebrow="ABOUT" title={content.heroTitle} />
 
-      {/* 법인과 브랜드의 관계 — 마스터 문서 2.1 / 11.0 */}
+      <VisualNarrative
+        description={locale === 'ko' ? 'BTREE AX LAB은 연구와 개발 경험을 현장 진단, 시스템 설계, PoC, 운영 가능한 디지털트윈 서비스로 전환합니다.' : 'BTREE AX LAB turns research and development experience into field diagnosis, system design, PoC, and operable digital twin services.'}
+        eyebrow="WHAT WE CONNECT"
+        image="/images/visuals/service-architecture.png"
+        imageAlt={locale === 'ko' ? '산업 현장과 Edge AI, 플랫폼, 디지털트윈을 연결하는 회사의 역할' : 'The company role connecting industrial fields, Edge AI, platform, and digital twin'}
+        points={locale === 'ko' ? [
+          { title: '현장 이해', description: '기술보다 먼저 실제 설비와 운영 조건을 파악합니다.' },
+          { title: '통합 설계', description: 'AI·IoT·Edge·플랫폼을 하나의 구조로 설계합니다.' },
+          { title: '검증 중심', description: 'PoC와 측정 지표로 투자 전 불확실성을 줄입니다.' },
+          { title: '운영 연결', description: '보고서가 아닌 실제 사용 가능한 시스템을 지향합니다.' },
+        ] : [
+          { title: 'Field understanding', description: 'Start with real equipment and operating conditions.' },
+          { title: 'Integrated design', description: 'Design AI, IoT, Edge, and platform as one structure.' },
+          { title: 'Evidence first', description: 'Reduce uncertainty with PoCs and measurable criteria.' },
+          { title: 'Operational link', description: 'Aim for usable systems rather than reports alone.' },
+        ]}
+        priority
+        title={locale === 'ko' ? '기술을 현장에서 작동하는 서비스로 바꿉니다' : 'Turning technology into services that work in the field'}
+      />
+
+      {/* 법인과 브랜드의 관계는 신뢰에 필요한 문장만 남기고, 전문성과 서비스 설명에 초점을 둔다. */}
       <Section ariaLabelledby="brand-relation-title" tone="dark">
-        <SectionHeader id="brand-relation-title" title={copy.brandRelationTitle} />
-
-        <div className="grid gap-5 lg:grid-cols-3">
-          <div className="rounded-card border border-line-dark bg-bg-elevated/50 p-6 md:p-7">
-            <Badge tone="neutral">{copy.legalNameBadge}</Badge>
-            <p className="mt-4 text-h4 text-ink-primary-dark">
-              {locale === 'ko' ? `${site.legalName.ko} / ${site.legalNameEn}` : site.legalName.en}
-            </p>
-            <p className="mt-3 text-body text-ink-secondary-dark">{copy.legalNameCaption}</p>
-          </div>
-          <div className="rounded-card border border-accent/30 bg-accent-soft p-6 md:p-7">
-            <Badge tone="accent">{copy.brandBadge}</Badge>
-            <p className="mt-4 text-h4 text-ink-primary-dark">{site.brand}</p>
-            <p className="mt-3 text-body text-ink-primary-dark/80">{copy.brandCaption}</p>
-          </div>
-          <div className="rounded-card border border-line-dark bg-bg-elevated/50 p-6 md:p-7">
-            <Badge tone="neutral">{copy.taglineBadge}</Badge>
-            <p className="mt-4 text-h4 text-accent">{site.tagline}</p>
-            <p className="mt-3 text-body text-ink-secondary-dark">{locale === 'ko' ? site.sloganKo : site.sloganEn}</p>
-          </div>
+        <SectionHeader
+          eyebrow="BTREE INC. × AX LAB"
+          id="brand-relation-title"
+          title={locale === 'ko' ? '축적된 기술을 현장 서비스로 연결합니다' : 'Turning accumulated technology into field services'}
+        />
+        <div className="max-w-[900px] rounded-card border border-accent/25 bg-accent-soft p-6 md:p-8">
+          <p className="text-h4 text-ink-primary-dark">
+            {locale === 'ko'
+              ? 'BTREE AX LAB은 주식회사 비트리가 운영하는 산업 현장 AX·Edge AI·디지털트윈 전문 브랜드입니다.'
+              : 'BTREE AX LAB is the industrial AX, Edge AI, and digital twin specialist brand operated by BTREE Inc.'}
+          </p>
+          <p className="mt-3 text-small text-ink-secondary-dark">
+            {locale === 'ko' ? '계약과 서비스 제공의 법적 주체는 주식회사 비트리입니다.' : 'BTREE Inc. is the legal entity for contracts and service delivery.'}
+          </p>
         </div>
-
         <div className="mt-8 max-w-[820px]">
           {content.intro.map((line) => (
             <p className="mt-3 text-body-l text-ink-secondary-dark" key={line}>

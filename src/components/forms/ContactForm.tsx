@@ -26,6 +26,9 @@ import { buildContactSchema, contactDefaultValues, type ContactInput } from '@/l
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
+/** Cloudflare Pages에서도 별도 서버 함수 없이 동작하는 Formspree 문의 엔드포인트. */
+const CONTACT_FORM_ENDPOINT = 'https://formspree.io/f/xaeweapv';
+
 export function ContactForm({
   defaultService = '',
   defaultIndustry = '',
@@ -74,9 +77,12 @@ export function ContactForm({
     trackEvent('contact_form_submit', { section: 'contact-form', service_type: values.service });
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch(CONTACT_FORM_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(values),
       });
 

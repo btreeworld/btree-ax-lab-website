@@ -29,22 +29,21 @@ export type Waypoint = {
  * 순서 = 서사 순서: 스캔 → 현장 → 단절 → 엣지 → 플랫폼 → 트윈 전경 → 운영자 → 대화.
  */
 export const WAYPOINTS: Waypoint[] = [
-  // 00 BOOT — 높은 상공에서 아직 형체 없는 점군을 내려다본다
-  { id: 'boot', cameraPosition: [0, 20, 30], lookAt: [0, 2, 10] },
-  // 01 FIELD — 현장으로 하강. 공장동·온실이 눈높이에 온다
-  { id: 'field', cameraPosition: [7, 3.4, 15], lookAt: [0, 1.6, 8] },
-  // 02 THE GAP — 좌측으로 크게 스윙하며 끊긴 스트림을 목격
-  { id: 'gap', cameraPosition: [-8, 5, 5], lookAt: [0, 2.6, -1] },
-  // 03 EDGE — 낮게 깔려 엣지 노드 내부로 진입
-  { id: 'edge', cameraPosition: [0.8, 1.9, -4], lookAt: [0, 1.7, -10] },
-  // 04 PLATFORM — 정렬된 레인 사이를 통과
-  { id: 'platform', cameraPosition: [-6, 3.4, -16], lookAt: [0, 2.2, -23] },
-  // 05 TWIN — 크게 후퇴·상승하며 전경 공개 (여정의 클라이맥스)
-  { id: 'twin', cameraPosition: [11, 10, -26], lookAt: [0, 2.5, -34] },
-  // 06 OPERATOR — 콘솔 앞으로 내려앉는다
-  { id: 'operator', cameraPosition: [2.5, 2.4, -38], lookAt: [0, 2, -43] },
-  // 07 CONTACT — 지평선으로 물러나며 고요해진다
-  { id: 'contact', cameraPosition: [0, 5.5, -48], lookAt: [0, 4, -62] },
+  { id: 'boot', cameraPosition: [7, 4.4, 16.4], lookAt: [0, 1.2, 7.6] },
+  { id: 'field', cameraPosition: [7, 3.6, 15], lookAt: [0, 1.55, 8] },
+  { id: 'gap', cameraPosition: [-7.5, 4.8, 4.5], lookAt: [0, 2.4, -1] },
+  { id: 'edge', cameraPosition: [2.8, 2.5, -4], lookAt: [0, 1.75, -9] },
+  { id: 'platform', cameraPosition: [-6.4, 3.8, -15.5], lookAt: [0, 1.8, -21.5] },
+  { id: 'twin', cameraPosition: [10.5, 8.2, -25.5], lookAt: [0, 2.5, -32] },
+  { id: 'operator', cameraPosition: [3.4, 2.8, -37.2], lookAt: [0, 1.9, -42] },
+  { id: 'contact', cameraPosition: [0, 5.5, -47], lookAt: [0, 3.5, -58] },
+];
+
+export const MOBILE_WAYPOINTS: Waypoint[] = [
+  { id: 'boot', cameraPosition: [0, 3.4, 17], lookAt: [0, 1.25, 8.1] },
+  { id: 'field', cameraPosition: [0.65, 2.9, 14.4], lookAt: [0, 1.25, 8.15] },
+  { id: 'edge', cameraPosition: [0.55, 2.85, -4.2], lookAt: [0, 1.55, -9.35] },
+  { id: 'operator', cameraPosition: [0.6, 2.8, -36.7], lookAt: [0, 1.7, -42] },
 ];
 
 /**
@@ -73,11 +72,22 @@ export function stageOpacity(progress: number, index: number): number {
   return 1 - (distance - plateau) / (fadeEnd - plateau);
 }
 
+export function mobileStageOpacity(progress: number, index: number, total = 4): number {
+  const span = 1 / (total - 1);
+  const distance = Math.abs(progress - index * span);
+  const plateau = span * 0.3;
+  const fadeEnd = span * 0.48;
+  if (distance <= plateau) return 1;
+  if (distance >= fadeEnd) return 0;
+  return 1 - (distance - plateau) / (fadeEnd - plateau);
+}
+
 /**
  * 스크롤 스페이서 높이(vh). 웨이포인트 7구간 × 약 110vh.
  * 너무 짧으면 카메라가 순간이동하는 것처럼 느껴지고, 너무 길면 지루해진다.
  */
 export const JOURNEY_SCROLL_VH = 780;
+export const MOBILE_JOURNEY_SCROLL_VH = 390;
 
 /**
  * FIELD 스테이션의 건물 배치 — PointCloudScan(부팅 시퀀스가 수렴하는 목표 지점)과

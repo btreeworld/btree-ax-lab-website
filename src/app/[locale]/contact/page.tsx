@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { ContactForm } from '@/components/forms/ContactForm';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { PageHero } from '@/components/sections/PageHero';
+import { VisualNarrative } from '@/components/sections/VisualNarrative';
 import { Icon } from '@/components/ui/Icon';
 import { Section } from '@/components/ui/Section';
 import { contactCopy } from '@/content/contact';
@@ -53,6 +54,25 @@ export default async function ContactPage({
   return (
     <>
       <PageHero breadcrumb={breadcrumb} description={copy.helper} eyebrow="CONTACT" title={copy.heroTitle} />
+
+      <VisualNarrative
+        description={locale === 'ko' ? '문의 내용을 바탕으로 현장 조건을 확인하고, 필요한 경우 진단·설계·PoC 중 가장 작은 검증 단위부터 제안합니다.' : 'We review your field conditions and propose the smallest useful validation step across diagnosis, design, or PoC.'}
+        eyebrow="WHAT HAPPENS NEXT"
+        image="/images/visuals/project-process.png"
+        imageAlt={locale === 'ko' ? '문의 이후 현장 진단, 설계, PoC, 운영으로 이어지는 상담 흐름' : 'Consultation flow from inquiry to diagnosis, design, PoC, and operations'}
+        points={locale === 'ko' ? [
+          { title: '문의 접수', description: '현장과 해결하려는 문제를 간단히 알려주세요.' },
+          { title: '조건 확인', description: '데이터·설비·네트워크·일정 조건을 확인합니다.' },
+          { title: '범위 제안', description: '필요한 산출물과 검증 범위를 투명하게 제안합니다.' },
+          { title: '착수 판단', description: '비용과 일정 확인 후 다음 단계를 결정합니다.' },
+        ] : [
+          { title: 'Inquiry', description: 'Tell us briefly about the field and the problem to solve.' },
+          { title: 'Condition review', description: 'Review data, equipment, network, and schedule constraints.' },
+          { title: 'Scope proposal', description: 'Propose deliverables and validation scope transparently.' },
+          { title: 'Start decision', description: 'Choose the next step after confirming cost and schedule.' },
+        ]}
+        title={locale === 'ko' ? '문의 후 진행 과정을 미리 확인하세요' : 'See what happens after your inquiry'}
+      />
 
       <Section tone="light">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">

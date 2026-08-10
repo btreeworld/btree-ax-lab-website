@@ -8,6 +8,8 @@ import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing';
 import { useJourneyAudio } from '@/components/three/world/audio/useJourneyAudio';
 import { CameraRig } from '@/components/three/world/CameraRig';
 import { JourneyHud } from '@/components/three/world/hud/JourneyHud';
+import { IndustrialEffects } from '@/components/three/world/IndustrialEffects';
+import { MobileJourneyScene } from '@/components/three/world/MobileJourneyScene';
 import { SoundToggle } from '@/components/three/world/hud/SoundToggle';
 import { PointCloudScan } from '@/components/three/world/PointCloudScan';
 import { EdgeStation } from '@/components/three/world/stations/EdgeStation';
@@ -20,7 +22,7 @@ import { Terrain } from '@/components/three/world/Terrain';
 import { useJourneyProgress } from '@/components/three/world/useJourneyProgress';
 import { WorldLighting } from '@/components/three/world/WorldLighting';
 import type { JourneyQuality } from '@/components/three/world/useJourneyQuality';
-import { JOURNEY_SCROLL_VH, WAYPOINTS } from '@/lib/journey';
+import { JOURNEY_SCROLL_VH, MOBILE_JOURNEY_SCROLL_VH, MOBILE_WAYPOINTS, WAYPOINTS } from '@/lib/journey';
 import { threeColors } from '@/lib/three-tokens';
 
 /**
@@ -44,7 +46,7 @@ export function JourneyWorld({ quality }: { quality: JourneyQuality }) {
           /* fov는 수직 화각이라, 세로로 긴 모바일 화면에서는 수평 화각이 크게 좁아져
              공장·온실처럼 옆으로 퍼진 설비가 화면 밖으로 잘려 나간다. lite(모바일)에서는
              화각을 넓혀 같은 카메라 경로로도 스테이션 전체가 프레임에 들어오게 한다. */
-          camera={{ position: WAYPOINTS[0].cameraPosition, fov: quality === 'lite' ? 70 : 50 }}
+          camera={{ position: quality === 'lite' ? MOBILE_WAYPOINTS[0].cameraPosition : WAYPOINTS[0].cameraPosition, fov: quality === 'lite' ? 58 : 50 }}
           dpr={dpr}
           frameloop="always"
           gl={{ alpha: false, antialias: quality === 'full' }}
@@ -56,31 +58,38 @@ export function JourneyWorld({ quality }: { quality: JourneyQuality }) {
           <fog args={[threeColors.fog, 9, 32]} attach="fog" />
           <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => quality === 'full' && setDpr(1.5)} />
 
-          <CameraRig progressRef={progress.ref} />
+          <CameraRig progressRef={progress.ref} quality={quality} />
           <WorldLighting quality={quality} />
           <Terrain />
-          <PointCloudScan progressRef={progress.ref} />
-          <FieldStation />
-          <GapStation />
-          <EdgeStation />
-          <PlatformStation />
-          <TwinStation />
-          <OperatorStation />
+          <IndustrialEffects quality={quality} />
+          {quality === 'full' ? (
+            <>
+              <PointCloudScan progressRef={progress.ref} />
+              <FieldStation />
+              <GapStation />
+              <EdgeStation />
+              <PlatformStation />
+              <TwinStation />
+              <OperatorStation />
+            </>
+          ) : (
+            <MobileJourneyScene />
+          )}
 
           {quality === 'full' ? (
             <EffectComposer>
-              <Bloom intensity={0.35} luminanceSmoothing={0.9} luminanceThreshold={0.25} mipmapBlur />
+              <Bloom intensity={0.42} luminanceSmoothing={0.92} luminanceThreshold={0.3} mipmapBlur />
               <Vignette darkness={0.55} offset={0.28} />
             </EffectComposer>
           ) : null}
         </Canvas>
       </div>
 
-      <JourneyHud progress={progress} />
+      <JourneyHud progress={progress} quality={quality} />
       <SoundToggle enabled={audio.enabled} onToggle={audio.toggle} />
 
       {/* 스크롤 길이 전용 스페이서 — 자체 콘텐츠 없음 */}
-      <div aria-hidden style={{ height: `${JOURNEY_SCROLL_VH}vh` }} />
+      <div aria-hidden data-journey-spacer style={{ height: `${quality === 'lite' ? MOBILE_JOURNEY_SCROLL_VH : JOURNEY_SCROLL_VH}vh` }} />
     </div>
   );
 }
