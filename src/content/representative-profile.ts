@@ -3,9 +3,9 @@
  *
  * ⚠️ 공개 금지 정보 (마스터 문서 0.1 / 12.12)
  *    생년월일, 나이, 개인 휴대전화는 이 데이터에 포함하지 않는다.
- * ⚠️ 확정 필요
- *    - 건양대학교 박사과정 학적 상태(재학·수료·졸업)는 학적증명서로 확정한다. 확정 전까지는
- *      '박사과정' 표기를 유지한다 (마스터 문서 7.10 "학적 상태에 따른 마지막 문장 교체" 참조).
+ *
+ * 건양대학교 박사과정 학적 상태는 '수료'로 확정했다(2026-08 대표 확인).
+ * 학위 취득 시 status를 '박사'로 교체한다 (마스터 문서 7.10 "학적 상태에 따른 마지막 문장 교체" 참조).
  */
 import type { Locale } from '@/i18n/locales';
 
@@ -176,11 +176,10 @@ export const representative: Record<Locale, RepresentativeContent> = {
     expertiseTags: ['Industrial AI', 'Edge AI', 'Digital Twin', 'AIoT', 'Computer Vision', 'Smart Farm', 'Robotics', 'Technology Planning'],
     education: [
       {
-        period: '2023.03–현재',
+        period: '2023.03 입학',
         institution: '건양대학교',
         major: '의료인공지능',
-        status: '박사과정',
-        statusNote: '학적 상태 확정 필요',
+        status: '박사과정 수료',
       },
       { period: '2006.02–2009.08', institution: '국립군산대학교', major: '영상처리·인공지능', status: '석사' },
       { period: '1999.03–2006.02', institution: '국립군산대학교', major: '컴퓨터정보공학', status: '학사' },
@@ -261,11 +260,10 @@ export const representative: Record<Locale, RepresentativeContent> = {
     expertiseTags: ['Industrial AI', 'Edge AI', 'Digital Twin', 'AIoT', 'Computer Vision', 'Smart Farm', 'Robotics', 'Technology Planning'],
     education: [
       {
-        period: '2023.03–Present',
+        period: 'Enrolled 2023.03',
         institution: 'Konyang University',
         major: 'Medical AI',
-        status: 'Ph.D. program',
-        statusNote: 'Enrollment status to be confirmed',
+        status: 'Ph.D. coursework completed',
       },
       { period: '2006.02–2009.08', institution: 'Kunsan National University', major: 'Video Processing & AI', status: 'M.S.' },
       { period: '1999.03–2006.02', institution: 'Kunsan National University', major: 'Computer Information Engineering', status: 'B.S.' },
