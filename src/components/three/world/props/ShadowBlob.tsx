@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import * as THREE from 'three';
 
 import { getShadowBlobTexture } from '@/components/three/world/materials';
 

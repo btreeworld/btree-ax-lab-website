@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 
-import { defaultLocale, isLocale } from '@/i18n/locales';
+import { defaultLocale, isLocale, type Locale } from '@/i18n/locales';
 import { sendAdminNotification, sendCustomerAcknowledgement } from '@/lib/email';
 import { buildContactSchema } from '@/lib/validation';
 
-export const runtime = 'nodejs';
+/**
+ * Cloudflare Pages(next-on-pages)는 프리렌더되지 않는 라우트에 edge 런타임을 요구한다.
+ * 이 라우트가 쓰는 email.ts(순수 fetch)와 validation.ts(zod)는 모두 edge 호환이다.
+ */
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 /**
@@ -13,7 +17,56 @@ export const dynamic = 'force-dynamic';
  * 민감한 오류정보는 응답에 노출하지 않는다.
  */
 
-/** 간단한 in-memory rate limit. 다중 인스턴스 배포 시 외부 저장소로 교체한다. */
+const routeMessages: Record<
+  Locale,
+  { rateLimited: string; badRequest: string; invalidInput: string; sendFailed: string; verificationFailed: string }
+> = {
+  ko: {
+    rateLimited: '요청이 많습니다. 잠시 후 다시 시도해 주세요.',
+    badRequest: '잘못된 요청입니다.',
+    invalidInput: '입력값을 확인해 주세요.',
+    sendFailed: '전송 중 문제가 발생했습니다.',
+    verificationFailed: '보안 확인에 실패했습니다. 새로고침 후 다시 시도해 주세요.',
+  },
+  en: {
+    rateLimited: 'Too many requests. Please try again shortly.',
+    badRequest: 'Invalid request.',
+    invalidInput: 'Please check your input.',
+    sendFailed: 'A problem occurred while sending. Please try again.',
+    verificationFailed: 'Security verification failed. Please refresh and try again.',
+  },
+};
+
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
+/**
+ * TURNSTILE_SECRET_KEY가 없으면(위젯 미도입) 항상 통과시킨다 — 클라이언트도 같은 조건으로
+ * 위젯 렌더링 여부를 결정하므로, 키 발급 전에는 이 함수가 사실상 no-op이다.
+ */
+async function verifyTurnstile(token: unknown, remoteIp: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret) return true;
+  if (typeof token !== 'string' || !token) return false;
+
+  try {
+    const form = new FormData();
+    form.append('secret', secret);
+    form.append('response', token);
+    if (remoteIp !== 'unknown') form.append('remoteip', remoteIp);
+
+    const result = await fetch(TURNSTILE_VERIFY_URL, { method: 'POST', body: form });
+    const outcome = (await result.json()) as { success?: boolean };
+    return outcome.success === true;
+  } catch (error) {
+    console.error('[contact] turnstile verification request failed', error instanceof Error ? error.message : 'unknown');
+    return false;
+  }
+}
+
+/**
+ * 간단한 in-memory rate limit. Cloudflare Workers는 아이솔레이트가 요청마다 흩어질 수 있어
+ * 이 Map이 완전한 방어선이 되지 못한다 — 봇 방지의 1차 방어선은 honeypot이고, 이건 보조 수단이다.
+ */
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 5;
 const requestLog = new Map<string, number[]>();
@@ -53,18 +106,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 403 });
   }
 
-  if (isRateLimited(clientKey(request))) {
-    return NextResponse.json(
-      { ok: false, message: '요청이 많습니다. 잠시 후 다시 시도해 주세요.' },
-      { status: 429 },
-    );
-  }
-
   let payload: unknown;
   try {
     payload = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, message: '잘못된 요청입니다.' }, { status: 400 });
+    return NextResponse.json({ ok: false, message: routeMessages[defaultLocale].badRequest }, { status: 400 });
   }
 
   const rawLocale =
@@ -72,13 +118,18 @@ export async function POST(request: Request) {
       ? String((payload as { locale: unknown }).locale)
       : '';
   const requestLocale = isLocale(rawLocale) ? rawLocale : defaultLocale;
+  const m = routeMessages[requestLocale];
+
+  if (isRateLimited(clientKey(request))) {
+    return NextResponse.json({ ok: false, message: m.rateLimited }, { status: 429 });
+  }
 
   const parsed = buildContactSchema(requestLocale).safeParse(payload);
   if (!parsed.success) {
     return NextResponse.json(
       {
         ok: false,
-        message: '입력값을 확인해 주세요.',
+        message: m.invalidInput,
         fields: parsed.error.flatten().fieldErrors,
       },
       { status: 400 },
@@ -92,6 +143,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
+  const turnstileToken = typeof payload === 'object' && payload !== null && 'turnstileToken' in payload
+    ? (payload as { turnstileToken: unknown }).turnstileToken
+    : undefined;
+  const turnstileOk = await verifyTurnstile(turnstileToken, clientKey(request));
+  if (!turnstileOk) {
+    return NextResponse.json({ ok: false, message: m.verificationFailed }, { status: 400 });
+  }
+
   const receivedAt = new Date().toISOString();
 
   try {
@@ -101,20 +160,23 @@ export async function POST(request: Request) {
     ]);
 
     if (adminResult === 'failed') {
-      return NextResponse.json(
-        { ok: false, message: '전송 중 문제가 발생했습니다.' },
-        { status: 502 },
-      );
+      return NextResponse.json({ ok: false, message: m.sendFailed }, { status: 502 });
     }
 
     if (adminResult === 'skipped') {
-      // 이메일 환경변수 미설정 — 개발/프리뷰 환경. 개인정보 전체는 로그에 남기지 않는다.
+      if (process.env.NODE_ENV === 'production') {
+        // 프로덕션에서 이메일 환경변수가 없다는 것은 설정 누락이다 — 문의를 조용히
+        // 삼키는 대신 실패로 처리해서 고객이 재시도하거나 다른 경로로 연락하게 한다.
+        console.error('[contact] email not configured in production. inquiry dropped for', data.company);
+        return NextResponse.json({ ok: false, message: m.sendFailed }, { status: 500 });
+      }
+      // 개발/프리뷰 환경 — 폼 자체는 정상 동작해야 하므로 실패로 처리하지 않는다.
       console.warn('[contact] email not configured. received inquiry from', data.company);
     }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error('[contact] unexpected error', error instanceof Error ? error.message : 'unknown');
-    return NextResponse.json({ ok: false, message: '전송 중 문제가 발생했습니다.' }, { status: 500 });
+    return NextResponse.json({ ok: false, message: m.sendFailed }, { status: 500 });
   }
 }

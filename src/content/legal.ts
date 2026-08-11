@@ -3,7 +3,8 @@
  *
  * ⚠️ 법무 검토 전 초안이다. 게시 전 반드시 전문가 검토를 거친다.
  *    시행일(2019-11-01)과 개인정보 보호책임자(성명·연락처)는 2026-08 대표 확인으로 확정했다.
- *    보유 기간(3장)과 위탁업체 목록(5장)은 여전히 대괄호 placeholder이며 별도 확인이 필요하다.
+ *    5장은 문의 폼 이메일 발송을 위한 Resend(미국) 위탁·국외이전만 확정 반영했다(2026-08).
+ *    보유 기간(3장)과 그 외 위탁업체(호스팅·분석 도구, 5장)는 여전히 대괄호 placeholder다.
  */
 import type { Locale } from '@/i18n/locales';
 
@@ -43,8 +44,16 @@ export const privacyPolicy: Record<Locale, LegalDoc> = {
         body: ['회사는 이용자의 개인정보를 원칙적으로 외부에 제공하지 않습니다.', '다만 이용자가 사전에 동의한 경우 또는 법령의 규정에 의한 경우는 예외로 합니다.'],
       },
       {
-        title: '5. 개인정보 처리 위탁',
-        body: ['회사는 서비스 운영을 위해 아래 업무를 위탁할 수 있습니다.', '[위탁업체 및 위탁 업무 내용 확정 필요 — 예: 이메일 발송, 웹사이트 호스팅, 분석 도구]'],
+        title: '5. 개인정보 처리 위탁 및 국외 이전',
+        body: [
+          '회사는 문의 폼 이메일 발송을 위해 아래와 같이 개인정보 처리를 위탁하고 국외로 이전합니다.',
+          '수탁업체: Resend, Inc. (미국 소재)',
+          '위탁 업무: 문의 접수 확인 메일 및 관리자 알림 메일 발송',
+          '이전 항목: 문의 폼에 입력한 회사명, 담당자명, 이메일, 연락처, 문의 내용 등',
+          '이전 방법 및 시점: 문의 접수 시 API 호출을 통해 즉시 전송',
+          '보유·이용 기간: 이메일 발송 목적 달성 후 수탁업체 정책에 따라 처리합니다(회사 자체 보유 기간은 3장 참조).',
+          '그 외 웹사이트 호스팅·분석 도구 관련 위탁업체는 [확정 필요 — 도입 시 이 목록에 추가합니다].',
+        ],
       },
       {
         title: '6. 개인정보의 파기 절차 및 방법',
@@ -107,10 +116,15 @@ export const privacyPolicy: Record<Locale, LegalDoc> = {
         ],
       },
       {
-        title: '5. Outsourcing of Processing',
+        title: '5. Outsourcing of Processing and Cross-Border Transfer',
         body: [
-          'The company may outsource the following operations to support the service.',
-          '[Vendors and outsourced tasks to be confirmed — e.g., email delivery, website hosting, analytics tools]',
+          'The company outsources personal information processing and transfers it overseas as follows, for sending contact-form emails.',
+          'Recipient: Resend, Inc. (based in the United States)',
+          'Outsourced task: Sending inquiry-received confirmation emails and admin notification emails',
+          'Items transferred: Company name, contact name, email, phone number, inquiry details, and other information entered in the contact form',
+          'Method and timing: Sent immediately via API call when an inquiry is submitted',
+          "Retention period: Processed according to the recipient's policy after the purpose of sending is fulfilled (see Article 3 for the company's own retention period).",
+          'Additional vendors for website hosting or analytics tools: [to be confirmed — will be added to this list when introduced].',
         ],
       },
       {

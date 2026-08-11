@@ -2,9 +2,6 @@
  * 사이트 전역 정보 — 마스터 문서 2장(브랜드), 6장(내비게이션), 18장(SEO)
  * 언어별 콘텐츠는 Record<Locale, T> 로 관리한다. 새 언어를 추가하려면
  * 이 파일들의 각 record에 해당 locale 키만 추가하면 된다.
- *
- * ⚠️ TODO 로 표시된 값은 마스터 문서 28장 "오픈 전 반드시 확정할 내용" 항목이다.
- *    임의의 사실을 만들어 채우지 않고 placeholder를 유지한다.
  */
 import type { Locale } from '@/i18n/locales';
 

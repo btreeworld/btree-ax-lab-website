@@ -23,7 +23,6 @@ const messages: Record<
     budget: string;
     timeline: string;
     maxLength: (max: number) => string;
-    honeypot: string;
   }
 > = {
   ko: {
@@ -41,7 +40,6 @@ const messages: Record<
     budget: '예상 예산을 다시 선택해 주세요.',
     timeline: '희망 시작 시기를 다시 선택해 주세요.',
     maxLength: (max) => `${max}자 이내로 입력해 주세요.`,
-    honeypot: '요청을 처리할 수 없습니다.',
   },
   en: {
     company: 'Please enter your company name.',
@@ -58,7 +56,6 @@ const messages: Record<
     budget: 'Please re-select an estimated budget.',
     timeline: 'Please re-select a desired start time.',
     maxLength: (max) => `Please keep it under ${max} characters.`,
-    honeypot: 'This request cannot be processed.',
   },
 };
 
@@ -105,9 +102,11 @@ export function buildContactSchema(locale: Locale) {
 
     /**
      * 스팸·봇 방지용 honeypot — 마스터 문서 17.2.
-     * 사람에게는 보이지 않는 필드이므로 값이 있으면 봇으로 판단한다.
+     * 사람에게는 보이지 않는 필드이므로 값이 있으면 봇으로 판단한다. 여기서 값을 거부하면
+     * 라우트 핸들러의 "조용히 성공 응답" 처리에 도달하지 못하고 400으로 막혀버리므로,
+     * 검증은 통과시키고 판단은 route.ts의 `if (data.hp)`에 맡긴다.
      */
-    hp: z.string().max(0, m.honeypot).optional(),
+    hp: z.string().optional(),
   });
 }
 

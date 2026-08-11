@@ -11,6 +11,7 @@ import {
   selectClassName,
   textareaClassName,
 } from '@/components/forms/FormField';
+import { TurnstileWidget } from '@/components/forms/TurnstileWidget';
 import {
   attachmentPolicy,
   budgetOptions,
@@ -26,8 +27,15 @@ import { buildContactSchema, contactDefaultValues, type ContactInput } from '@/l
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-/** Cloudflare Pages에서도 별도 서버 함수 없이 동작하는 Formspree 문의 엔드포인트. */
-const CONTACT_FORM_ENDPOINT = 'https://formspree.io/f/xaeweapv';
+/**
+ * 자체 문의 엔드포인트 — 서버 재검증, honeypot 봇 차단, 관리자 알림과 고객 접수 확인 메일이
+ * 모두 여기서 처리된다. 이전에는 Formspree로 직접 전송했으나, 그 경로에서는 접수 확인 메일과
+ * honeypot(필드명 불일치)이 동작하지 않고 개인정보가 제3자 대시보드에 적재되어 되돌렸다.
+ */
+const CONTACT_FORM_ENDPOINT = '/api/contact';
+
+/** 미설정 시(키 미발급) 위젯을 렌더링하지 않고 기존 동작(honeypot만)을 유지한다. */
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 export function ContactForm({
   defaultService = '',
@@ -46,6 +54,11 @@ export function ContactForm({
   const timelines = timelineOptions[locale];
 
   const [status, setStatus] = useState<Status>('idle');
+  /** 서버가 사유를 알려준 경우(예: 요청 과다)에만 채워지고, 그 외에는 기본 안내를 쓴다. */
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  /** Turnstile 토큰은 1회용이라, 제출 시도 후에는 key를 바꿔 위젯을 통째로 다시 그린다. */
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const started = useRef(false);
   const errorSummaryRef = useRef<HTMLDivElement>(null);
 
@@ -74,6 +87,7 @@ export function ContactForm({
 
   const onSubmit = async (values: ContactInput) => {
     setStatus('submitting');
+    setServerMessage(null);
     trackEvent('contact_form_submit', { section: 'contact-form', service_type: values.service });
 
     try {
@@ -83,10 +97,14 @@ export function ContactForm({
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(TURNSTILE_SITE_KEY ? { ...values, turnstileToken } : values),
       });
 
-      if (!response.ok) throw new Error('request failed');
+      if (!response.ok) {
+        const body = (await response.json().catch(() => null)) as { message?: string } | null;
+        setServerMessage(body?.message ?? null);
+        throw new Error('request failed');
+      }
 
       setStatus('success');
       trackEvent('contact_form_success', { section: 'contact-form', service_type: values.service });
@@ -94,6 +112,10 @@ export function ContactForm({
     } catch {
       setStatus('error');
       trackEvent('contact_form_error', { section: 'contact-form' });
+    } finally {
+      // 토큰은 1회용이므로 성공·실패 모두 다음 시도를 위해 위젯을 새로 그린다.
+      setTurnstileToken('');
+      setTurnstileResetKey((key) => key + 1);
     }
   };
 
@@ -341,12 +363,24 @@ export function ContactForm({
 
         {status === 'error' ? (
           <p className="mt-6 rounded-button border border-state-error bg-state-error/10 px-5 py-4 text-small text-state-error" role="alert">
-            {copy.errorMessage}
+            {serverMessage ?? copy.errorMessage}
           </p>
+        ) : null}
+
+        {TURNSTILE_SITE_KEY ? (
+          <div className="mt-6">
+            <TurnstileWidget
+              key={turnstileResetKey}
+              onExpire={() => setTurnstileToken('')}
+              onVerify={setTurnstileToken}
+              siteKey={TURNSTILE_SITE_KEY}
+            />
+          </div>
         ) : null}
 
         <button
           className="mt-8 inline-flex min-h-[52px] w-full items-center justify-center rounded-button bg-accent-deep px-6 text-[15px] font-semibold text-white transition-colors hover:bg-accent-deep/90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+          disabled={Boolean(TURNSTILE_SITE_KEY) && !turnstileToken}
           type="submit"
         >
           {status === 'submitting' ? t('submitting') : copy.submitLabel}
