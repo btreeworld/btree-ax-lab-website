@@ -5,10 +5,11 @@ import { sendAdminNotification, sendCustomerAcknowledgement } from '@/lib/email'
 import { buildContactSchema } from '@/lib/validation';
 
 /**
- * Cloudflare Pages(next-on-pages)는 프리렌더되지 않는 라우트에 edge 런타임을 요구한다.
- * 이 라우트가 쓰는 email.ts(순수 fetch)와 validation.ts(zod)는 모두 edge 호환이다.
+ * 실제 배포 파이프라인은 next-on-pages가 아니라 OpenNext(@opennextjs/cloudflare)다 — 이미
+ * 앱 전체를 Workers 런타임(Node 호환)으로 번들링하므로, 라우트에 별도로 edge 런타임을
+ * 선언하면 "OpenNext requires edge runtime function to be defined in a separate function"
+ * 오류로 빌드가 실패한다. 기본(nodejs) 런타임을 그대로 둔다.
  */
-export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 /**
