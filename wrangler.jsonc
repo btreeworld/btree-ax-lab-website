@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "btree-ax-lab-website",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-13",
+  // nodejs_compat는 필수다 — 이게 없으면 Workers 런타임의 process.env가 빈 객체로 남아
+  // 대시보드에 설정한 CONTACT_TO_EMAIL 등 환경변수가 전부 undefined로 읽힌다.
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
