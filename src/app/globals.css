@@ -29,10 +29,14 @@
   --color-border-dark: rgba(255, 255, 255, 0.12);
   --color-border-light: #dde5ed;
 
-  /* 폰트 로딩 실패 시에도 레이아웃이 무너지지 않도록 시스템 폰트를 폴백에 포함한다. */
+  /* 폰트 로딩 실패 시에도 레이아웃이 무너지지 않도록 시스템 폰트를 폴백에 포함한다.
+     Pretendard는 layout.tsx의 <head> CDN 링크로, Manrope(--font-manrope)는 next/font로
+     로드한다 — 실제로 로드되지 않으면 폴백 폰트의 넓은 한글 자간 때문에 디자인이 가정한
+     너비에서 헤드라인이 의도치 않게 추가로 줄바꿈된다. */
   --font-sans: 'Pretendard', 'Pretendard Variable', -apple-system, BlinkMacSystemFont,
     'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
-  --font-display: 'Manrope', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: var(--font-manrope), 'Pretendard', 'Pretendard Variable', -apple-system,
+    BlinkMacSystemFont, system-ui, sans-serif;
 
   /* Section spacing — Desktop 기준, 미디어쿼리에서 모바일 값으로 축소 */
   --space-section: 120px;
@@ -74,6 +78,11 @@
   h4 {
     word-break: keep-all;
     text-wrap: balance;
+  }
+
+  /* 문단 마지막 줄에 한두 글자만 남는 위도우 방지 (지원 브라우저에서만 적용, 나머지는 기존 줄바꿈 유지) */
+  p {
+    text-wrap: pretty;
   }
 
   :focus-visible {

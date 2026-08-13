@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { hasLocale } from 'next-intl';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Manrope } from 'next/font/google';
 import { notFound } from 'next/navigation';
 
 import '@/app/globals.css';
@@ -15,6 +16,14 @@ import { site } from '@/content/site';
 import { locales, type Locale } from '@/i18n/locales';
 import { routing } from '@/i18n/routing';
 import { organizationJsonLd } from '@/lib/seo';
+
+/**
+ * 표시용 헤딩 폰트(Manrope)는 Google Fonts에 있어 next/font로 자체 호스팅한다.
+ * 본문용 Pretendard는 Google Fonts에 없어 공식 CDN을 통해 로드한다(아래 <head>).
+ * 이전에는 globals.css가 두 폰트를 선언만 하고 실제로 로드하지 않아, 시스템 대체 폰트의
+ * 넓은 한글 자간 때문에 여러 헤드라인이 의도치 않게 추가로 줄바꿈되고 있었다.
+ */
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope', display: 'swap' });
 
 const metadataCopy: Record<Locale, { title: string; description: string }> = {
   ko: {
@@ -104,7 +113,14 @@ export default async function LocaleLayout({
   const t = await getTranslations({ locale, namespace: 'Header' });
 
   return (
-    <html lang={locale}>
+    <html className={manrope.variable} lang={locale}>
+      <head>
+        <link crossOrigin="anonymous" href="https://cdn.jsdelivr.net" rel="preconnect" />
+        <link
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.css"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         {/* Skip to content — 마스터 문서 20장 */}
         <a
