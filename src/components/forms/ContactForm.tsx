@@ -121,11 +121,24 @@ export function ContactForm({
 
   if (status === 'success') {
     return (
-      <div className="rounded-card border border-accent/40 bg-accent-soft p-8 text-center" role="status">
-        <h2 className="text-h3 text-ink-primary-dark">{copy.successTitle}</h2>
-        <p className="mt-4 text-body-l text-ink-secondary-dark">{copy.successMessage}</p>
+      <div
+        aria-live="polite"
+        className="rounded-card border border-accent-deep/30 bg-surface-white px-6 py-10 text-center shadow-[0_16px_48px_rgba(7,17,31,0.08)] md:px-10 md:py-12"
+        role="status"
+      >
+        <span
+          aria-hidden="true"
+          className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft text-accent-deep"
+        >
+          <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24">
+            <path d="m5 12.5 4.25 4.25L19 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" />
+          </svg>
+        </span>
+        <h2 className="mt-6 text-h3 text-ink-primary-light">{copy.successTitle}</h2>
+        <p className="mx-auto mt-3 max-w-xl text-body-l text-ink-secondary-light">{copy.successMessage}</p>
+        <div className="mx-auto mt-8 h-px max-w-md bg-line-light" />
         <button
-          className="mt-8 min-h-[52px] rounded-button border border-line-dark px-6 text-[15px] font-semibold text-ink-primary-dark hover:border-accent hover:text-accent"
+          className="mt-8 inline-flex min-h-[52px] items-center justify-center rounded-button bg-accent-deep px-7 text-[15px] font-semibold text-white transition-colors hover:bg-accent-deep/90"
           onClick={() => setStatus('idle')}
           type="button"
         >

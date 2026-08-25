@@ -50,19 +50,20 @@ export default async function ProcessPage({ params }: { params: Promise<{ locale
 
       <VisualNarrative
         description={locale === 'ko' ? '각 단계는 다음 단계의 투자 판단에 필요한 증거를 만듭니다. 진단 결과만으로 곧바로 대형 구축을 권하지 않습니다.' : 'Each stage creates the evidence needed for the next investment decision. We do not jump from diagnosis straight into a large deployment.'}
+        diagramVariant="gates"
         eyebrow="DELIVERY JOURNEY"
-        image="/images/visuals/project-process.png"
-        imageAlt={locale === 'ko' ? '현장 진단, 시스템 설계, PoC 검증, 운영으로 이어지는 프로젝트 절차' : 'Project journey from field diagnosis and system design to PoC verification and operations'}
+        image="/images/visuals/process-spatial-simulation-v3.webp"
+        imageAlt={locale === 'ko' ? '산업 현장의 포인트클라우드를 3D 디지털트윈으로 전환하고 AI 감지구역과 검증 단계를 설계하는 프로젝트팀' : 'A project team turning an industrial point cloud into a 3D digital twin while designing AI detection zones and validation gates'}
         points={locale === 'ko' ? [
-          { title: '진단', description: '현장 데이터와 제약, 기대 효과를 함께 확인합니다.' },
-          { title: '설계', description: '구현 범위·아키텍처·검증 지표를 구체화합니다.' },
-          { title: 'PoC', description: '실제 환경에서 성능과 운영 가능성을 검증합니다.' },
-          { title: '운영', description: '모니터링·개선·확장 가능한 체계로 전환합니다.' },
+          { title: '진단', description: '현장 데이터와 제약, 기대 효과를 함께 확인합니다.', icon: 'search' },
+          { title: '설계·3D 모델링', description: '응용 소프트웨어 구조, 공간 모델, 데이터 흐름과 검증 지표를 구체화합니다.', icon: 'blueprint' },
+          { title: 'PoC·시뮬레이션', description: '실제 환경과 3D 시뮬레이션에서 성능과 운영 가능성을 검증합니다.', icon: 'flask' },
+          { title: '통합관제 운영', description: '모니터링·원격조치·개선·확장이 가능한 운영 체계로 전환합니다.', icon: 'twin' },
         ] : [
-          { title: 'Diagnosis', description: 'Review field data, constraints, and expected value together.' },
-          { title: 'Design', description: 'Specify scope, architecture, and validation metrics.' },
-          { title: 'PoC', description: 'Validate performance and operability in the real environment.' },
-          { title: 'Operations', description: 'Move into a monitorable, improvable, scalable system.' },
+          { title: 'Diagnosis', description: 'Review field data, constraints, and expected value together.', icon: 'search' },
+          { title: 'Design & 3D modeling', description: 'Specify the application architecture, spatial model, data flow, and metrics.', icon: 'blueprint' },
+          { title: 'PoC & simulation', description: 'Validate performance in both the real environment and 3D simulation.', icon: 'flask' },
+          { title: 'Integrated operations', description: 'Move into a monitorable, remotely actionable, and scalable system.', icon: 'twin' },
         ]}
         priority
         title={locale === 'ko' ? '불확실성을 단계별로 줄이는 프로젝트 방식' : 'A project method that reduces uncertainty stage by stage'}

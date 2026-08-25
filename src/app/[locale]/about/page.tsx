@@ -60,19 +60,20 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
       <VisualNarrative
         description={locale === 'ko' ? 'BTREE AX LAB은 연구와 개발 경험을 현장 진단, 시스템 설계, PoC, 운영 가능한 디지털트윈 서비스로 전환합니다.' : 'BTREE AX LAB turns research and development experience into field diagnosis, system design, PoC, and operable digital twin services.'}
+        diagramVariant="matrix"
         eyebrow="WHAT WE CONNECT"
-        image="/images/visuals/service-architecture.png"
-        imageAlt={locale === 'ko' ? '산업 현장과 Edge AI, 플랫폼, 디지털트윈을 연결하는 회사의 역할' : 'The company role connecting industrial fields, Edge AI, platform, and digital twin'}
+        image="/images/visuals/about-digital-twin-studio-v3.webp"
+        imageAlt={locale === 'ko' ? '산업용 3D 디지털트윈, 포인트클라우드, 영상 AI, 통합관제 소프트웨어를 함께 개발하는 기술팀' : 'A technology team developing industrial 3D digital twins, point clouds, vision AI, and integrated monitoring software'}
         points={locale === 'ko' ? [
-          { title: '현장 이해', description: '기술보다 먼저 실제 설비와 운영 조건을 파악합니다.' },
-          { title: '통합 설계', description: 'AI·IoT·Edge·플랫폼을 하나의 구조로 설계합니다.' },
-          { title: '검증 중심', description: 'PoC와 측정 지표로 투자 전 불확실성을 줄입니다.' },
-          { title: '운영 연결', description: '보고서가 아닌 실제 사용 가능한 시스템을 지향합니다.' },
+          { title: '현장 이해', description: '기술보다 먼저 실제 설비와 운영 조건을 파악합니다.', icon: 'search' },
+          { title: '통합 설계', description: 'AI·IoT·Edge·플랫폼을 하나의 구조로 설계합니다.', icon: 'blueprint' },
+          { title: '검증 중심', description: 'PoC와 측정 지표로 투자 전 불확실성을 줄입니다.', icon: 'flask' },
+          { title: '운영 연결', description: '보고서가 아닌 실제 사용 가능한 시스템을 지향합니다.', icon: 'check' },
         ] : [
-          { title: 'Field understanding', description: 'Start with real equipment and operating conditions.' },
-          { title: 'Integrated design', description: 'Design AI, IoT, Edge, and platform as one structure.' },
-          { title: 'Evidence first', description: 'Reduce uncertainty with PoCs and measurable criteria.' },
-          { title: 'Operational link', description: 'Aim for usable systems rather than reports alone.' },
+          { title: 'Field understanding', description: 'Start with real equipment and operating conditions.', icon: 'search' },
+          { title: 'Integrated design', description: 'Design AI, IoT, Edge, and platform as one structure.', icon: 'blueprint' },
+          { title: 'Evidence first', description: 'Reduce uncertainty with PoCs and measurable criteria.', icon: 'flask' },
+          { title: 'Operational link', description: 'Aim for usable systems rather than reports alone.', icon: 'check' },
         ]}
         priority
         title={locale === 'ko' ? '기술을 현장에서 작동하는 서비스로 바꿉니다' : 'Turning technology into services that work in the field'}

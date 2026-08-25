@@ -50,19 +50,20 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
       <VisualNarrative
         description={locale === 'ko' ? '현장 설비를 교체하는 대신, 이미 존재하는 카메라·센서·PLC의 데이터를 Edge AI와 디지털트윈으로 연결합니다.' : 'We connect existing cameras, sensors, and PLC data to Edge AI and a digital twin without replacing field equipment.'}
+        diagramVariant="architecture"
         eyebrow="SYSTEM ARCHITECTURE"
-        image="/images/visuals/service-architecture.png"
-        imageAlt={locale === 'ko' ? '현장 설비에서 Edge AI와 플랫폼, 디지털트윈으로 이어지는 서비스 구조' : 'Service architecture from field equipment to Edge AI, platform, and digital twin'}
+        image="/images/visuals/services-integrated-control-v3.webp"
+        imageAlt={locale === 'ko' ? '실제 생산라인의 영상 AI, 설비 데이터, 3D 공간 모델과 경보를 하나의 통합관제 소프트웨어로 운영하는 모습' : 'An integrated operations application managing vision AI, equipment data, a 3D spatial model, and alerts for a real production line'}
         points={locale === 'ko' ? [
-          { title: '현장 데이터', description: '카메라·센서·PLC·설비 신호를 수집합니다.' },
-          { title: 'Edge 판단', description: '현장 제약 안에서 실시간 추론과 1차 판단을 수행합니다.' },
-          { title: '통합 플랫폼', description: '모델·이벤트·운영 데이터를 안전하게 관리합니다.' },
-          { title: '디지털트윈', description: '현장을 시뮬레이션하고 운영자의 조치로 연결합니다.' },
+          { title: '현장 데이터', description: '카메라·센서·PLC·설비 신호를 수집합니다.', icon: 'camera' },
+          { title: 'Edge 판단', description: '현장 제약 안에서 실시간 추론과 1차 판단을 수행합니다.', icon: 'edge' },
+          { title: 'AI·관제 플랫폼', description: 'AI 모델·이벤트·영상·운영 데이터를 하나의 응용 소프트웨어에서 관리합니다.', icon: 'database' },
+          { title: '3D 디지털트윈', description: '공간과 설비 상태를 시각화하고 시뮬레이션과 운영 조치로 연결합니다.', icon: 'twin' },
         ] : [
-          { title: 'Field data', description: 'Capture cameras, sensors, PLCs, and equipment signals.' },
-          { title: 'Edge decisions', description: 'Run real-time inference within field constraints.' },
-          { title: 'Unified platform', description: 'Manage models, events, and operational data securely.' },
-          { title: 'Digital twin', description: 'Simulate the field and connect insight to operator action.' },
+          { title: 'Field data', description: 'Capture cameras, sensors, PLCs, and equipment signals.', icon: 'camera' },
+          { title: 'Edge decisions', description: 'Run real-time inference within field constraints.', icon: 'edge' },
+          { title: 'AI control platform', description: 'Manage AI models, events, video, and operations in one application.', icon: 'database' },
+          { title: '3D digital twin', description: 'Visualize spaces and assets, then connect simulations to operator action.', icon: 'twin' },
         ]}
         priority
         title={locale === 'ko' ? '기존 현장이 하나의 운영 시스템이 되는 구조' : 'How the existing field becomes one operating system'}

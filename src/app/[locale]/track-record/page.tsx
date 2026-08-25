@@ -89,19 +89,20 @@ export default async function TrackRecordPage({ params }: { params: Promise<{ lo
 
       <VisualNarrative
         description={locale === 'ko' ? '연구·사업·컨설팅 이력은 서로 분리된 목록이 아니라, 현장 데이터를 이해하고 시스템으로 구현해 운영까지 연결해 온 하나의 축적 과정입니다.' : 'Research, business, and consulting records form one accumulated path from understanding field data to implementation and operation.'}
+        diagramVariant="timeline"
         eyebrow="EXPERIENCE MAP"
-        image="/images/visuals/proven-systems.png"
-        imageAlt={locale === 'ko' ? '다양한 산업 AI 프로젝트와 연구 결과가 하나의 기술 코어로 연결된 경험 지도' : 'Experience map connecting industrial AI projects and research to one technology core'}
+        image="/images/visuals/track-record-software-evolution-v3.webp"
+        imageAlt={locale === 'ko' ? '지능형 CCTV, 스마트시티 시각화, AIoT 관제, 농촌 3D 디지털트윈, 로봇 비전의 기술 발전 과정을 검토하는 팀' : 'A team reviewing the evolution from intelligent CCTV and smart-city visualization to AIoT control, rural 3D digital twins, and robotic vision'}
         points={locale === 'ko' ? [
-          { title: '국가 R&D', description: 'AI·디지털트윈·콘텐츠 기술을 연구 과제로 검증했습니다.' },
-          { title: '산업 프로젝트', description: '제조·안전·농업 현장의 문제를 시스템으로 구현했습니다.' },
-          { title: '연구와 지식', description: '논문·저서·강의로 기술을 구조화하고 전달했습니다.' },
-          { title: '실행 책임', description: '기획부터 PoC, 운영 협의까지 연결해 왔습니다.' },
+          { title: '국가 R&D', description: 'AI·디지털트윈·콘텐츠 기술을 연구 과제로 검증했습니다.', icon: 'flask' },
+          { title: '산업 프로젝트', description: '제조·안전·농업 현장의 문제를 시스템으로 구현했습니다.', icon: 'briefcase' },
+          { title: '연구와 지식', description: '논문·저서·강의로 기술을 구조화하고 전달했습니다.', icon: 'graduation' },
+          { title: '실행 책임', description: '기획부터 PoC, 운영 협의까지 연결해 왔습니다.', icon: 'check' },
         ] : [
-          { title: 'National R&D', description: 'Validated AI, digital twin, and content technologies through research.' },
-          { title: 'Industry projects', description: 'Implemented systems for manufacturing, safety, and agriculture.' },
-          { title: 'Research knowledge', description: 'Structured and shared knowledge through papers, books, and lectures.' },
-          { title: 'Delivery ownership', description: 'Connected planning, PoC, and operational coordination.' },
+          { title: 'National R&D', description: 'Validated AI, digital twin, and content technologies through research.', icon: 'flask' },
+          { title: 'Industry projects', description: 'Implemented systems for manufacturing, safety, and agriculture.', icon: 'briefcase' },
+          { title: 'Research knowledge', description: 'Structured and shared knowledge through papers, books, and lectures.', icon: 'graduation' },
+          { title: 'Delivery ownership', description: 'Connected planning, PoC, and operational coordination.', icon: 'check' },
         ]}
         title={locale === 'ko' ? '연구에서 현장 운영까지 이어진 경험의 지도' : 'An experience map from research to field operations'}
       />

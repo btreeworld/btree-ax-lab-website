@@ -47,19 +47,20 @@ export default async function IndustriesPage({ params }: { params: Promise<{ loc
 
       <VisualNarrative
         description={locale === 'ko' ? '산업은 달라도 핵심은 같습니다. 현장을 감지하고, 가까운 곳에서 판단하고, 운영 가능한 정보로 바꾸는 것입니다.' : 'Different industries share the same core: sense the field, decide close to it, and turn signals into operable information.'}
+        diagramVariant="hub"
         eyebrow="APPLICATION LANDSCAPE"
-        image="/images/visuals/industry-landscape.png"
-        imageAlt={locale === 'ko' ? '제조, 산업안전, 스마트팜 현장이 Edge AI로 연결된 모습' : 'Manufacturing, industrial safety, and smart farming connected through Edge AI'}
+        image="/images/visuals/industries-digital-twin-map-v3.webp"
+        imageAlt={locale === 'ko' ? '제조, 안전, 시설, 물류, 스마트농업 공간이 하나의 3D 디지털트윈과 통합관제 플랫폼에 연결된 산업단지' : 'An industrial district where manufacturing, safety, facilities, logistics, and smart agriculture connect to one 3D digital twin and control platform'}
         points={locale === 'ko' ? [
-          { title: '스마트 제조', description: '검사·이상탐지·설비 상태를 실시간으로 연결합니다.' },
-          { title: '산업 안전', description: '위험 행동과 환경 신호를 현장에서 빠르게 판단합니다.' },
-          { title: '스마트팜', description: '생육·기후·설비 데이터를 하나의 운영 흐름으로 만듭니다.' },
-          { title: '공통 데이터 코어', description: '산업별 데이터를 Edge와 플랫폼에서 일관되게 관리합니다.' },
+          { title: '스마트 제조', description: '검사·이상탐지·설비 상태를 실시간으로 연결합니다.', icon: 'factory' },
+          { title: '산업 안전', description: '위험 행동과 환경 신호를 현장에서 빠르게 판단합니다.', icon: 'shield' },
+          { title: '스마트팜', description: '생육·기후·설비 데이터를 하나의 운영 흐름으로 만듭니다.', icon: 'leaf' },
+          { title: '공통 디지털트윈·관제 코어', description: '산업별 공간·설비·AI 이벤트를 하나의 3D 운영 모델과 통합관제 소프트웨어에서 관리합니다.', icon: 'twin' },
         ] : [
-          { title: 'Smart manufacturing', description: 'Connect inspection, anomalies, and equipment health in real time.' },
-          { title: 'Industrial safety', description: 'Detect risky behavior and environmental signals at the edge.' },
-          { title: 'Smart farming', description: 'Unify crop, climate, and equipment data into one workflow.' },
-          { title: 'Shared data core', description: 'Manage industry data consistently across Edge and platform.' },
+          { title: 'Smart manufacturing', description: 'Connect inspection, anomalies, and equipment health in real time.', icon: 'factory' },
+          { title: 'Industrial safety', description: 'Detect risky behavior and environmental signals at the edge.', icon: 'shield' },
+          { title: 'Smart farming', description: 'Unify crop, climate, and equipment data into one workflow.', icon: 'leaf' },
+          { title: 'Shared twin & control core', description: 'Manage spatial, equipment, and AI events in one 3D operating model and control application.', icon: 'twin' },
         ]}
         priority
         title={locale === 'ko' ? '제조·안전·농업을 연결하는 하나의 AX 원리' : 'One AX principle across manufacturing, safety, and agriculture'}
