@@ -7,6 +7,7 @@ import { Section, SectionHeader } from '@/components/ui/Section';
 import { pricingNote, pricingPlans, pricingSectionCopy } from '@/content/pricing';
 import { cta } from '@/content/site';
 import type { Locale } from '@/i18n/locales';
+import { stagger } from '@/lib/motion';
 
 /** Section 09 — Pricing Preview (마스터 문서 7.9) */
 export async function PricingSection() {
@@ -20,14 +21,15 @@ export async function PricingSection() {
       <SectionHeader description={copy.description} eyebrow={copy.eyebrow} id="pricing-title" title={copy.title} tone="light" />
 
       <div className="grid gap-5 lg:grid-cols-3">
-        {plans.map((plan) => (
+        {plans.map((plan, index) => (
           <article
-            className={`flex h-full flex-col rounded-card border p-6 md:p-8 ${
+            className={`reveal flex h-full flex-col rounded-card border p-6 md:p-8 ${
               plan.highlighted
                 ? 'border-accent-deep bg-surface-white shadow-[0_0_0_1px_var(--color-accent-deep)]'
                 : 'border-line-light bg-surface-white'
             }`}
             key={plan.name}
+            style={stagger(index, 3)}
           >
             <div className="flex items-start justify-between gap-3">
               <h3 className="text-h4 text-ink-primary-light">{plan.name}</h3>

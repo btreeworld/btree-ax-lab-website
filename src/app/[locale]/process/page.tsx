@@ -73,9 +73,9 @@ export default async function ProcessPage({ params }: { params: Promise<{ locale
       <Section ariaLabelledby="process-detail-title" tone="dark">
         <SectionHeader description={copy.detailDescription} id="process-detail-title" title={copy.detailTitle} />
 
-        <ol className="relative flex flex-col gap-0 border-l border-line-dark pl-8 md:pl-10">
+        <ol className="connector-y flex flex-col gap-0 pl-8 md:pl-10">
           {steps.map((step) => (
-            <li className="relative pb-10 last:pb-0" key={step.step}>
+            <li className="reveal relative pb-10 last:pb-0" key={step.step}>
               <span className="absolute -left-[41px] top-1 flex h-8 w-8 items-center justify-center rounded-full border border-accent/40 bg-bg-primary font-display text-[12px] font-bold text-accent md:-left-[49px]">
                 {step.step}
               </span>

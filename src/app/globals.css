@@ -136,11 +136,6 @@
   .text-balance {
     text-wrap: balance;
   }
-
-  /* 섹션 진입 모션 — 12~20px 이동 + opacity (13.9 Motion) */
-  .reveal {
-    animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
 }
 
 @keyframes fade-up {

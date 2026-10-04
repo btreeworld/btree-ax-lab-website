@@ -6,6 +6,7 @@ import { Section, SectionHeader } from '@/components/ui/Section';
 import { cases, casesNotice } from '@/content/cases';
 import { homeSectionCopy } from '@/content/home';
 import type { Locale } from '@/i18n/locales';
+import { stagger } from '@/lib/motion';
 
 /** Section 08 — Cases (마스터 문서 7.8) */
 export async function CasesSection() {
@@ -17,8 +18,10 @@ export async function CasesSection() {
       <SectionHeader description={copy.description} eyebrow={copy.eyebrow} id="cases-title" title={copy.title} />
 
       <div className="grid gap-5 lg:grid-cols-3">
-        {cases[locale].map((caseStudy) => (
-          <CaseCard caseStudy={caseStudy} compact key={caseStudy.slug} />
+        {cases[locale].map((caseStudy, index) => (
+          <div className="reveal h-full" key={caseStudy.slug} style={stagger(index, 3)}>
+            <CaseCard caseStudy={caseStudy} compact />
+          </div>
         ))}
       </div>
 

@@ -16,6 +16,7 @@ import { about, aboutPageCopy } from '@/content/about';
 import { representative } from '@/content/representative-profile';
 import { navLabel } from '@/content/site';
 import { locales, type Locale } from '@/i18n/locales';
+import { stagger } from '@/lib/motion';
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo';
 
 /** valueProps / positioning.rows 는 항목 순서가 고정되어 있어 인덱스로 아이콘을 매핑한다. */
@@ -111,8 +112,9 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {content.valueProps.map((item, index) => (
             <li
-              className="rounded-card border border-line-light bg-surface-white p-6 last:sm:col-span-2 last:lg:col-span-1"
+              className="reveal rounded-card border border-line-light bg-surface-white p-6 last:sm:col-span-2 last:lg:col-span-1"
               key={item.title}
+              style={stagger(index, 5)}
             >
               <span className="flex h-11 w-11 items-center justify-center rounded-button bg-accent-soft text-accent-deep">
                 <Icon className="h-5 w-5" name={valuePropIcons[index % valuePropIcons.length]} />

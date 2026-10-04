@@ -3,6 +3,7 @@ import { getLocale } from 'next-intl/server';
 
 import { PlaceholderNote } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { MetricValue } from '@/components/ui/MetricValue';
 import { Eyebrow, Section } from '@/components/ui/Section';
 import type { Locale } from '@/i18n/locales';
 import { representative, representativePhoto } from '@/content/representative-profile';
@@ -44,12 +45,12 @@ export async function RepresentativeSection() {
           <p className="mt-4 text-body text-ink-secondary-dark">{rep.homeIntro}</p>
 
           {/* Trust Metrics — 검증된 지표만 표시 */}
-          <dl className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line-dark bg-white/5 lg:grid-cols-4">
+          <dl className="mt-8 grid grid-cols-2 gap-px overflow-clip rounded-card border border-line-dark bg-white/5 lg:grid-cols-4">
             {rep.trustMetrics.map((metric) => (
               <div className="bg-bg-primary px-4 py-5" key={metric.label}>
                 <dt className="sr-only">{metric.label}</dt>
                 <dd>
-                  <span className="block font-display text-h3 text-accent">{metric.value}</span>
+                  <MetricValue className="block font-display text-h3 text-accent" countTo={metric.countTo} value={metric.value} />
                   <span className="mt-2 block text-[13px] leading-snug text-ink-secondary-dark">{metric.label}</span>
                 </dd>
               </div>

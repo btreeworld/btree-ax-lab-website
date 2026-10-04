@@ -6,6 +6,7 @@ import { Manrope } from 'next/font/google';
 import { notFound } from 'next/navigation';
 
 import '@/app/globals.css';
+import '@/styles/motion.css';
 
 import { Analytics } from '@/components/layout/Analytics';
 import { JsonLd } from '@/components/layout/JsonLd';

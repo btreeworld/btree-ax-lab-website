@@ -12,6 +12,7 @@ import { Accordion } from '@/components/ui/Accordion';
 import { Badge, PlaceholderNote } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
+import { MetricValue } from '@/components/ui/MetricValue';
 import { Container, Section, SectionHeader } from '@/components/ui/Section';
 import { businessRecordNotice, businessRecords, businessTagLabel, getFeaturedBusinessRecords } from '@/content/business-records';
 import { consultingRecords, consultingSummary } from '@/content/consulting-records';
@@ -27,6 +28,7 @@ import { representative, trackRecordPageCopy } from '@/content/representative-pr
 import { researchRecords, researchSummary } from '@/content/research-records';
 import { cta, navLabel } from '@/content/site';
 import { locales, type Locale } from '@/i18n/locales';
+import { stagger } from '@/lib/motion';
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -81,7 +83,7 @@ export default async function TrackRecordPage({ params }: { params: Promise<{ lo
 
   return (
     <>
-      <PageHero breadcrumb={breadcrumb} description={copy.heroDescription} eyebrow={copy.heroEyebrow} title={copy.heroTitle}>
+      <PageHero breadcrumb={breadcrumb} description={copy.heroDescription} eyebrow={copy.heroEyebrow} progress title={copy.heroTitle}>
         <Button event="cta_project_consulting_click" eventPayload={{ section: 'track-record-hero' }} href={ctaContent.secondary.href}>
           {ctaContent.secondary.label}
         </Button>
@@ -139,12 +141,12 @@ export default async function TrackRecordPage({ params }: { params: Promise<{ lo
             <p className="text-[15px] font-semibold text-accent">{rep.role}</p>
             <p className="mt-4 text-body-l text-ink-secondary-dark">{rep.detailIntro}</p>
 
-            <dl className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line-dark bg-white/5 lg:grid-cols-4">
+            <dl className="mt-8 grid grid-cols-2 gap-px overflow-clip rounded-card border border-line-dark bg-white/5 lg:grid-cols-4">
               {rep.trustMetrics.map((metric) => (
                 <div className="bg-bg-primary px-4 py-5" key={metric.label}>
                   <dt className="sr-only">{metric.label}</dt>
                   <dd>
-                    <span className="block font-display text-h3 text-accent">{metric.value}</span>
+                    <MetricValue className="block font-display text-h3 text-accent" countTo={metric.countTo} value={metric.value} />
                     <span className="mt-2 block text-[13px] leading-snug text-ink-secondary-dark">{metric.label}</span>
                   </dd>
                 </div>
@@ -233,17 +235,18 @@ export default async function TrackRecordPage({ params }: { params: Promise<{ lo
           title={copy.nationalRndTitle}
         />
 
-        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line-dark bg-white/5 lg:grid-cols-4">
+        <dl className="grid grid-cols-2 gap-px overflow-clip rounded-card border border-line-dark bg-white/5 lg:grid-cols-4">
           {[
-            { value: `${rndSummary.annualParticipationRecords}`, label: copy.nationalRndMetrics.annual },
-            { value: `${rndSummary.principalInvestigatorRecords}`, label: copy.nationalRndMetrics.pi },
-            { value: `${rndSummary.researcherRecords}`, label: copy.nationalRndMetrics.researcher },
-            { value: `${rndSummary.uniqueProgramsDisplayed}`, label: copy.nationalRndMetrics.programs },
+            // count-up은 NTIS 원자료 수치(9·2·7)에만 — 프로그램 수(5)는 자체 묶음이라 정적 표시.
+            { value: `${rndSummary.annualParticipationRecords}`, label: copy.nationalRndMetrics.annual, countTo: rndSummary.annualParticipationRecords },
+            { value: `${rndSummary.principalInvestigatorRecords}`, label: copy.nationalRndMetrics.pi, countTo: rndSummary.principalInvestigatorRecords },
+            { value: `${rndSummary.researcherRecords}`, label: copy.nationalRndMetrics.researcher, countTo: rndSummary.researcherRecords },
+            { value: `${rndSummary.uniqueProgramsDisplayed}`, label: copy.nationalRndMetrics.programs, countTo: undefined },
           ].map((metric) => (
             <div className="bg-bg-secondary px-4 py-5" key={metric.label}>
               <dt className="sr-only">{metric.label}</dt>
               <dd>
-                <span className="block font-display text-h3 text-accent">{metric.value}</span>
+                <MetricValue className="block font-display text-h3 text-accent" countTo={metric.countTo} value={metric.value} />
                 <span className="mt-2 block text-[13px] leading-snug text-ink-secondary-dark">{metric.label}</span>
               </dd>
             </div>
@@ -286,8 +289,12 @@ export default async function TrackRecordPage({ params }: { params: Promise<{ lo
         <SectionHeader description={copy.projectsDescription} eyebrow={copy.projectsEyebrow} id="projects-title" title={copy.projectsTitle} />
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {featuredBusiness.map((record) => (
-            <article className="flex h-full flex-col rounded-card border border-line-dark bg-bg-elevated/50 p-6" key={`${record.year}-${record.title}`}>
+          {featuredBusiness.map((record, index) => (
+            <article
+              className="reveal card-hover card-hover--static flex h-full flex-col rounded-card border border-line-dark bg-bg-elevated/50 p-6"
+              key={`${record.year}-${record.title}`}
+              style={stagger(index, 3)}
+            >
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-display text-h4 text-accent">{record.year}</span>
                 {record.tags.map((tag) => (
@@ -376,9 +383,13 @@ export default async function TrackRecordPage({ params }: { params: Promise<{ lo
         {/* 기술 진화 타임라인 — 마스터 문서 12.10 */}
         <div className="mt-14">
           <h3 className="text-h4 text-ink-primary-dark">{copy.evolutionTimelineLabel}</h3>
-          <ol className="mt-6 grid gap-4 md:grid-cols-5">
-            {rep.evolutionTimeline.map((item) => (
-              <li className="rounded-card border border-line-dark bg-bg-elevated/50 p-5" key={item.period}>
+          <ol className="connector-x relative mt-9 grid gap-4 md:grid-cols-5 md:before:absolute md:before:inset-x-0 md:before:-top-3 md:before:h-px md:before:bg-accent/40">
+            {rep.evolutionTimeline.map((item, index) => (
+              <li
+                className="reveal relative rounded-card border border-line-dark bg-bg-elevated/50 p-5 md:before:absolute md:before:-top-[15px] md:before:left-5 md:before:h-[7px] md:before:w-[7px] md:before:rounded-full md:before:bg-accent"
+                key={item.period}
+                style={stagger(index, 5)}
+              >
                 <p className="font-display text-small font-bold text-accent">{item.period}</p>
                 <p className="mt-3 text-small text-ink-secondary-dark">{item.summary}</p>
               </li>

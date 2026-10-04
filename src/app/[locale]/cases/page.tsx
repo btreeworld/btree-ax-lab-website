@@ -13,6 +13,7 @@ import { Section, SectionHeader } from '@/components/ui/Section';
 import { caseStatusLabel, cases, casesNotice, casesPageCopy } from '@/content/cases';
 import { navLabel } from '@/content/site';
 import { locales, type Locale } from '@/i18n/locales';
+import { stagger } from '@/lib/motion';
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -77,8 +78,10 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
         </ul>
 
         <div className="grid gap-5 lg:grid-cols-3">
-          {cases[locale].map((caseStudy) => (
-            <CaseCard caseStudy={caseStudy} key={caseStudy.slug} />
+          {cases[locale].map((caseStudy, index) => (
+            <div className="reveal h-full" key={caseStudy.slug} style={stagger(index, 3)}>
+              <CaseCard caseStudy={caseStudy} />
+            </div>
           ))}
         </div>
 

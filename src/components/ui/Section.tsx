@@ -71,6 +71,7 @@ export function Eyebrow({
 
 /**
  * 섹션 헤더 — 제목과 콘텐츠 간격 48px(desktop) / 32px(mobile)
+ * reveal: 스크롤 진입 모션(motion.css). 첫 화면에 걸리는 헤더는 LCP 보호를 위해 false로 끈다.
  */
 export function SectionHeader({
   eyebrow,
@@ -80,6 +81,7 @@ export function SectionHeader({
   id,
   align = 'left',
   action,
+  reveal = true,
 }: {
   eyebrow?: string;
   title: ReactNode;
@@ -88,11 +90,13 @@ export function SectionHeader({
   id?: string;
   align?: 'left' | 'center';
   action?: ReactNode;
+  reveal?: boolean;
 }) {
   return (
     <div
       className={cn(
         'mb-8 flex flex-col gap-4 md:mb-12',
+        reveal && 'reveal',
         align === 'center' && 'items-center text-center',
         Boolean(action) && 'md:flex-row md:items-end md:justify-between',
       )}

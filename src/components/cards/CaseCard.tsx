@@ -25,7 +25,7 @@ export async function CaseCard({ caseStudy, compact = false }: { caseStudy: Case
         : outcomeNotDisclosedLabel[locale];
 
   return (
-    <article className="flex h-full flex-col rounded-card border border-line-dark bg-bg-elevated/50 p-6 md:p-7" id={caseStudy.slug}>
+    <article className="card-hover card-hover--static flex h-full flex-col rounded-card border border-line-dark bg-bg-elevated/50 p-6 md:p-7" id={caseStudy.slug}>
       <div className="flex flex-wrap items-center gap-2">
         <Badge tone={caseStudy.status === 'actual' ? 'accent' : 'neutral'}>{caseStatusLabel[locale][caseStudy.status]}</Badge>
         <Badge tone="neutral">{caseStudy.industry}</Badge>

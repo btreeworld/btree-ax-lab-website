@@ -6,6 +6,7 @@ import { TextLink } from '@/components/ui/TextLink';
 import { homeSectionCopy } from '@/content/home';
 import { homeServiceSlugs, services } from '@/content/services';
 import type { Locale } from '@/i18n/locales';
+import { stagger } from '@/lib/motion';
 
 /** Section 03 — Core Services (마스터 문서 7.3) */
 export async function ServicesSection() {
@@ -31,8 +32,10 @@ export async function ServicesSection() {
       />
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {homeServices.map((service) => (
-          <ServiceCard key={service.slug} service={service} tone="light" />
+        {homeServices.map((service, index) => (
+          <div className="reveal h-full" key={service.slug} style={stagger(index, 4)}>
+            <ServiceCard service={service} tone="light" />
+          </div>
         ))}
       </div>
     </Section>

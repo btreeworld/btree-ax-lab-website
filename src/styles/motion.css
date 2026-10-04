@@ -1,0 +1,240 @@
+/* ------------------------------------------------------------------
+   Motion — 마스터 문서 13.9
+   허용 모션(섹션 진입 12~20px+opacity, 연결선, 카드 hover, 검증 지표 count-up)만 다룬다.
+
+   원칙
+   - CSS 스크롤 구동 애니메이션(animation-timeline)만 쓴다. 컴포지터에서 돌아 메인 스레드를
+     쓰지 않고, 서버 컴포넌트를 클라이언트로 바꿀 필요가 없다.
+   - 모든 스크롤 모션은 @supports + (prefers-reduced-motion: no-preference) 안에서만 켠다.
+     미지원 브라우저(Firefox 안정판 등)와 모션 감소 사용자는 정적 콘텐츠를 그대로 본다.
+     globals.css의 전역 reduce 규칙은 duration만 줄이므로 스크롤 타임라인을 막지 못한다 —
+     그래서 여기서 별도로 게이트한다.
+   - animation 단축속성은 animation-timeline을 리셋하므로 롱핸드만 쓴다.
+   - 진입 이동은 독립 속성 translate를 쓴다. Tailwind 3의 hover lift(transform)와 합성되어
+     서로 덮어쓰지 않는다. translate가 걸린 요소는 fixed 자식의 기준이 되므로 fixed 요소를
+     품은 요소에는 .reveal을 쓰지 않는다.
+   - 첫 화면(PageHero, 그 아래 VisualNarrative의 헤더·이미지)에는 쓰지 않는다 — opacity 0
+     요소는 LCP 후보에서 빠진다.
+   - view() 대상의 조상에 overflow: hidden/auto를 두지 않는다. 그 요소가 스크롤 컨테이너가
+     되어 타임라인이 페이지가 아니라 그 상자에 묶인다(애니메이션이 즉시 '완료' 상태가 됨).
+     둥근 모서리 클리핑이 필요하면 스크롤 컨테이너를 만들지 않는 overflow-clip을 쓴다.
+------------------------------------------------------------------ */
+
+:root {
+  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-fast: 200ms;
+  --reveal-distance: 16px;
+}
+
+/* count-up 정수 보간용. @property는 최상위에 있어야 한다. */
+@property --num {
+  syntax: '<integer>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--reveal-distance);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes draw-x {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes draw-y {
+  from {
+    scale: 1 0;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes count {
+  from {
+    --num: 0;
+  }
+  to {
+    --num: var(--to);
+  }
+}
+
+@keyframes progress-x {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+/* ---------- 기본(정적) 상태 — 미지원·모션 감소 환경에서 보이는 모습 ---------- */
+
+/* 세로 연결선: 회색 기준선은 항상 보이고, accent 진행선은 모션 환경에서만 채워진다. */
+.connector-y {
+  position: relative;
+  /* 의사요소 선을 z-index -1로 목록 항목(단계 번호 배지) 아래에 깔기 위한 쌓임 맥락 */
+  isolation: isolate;
+}
+
+.connector-y::before,
+.connector-y::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  width: 1px;
+}
+
+.connector-y::before {
+  background: var(--color-border-dark);
+}
+
+.connector-y::after {
+  background: var(--color-accent);
+  opacity: 0;
+  transform-origin: top;
+}
+
+.count-up__visual {
+  display: none;
+}
+
+.scroll-progress {
+  display: none;
+}
+
+/* 카드 hover — 터치 기기에서 탭 후 들러붙지 않도록 (hover: hover)에서만. */
+.card-hover {
+  transition-property: border-color, box-shadow, transform;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--motion-ease-out);
+}
+
+@media (hover: hover) {
+  .card-hover:hover {
+    border-color: rgb(42 212 217 / 0.45);
+    box-shadow:
+      0 0 0 1px rgb(42 212 217 / 0.12),
+      0 18px 40px -24px rgb(42 212 217 / 0.35);
+    transform: translateY(-2px);
+  }
+
+  /* 클릭 대상이 아닌 카드 — 강조만 하고 들어 올리지 않는다. */
+  .card-hover.card-hover--static:hover {
+    transform: none;
+  }
+}
+
+/* ---------- 스크롤 구동 모션 ---------- */
+
+@supports (animation-timeline: view()) {
+  @media screen and (prefers-reduced-motion: no-preference) {
+    /* 섹션 헤더·카드 진입. stagger는 animation-delay가 아니라 진입 구간 오프셋으로 준다. */
+    .reveal {
+      animation-name: reveal-rise;
+      animation-duration: auto;
+      animation-timing-function: var(--motion-ease-out);
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 20%;
+    }
+
+    /* 같은 행의 카드는 동시에 들어오므로 데스크톱에서만 열 순서대로 살짝 어긋나게 한다. */
+    @media (min-width: 1024px) {
+      .reveal {
+        animation-range: entry calc(var(--i, 0) * 6%) cover calc(20% + var(--i, 0) * 4%);
+      }
+    }
+
+    /* 가로 연결선 — 요소의 ::before 선을 목록이 화면에 들어오는 동안 왼쪽부터 그린다. */
+    .connector-x {
+      view-timeline-name: --connector-x;
+    }
+
+    .connector-x::before {
+      transform-origin: left;
+      animation-name: draw-x;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --connector-x;
+      animation-range: entry 20% cover 45%;
+    }
+
+    /* 세로 연결선 — 목록을 읽어 내려가는 만큼 accent 진행선이 채워진다. */
+    .connector-y {
+      view-timeline-name: --connector-y;
+    }
+
+    .connector-y::after {
+      opacity: 1;
+      animation-name: draw-y;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --connector-y;
+      animation-range: cover 15% cover 75%;
+    }
+
+    /* 검증 지표 count-up — 시각 숫자는 aria-hidden, 실제 값은 스크린리더용으로만 남긴다. */
+    .count-up__visual {
+      display: inline;
+      font-variant-numeric: tabular-nums;
+      counter-reset: num var(--num);
+      animation-name: count;
+      animation-duration: auto;
+      animation-timing-function: var(--motion-ease-out);
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 25% cover 45%;
+    }
+
+    .count-up__visual::before {
+      content: counter(num);
+    }
+
+    .count-up__text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* 긴 문서형 페이지의 읽기 진행 바 */
+    .scroll-progress {
+      display: block;
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 60;
+      height: 2px;
+      background: var(--color-accent);
+      transform-origin: left;
+      pointer-events: none;
+      animation-name: progress-x;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}

@@ -65,7 +65,8 @@ export async function ArchitectureDiagram() {
                 viewBox="0 0 16 40"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M8 0v32" strokeDasharray="4 4" />
+                {/* 연결선 데이터 흐름(13.9 허용). −24는 8px 대시 주기의 배수라 끊김 없이 반복된다. */}
+                <path className="motion-safe:animate-flow-dash" d="M8 0v32" strokeDasharray="4 4" />
                 <path d="m3.5 27 4.5 5 4.5-5" />
               </svg>
             </div>

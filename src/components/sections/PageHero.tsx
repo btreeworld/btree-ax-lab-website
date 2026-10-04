@@ -3,19 +3,25 @@ import { getTranslations } from 'next-intl/server';
 import { Container, Eyebrow } from '@/components/ui/Section';
 import { Link } from '@/i18n/navigation';
 
-/** 하위 페이지 공통 Hero + Breadcrumb (마스터 문서 15.1 Breadcrumb / 18.4) */
+/**
+ * 하위 페이지 공통 Hero + Breadcrumb (마스터 문서 15.1 Breadcrumb / 18.4)
+ * 첫 화면이므로 진입 애니메이션을 걸지 않는다(LCP 보호). progress는 긴 문서형 페이지에
+ * 읽기 진행 바를 띄운다(motion.css `.scroll-progress`, 미지원·모션 감소 환경에서는 숨김).
+ */
 export async function PageHero({
   eyebrow,
   title,
   description,
   breadcrumb,
   children,
+  progress = false,
 }: {
   eyebrow?: string;
   title: readonly string[] | string;
   description?: readonly string[] | string;
   breadcrumb: ReadonlyArray<{ name: string; path: string }>;
   children?: React.ReactNode;
+  progress?: boolean;
 }) {
   const t = await getTranslations('Common');
   const titleLines = Array.isArray(title) ? title : [title];
@@ -24,6 +30,7 @@ export async function PageHero({
   return (
     <section className="hero-gradient relative overflow-hidden pb-16 pt-[112px] md:pb-20 md:pt-[152px]">
       <div aria-hidden="true" className="grid-overlay pointer-events-none absolute inset-0 opacity-50" />
+      {progress ? <div aria-hidden="true" className="scroll-progress" /> : null}
 
       <Container className="relative">
         <nav aria-label={t('breadcrumbLabel')}>

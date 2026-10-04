@@ -29,7 +29,8 @@ type RepresentativeContent = {
   academicStatusOptions: string[];
   detailIntro: string;
   sectionTitle: string[];
-  trustMetrics: Array<{ value: string; label: string }>;
+  /** countTo: 출처가 확인된 정수 지표에만 둔다 — 화면에서 0부터 세어 올라간다(마스터 문서 13.9). */
+  trustMetrics: Array<{ value: string; label: string; countTo?: number }>;
   trustMetricsNote: string;
   homeHighlights: string[];
   allHighlights: string[];
@@ -151,8 +152,8 @@ export const representative: Record<Locale, RepresentativeContent> = {
     sectionTitle: ['20년간 축적한 영상처리·AI 연구를', '산업 현장의 실행 가능한 시스템으로'],
     trustMetrics: [
       { value: '2005–', label: '영상처리·AI 연구개발' },
-      { value: '9건', label: 'NTIS 국가R&D 참여기록' },
-      { value: '2건', label: '국가R&D 연구책임자 기록' },
+      { value: '9건', label: 'NTIS 국가R&D 참여기록', countTo: 9 },
+      { value: '2건', label: '국가R&D 연구책임자 기록', countTo: 2 },
       { value: '2007–2026', label: '산업·공공 IT 프로젝트 이력' },
     ],
     trustMetricsNote: '국가R&D 참여기록은 2025년 7월 14일 발급 NTIS 자료 기준이며, 동일 과제의 연차별 기록을 포함합니다.',
@@ -234,8 +235,8 @@ export const representative: Record<Locale, RepresentativeContent> = {
     sectionTitle: ['Two decades of video processing and AI research,', 'turned into working systems for the industrial field'],
     trustMetrics: [
       { value: '2005–', label: 'Video processing & AI R&D' },
-      { value: '9', label: 'NTIS national R&D participation records' },
-      { value: '2', label: 'National R&D principal investigator records' },
+      { value: '9', label: 'NTIS national R&D participation records', countTo: 9 },
+      { value: '2', label: 'National R&D principal investigator records', countTo: 2 },
       { value: '2007–2026', label: 'Industrial & public IT project history' },
     ],
     trustMetricsNote:

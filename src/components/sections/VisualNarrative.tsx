@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { Section, SectionHeader } from '@/components/ui/Section';
+import { stagger } from '@/lib/motion';
 
 type VisualPoint = {
   title: string;
@@ -44,7 +45,7 @@ function VisualDiagram({ points, variant }: { points: readonly VisualPoint[]; va
       <ol className="flex flex-col gap-2">
         {points.map((point, index) => (
           <li
-            className="grid gap-3 rounded-button border border-line-dark bg-bg-elevated/70 p-4 sm:grid-cols-[44px_180px_1fr] sm:items-center sm:gap-4 md:px-5"
+            className="reveal grid gap-3 rounded-button border border-line-dark bg-bg-elevated/70 p-4 sm:grid-cols-[44px_180px_1fr] sm:items-center sm:gap-4 md:px-5"
             key={point.title}
           >
             <PointIcon index={index} point={point} />
@@ -65,10 +66,11 @@ function VisualDiagram({ points, variant }: { points: readonly VisualPoint[]; va
             <li
               className={
                 isCore
-                  ? 'rounded-button border border-accent/35 bg-accent-soft p-5 sm:col-span-3'
-                  : 'rounded-button border border-line-dark bg-bg-elevated/70 p-5'
+                  ? 'reveal rounded-button border border-accent/35 bg-accent-soft p-5 sm:col-span-3'
+                  : 'reveal rounded-button border border-line-dark bg-bg-elevated/70 p-5'
               }
               key={point.title}
+              style={stagger(index, 3)}
             >
               <div className={isCore ? 'flex flex-col gap-4 sm:flex-row sm:items-center' : ''}>
                 <div className="flex items-center gap-3">
@@ -90,7 +92,7 @@ function VisualDiagram({ points, variant }: { points: readonly VisualPoint[]; va
     return (
       <ol className="grid gap-3 sm:grid-cols-2">
         {points.map((point, index) => (
-          <li className="flex gap-4 rounded-button border border-line-dark bg-bg-elevated/70 p-5 md:p-6" key={point.title}>
+          <li className="reveal flex gap-4 rounded-button border border-line-dark bg-bg-elevated/70 p-5 md:p-6" key={point.title} style={stagger(index, 2)}>
             <PointIcon index={index} point={point} size="lg" />
             <div>
               <PointText index={index} point={point} />
@@ -104,9 +106,9 @@ function VisualDiagram({ points, variant }: { points: readonly VisualPoint[]; va
 
   if (variant === 'timeline') {
     return (
-      <ol className="relative grid gap-4 lg:grid-cols-4 lg:before:absolute lg:before:left-[12.5%] lg:before:right-[12.5%] lg:before:top-[22px] lg:before:h-px lg:before:bg-accent/35">
+      <ol className="connector-x relative grid gap-4 lg:grid-cols-4 lg:before:absolute lg:before:left-[12.5%] lg:before:right-[12.5%] lg:before:top-[22px] lg:before:h-px lg:before:bg-accent/35">
         {points.map((point, index) => (
-          <li className="relative pt-1 text-center" key={point.title}>
+          <li className="reveal relative pt-1 text-center" key={point.title} style={stagger(index, 4)}>
             <div className="relative z-10 mx-auto w-fit bg-bg-secondary px-2">
               <PointIcon index={index} point={point} />
             </div>
@@ -124,10 +126,11 @@ function VisualDiagram({ points, variant }: { points: readonly VisualPoint[]; va
     <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {points.map((point, index) => (
         <li
-          className={`relative rounded-button bg-bg-elevated/70 p-5 ${
+          className={`reveal relative rounded-button bg-bg-elevated/70 p-5 ${
             variant === 'gates' ? 'border border-line-dark border-t-2 border-t-accent/55' : 'border border-line-dark'
           } lg:after:absolute lg:after:-right-[13px] lg:after:top-9 lg:after:h-px lg:after:w-3 lg:after:bg-accent/50 lg:last:after:hidden`}
           key={point.title}
+          style={stagger(index, 4)}
         >
           <div className="flex items-center gap-3">
             <PointIcon index={index} point={point} />
@@ -167,10 +170,11 @@ export function VisualNarrative({
         description={description}
         eyebrow={eyebrow}
         id={`${eyebrow.toLowerCase().replaceAll(' ', '-')}-visual-title`}
+        reveal={false}
         title={title}
       />
 
-      <figure className="overflow-hidden rounded-card border border-line-dark bg-bg-elevated shadow-[0_24px_80px_rgba(0,0,0,0.28)]">
+      <figure className="overflow-clip rounded-card border border-line-dark bg-bg-elevated shadow-[0_24px_80px_rgba(0,0,0,0.28)]">
         <div className="relative aspect-[16/9] overflow-hidden md:aspect-[2.15/1]">
           <Image
             alt={imageAlt}

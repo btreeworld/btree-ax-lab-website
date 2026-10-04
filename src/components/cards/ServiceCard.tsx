@@ -23,8 +23,8 @@ export async function ServiceCard({ service, tone = 'dark' }: { service: Service
     <article
       className={
         dark
-          ? 'flex h-full flex-col rounded-card border border-line-dark bg-bg-elevated/60 p-6 transition-colors hover:border-accent/40 md:p-7'
-          : 'flex h-full flex-col rounded-card border border-line-light bg-surface-white p-6 transition-colors hover:border-accent-deep/40 md:p-7'
+          ? 'card-hover flex h-full flex-col rounded-card border border-line-dark bg-bg-elevated/60 p-6 md:p-7'
+          : 'card-hover flex h-full flex-col rounded-card border border-line-light bg-surface-white p-6 md:p-7'
       }
       id={service.slug}
     >

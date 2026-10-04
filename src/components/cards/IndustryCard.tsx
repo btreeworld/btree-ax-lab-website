@@ -15,7 +15,7 @@ const industryIcons: Record<string, IconName> = {
 export function IndustryCard({ industry }: { industry: Industry }) {
   return (
     <article
-      className="flex h-full flex-col rounded-card border border-line-dark bg-bg-elevated/50 p-6 transition-colors hover:border-accent/40 md:p-7"
+      className="card-hover flex h-full flex-col rounded-card border border-line-dark bg-bg-elevated/50 p-6 md:p-7"
       id={industry.slug}
     >
       <span className="text-accent">
