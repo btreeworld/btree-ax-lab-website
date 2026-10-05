@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { defaultLocale, isLocale, type Locale } from '@/i18n/locales';
 import { sendAdminNotification, sendCustomerAcknowledgement } from '@/lib/email';
+import { turnstileSiteKey } from '@/lib/turnstile';
 import { buildContactSchema } from '@/lib/validation';
 
 /**
@@ -41,12 +42,17 @@ const routeMessages: Record<
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 /**
- * TURNSTILE_SECRET_KEY가 없으면(위젯 미도입) 항상 통과시킨다 — 클라이언트도 같은 조건으로
- * 위젯 렌더링 여부를 결정하므로, 키 발급 전에는 이 함수가 사실상 no-op이다.
+ * 사이트키(빌드 시 인라인)와 시크릿(런타임)이 둘 다 있을 때만 토큰을 요구한다. 사이트키가 빌드에
+ * 없으면 클라이언트가 위젯을 렌더링하지 못해 토큰을 보낼 수 없으므로, 그 상태에서 검증을 강제하면
+ * 모든 문의가 거부된다. 그 경우는 설정 누락으로 로그만 남기고 honeypot·rate limit에 맡긴다.
  */
 async function verifyTurnstile(token: unknown, remoteIp: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret) return true;
+  if (!turnstileSiteKey) {
+    console.warn('[contact] TURNSTILE_SECRET_KEY is set but NEXT_PUBLIC_TURNSTILE_SITE_KEY was not available at build time — skipping verification');
+    return true;
+  }
   if (typeof token !== 'string' || !token) return false;
 
   try {

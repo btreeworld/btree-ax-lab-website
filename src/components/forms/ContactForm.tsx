@@ -23,6 +23,7 @@ import {
 import type { Locale } from '@/i18n/locales';
 import { Link } from '@/i18n/navigation';
 import { trackEvent } from '@/lib/analytics';
+import { turnstileSiteKey } from '@/lib/turnstile';
 import { buildContactSchema, contactDefaultValues, type ContactInput } from '@/lib/validation';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
@@ -35,7 +36,7 @@ type Status = 'idle' | 'submitting' | 'success' | 'error';
 const CONTACT_FORM_ENDPOINT = '/api/contact';
 
 /** 미설정 시(키 미발급) 위젯을 렌더링하지 않고 기존 동작(honeypot만)을 유지한다. */
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+const TURNSTILE_SITE_KEY = turnstileSiteKey;
 
 export function ContactForm({
   defaultService = '',
