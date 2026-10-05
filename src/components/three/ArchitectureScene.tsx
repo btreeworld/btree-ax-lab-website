@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
 import { DoubleSide } from 'three';
 import type * as THREE from 'three';
 
+import { SceneLabel } from '@/components/three/SceneLabel';
 import type { ArchitectureLayer } from '@/content/home';
 import { threeColors } from '@/lib/three-tokens';
 
@@ -40,12 +40,12 @@ export function ArchitectureScene({
       ))}
 
       {activeLayer >= 0 && layers[activeLayer] ? (
-        <Html center position={[0, 1.25, LAYER_Z[activeLayer]]} style={{ pointerEvents: 'none' }}>
+        <SceneLabel center position={[0, 1.25, LAYER_Z[activeLayer]]} style={{ pointerEvents: 'none' }}>
           <div className="w-[240px] rounded-card border border-accent/30 bg-bg-primary/95 px-4 py-3 text-center shadow-xl">
             <p className="font-display text-[11px] font-bold uppercase tracking-[0.16em] text-accent">{layers[activeLayer].label}</p>
             <p className="mt-1 text-[13px] leading-snug text-ink-secondary-dark">{layers[activeLayer].description}</p>
           </div>
-        </Html>
+        </SceneLabel>
       ) : null}
     </Canvas>
   );
@@ -168,11 +168,11 @@ function LayerPlane({ layer, z }: { layer: ArchitectureLayer; z: number }) {
               <meshBasicMaterial color={threeColors.accentHover} />
             </mesh>
             {isHovered ? (
-              <Html center style={{ pointerEvents: 'none' }}>
+              <SceneLabel center style={{ pointerEvents: 'none' }}>
                 <span className="whitespace-nowrap rounded-badge border border-accent/40 bg-bg-primary/95 px-2.5 py-1 text-[11px] font-medium text-accent shadow-lg">
                   {node}
                 </span>
-              </Html>
+              </SceneLabel>
             ) : null}
           </group>
         );

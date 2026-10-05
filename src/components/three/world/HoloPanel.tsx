@@ -2,9 +2,9 @@
 
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 
+import { SceneLabel } from '@/components/three/SceneLabel';
 import { useDutyCyclePulse } from '@/components/three/primitives';
 import { threeColors } from '@/lib/three-tokens';
 
@@ -64,11 +64,11 @@ export function HoloPanel({
         // distanceFactor: drei Html은 기본적으로 항상 같은 화면 크기로 그려져(원근 없음) 멀리 있는
         // 패널 라벨도 가까운 것처럼 또렷하게 보이는 문제가 있었다 — 카메라 거리에 비례해 실제로
         // 작아지게 해서 다른 스테이션의 3D 지오메트리와 같은 원근 규칙을 따르게 한다.
-        <Html center distanceFactor={8} position={[0, height / 2 + 0.16, 0]} style={{ pointerEvents: 'none' }}>
+        <SceneLabel center distanceFactor={8} position={[0, height / 2 + 0.16, 0]} style={{ pointerEvents: 'none' }}>
           <span className="whitespace-nowrap rounded-badge border border-accent/40 bg-bg-primary/90 px-2 py-0.5 text-[10px] font-medium text-accent">
             {label}
           </span>
-        </Html>
+        </SceneLabel>
       ) : null}
     </group>
   );

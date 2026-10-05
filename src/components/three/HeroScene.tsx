@@ -2,9 +2,10 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Html, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
+import { SceneLabel } from '@/components/three/SceneLabel';
 import { Beam, EdgedMesh, PulsingNode, TravelingPacket, useDutyCyclePulse } from '@/components/three/primitives';
 import { threeColors } from '@/lib/three-tokens';
 
@@ -100,11 +101,11 @@ export function HeroScene({ labels }: { labels: Record<NodeId, string> }) {
       <TravelingPacket waypoints={[NODE_POSITIONS.camera, NODE_POSITIONS.edge, NODE_POSITIONS.twin]} />
 
       {activeNode ? (
-        <Html position={NODE_POSITIONS[activeNode]} style={{ pointerEvents: 'none' }} zIndexRange={[10, 0]}>
+        <SceneLabel position={NODE_POSITIONS[activeNode]} style={{ pointerEvents: 'none' }} zIndexRange={[10, 0]}>
           <span className="-translate-x-1/2 -translate-y-[140%] whitespace-nowrap rounded-badge border border-accent/40 bg-bg-primary/95 px-3 py-1.5 text-[12px] font-semibold text-accent shadow-lg">
             {labels[activeNode]}
           </span>
-        </Html>
+        </SceneLabel>
       ) : null}
 
       <OrbitControls
