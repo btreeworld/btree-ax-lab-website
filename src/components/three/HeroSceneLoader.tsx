@@ -26,10 +26,7 @@ export function HeroSceneLoader() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (!canMount) {
-      setReady(false);
-      return;
-    }
+    if (!canMount) return;
 
     const win = window as Window & { requestIdleCallback?: (cb: () => void) => number; cancelIdleCallback?: (id: number) => void };
     if (typeof win.requestIdleCallback === 'function') {
@@ -41,7 +38,7 @@ export function HeroSceneLoader() {
     return () => window.clearTimeout(timeout);
   }, [canMount]);
 
-  if (!ready) return null;
+  if (!canMount || !ready) return null;
 
   const layers = architectureLayers[locale];
   const labels = {

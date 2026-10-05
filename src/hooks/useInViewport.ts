@@ -42,7 +42,6 @@ export function useInViewport<T extends Element>(
 
     observer.observe(node);
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rootMargin, nodeVersion]);
 
   return [setRef, inViewport, ref];

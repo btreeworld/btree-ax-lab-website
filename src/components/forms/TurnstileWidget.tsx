@@ -1,7 +1,7 @@
 'use client';
 
 import Script from 'next/script';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 
 declare global {
   interface Window {
@@ -28,23 +28,21 @@ export function TurnstileWidget({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-  const onVerifyRef = useRef(onVerify);
-  const onExpireRef = useRef(onExpire);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
-  // 매 렌더의 최신 콜백을 ref에만 반영한다 — effect 의존성에 넣으면 부모가 인라인 함수를
-  // 넘길 때마다 위젯이 제거·재생성되는 루프가 생긴다.
-  onVerifyRef.current = onVerify;
-  onExpireRef.current = onExpire;
+  // Effect Event로 항상 최신 콜백을 호출한다 — 콜백을 effect 의존성에 넣으면 부모가 인라인
+  // 함수를 넘길 때마다 위젯이 제거·재생성되는 루프가 생긴다.
+  const handleVerify = useEffectEvent((token: string) => onVerify(token));
+  const handleExpire = useEffectEvent(() => onExpire());
 
   useEffect(() => {
     if (!scriptLoaded || !containerRef.current || !window.turnstile || widgetIdRef.current) return;
 
     widgetIdRef.current = window.turnstile.render(containerRef.current, {
       sitekey: siteKey,
-      callback: (token: string) => onVerifyRef.current(token),
-      'expired-callback': () => onExpireRef.current(),
-      'error-callback': () => onExpireRef.current(),
+      callback: (token: string) => handleVerify(token),
+      'expired-callback': () => handleExpire(),
+      'error-callback': () => handleExpire(),
     });
 
     return () => {

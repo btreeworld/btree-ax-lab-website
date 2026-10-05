@@ -36,10 +36,13 @@ export function SiteHeader() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // 라우트가 바뀌면 모바일 메뉴를 닫는다.
-  useEffect(() => {
+  // 라우트가 바뀌면 모바일 메뉴를 닫는다. effect 대신 렌더 중에 이전 경로와 비교해 상태를
+  // 조정한다(effect에서 동기 setState를 하면 렌더가 한 번 더 연쇄된다).
+  const [menuPathname, setMenuPathname] = useState(pathname);
+  if (pathname !== menuPathname) {
+    setMenuPathname(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   // 메뉴가 열려 있는 동안 배경 스크롤을 막고 Esc 로 닫는다.
   useEffect(() => {

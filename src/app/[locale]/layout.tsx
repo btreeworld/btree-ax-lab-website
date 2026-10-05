@@ -114,7 +114,9 @@ export default async function LocaleLayout({
   const t = await getTranslations({ locale, namespace: 'Header' });
 
   return (
-    <html className={manrope.variable} lang={locale}>
+    // data-scroll-behavior: globals.css가 html에 scroll-behavior: smooth를 주므로, Next 16에서도
+    // 라우트 이동 시엔 맨 위로 즉시 이동하도록 Next가 잠시 smooth를 끄게 한다.
+    <html className={manrope.variable} data-scroll-behavior="smooth" lang={locale}>
       <head>
         <link crossOrigin="anonymous" href="https://cdn.jsdelivr.net" rel="preconnect" />
         <link

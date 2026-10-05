@@ -153,10 +153,12 @@ export function ContactForm({
       className="rounded-card border border-line-light bg-surface-white p-6 md:p-8"
       noValidate
       onChange={onFirstInteraction}
-      onSubmit={handleSubmit(onSubmit, () => {
-        trackEvent('contact_form_error', { section: 'contact-form' });
-        errorSummaryRef.current?.focus();
-      })}
+      onSubmit={(event) =>
+        handleSubmit(onSubmit, () => {
+          trackEvent('contact_form_error', { section: 'contact-form' });
+          errorSummaryRef.current?.focus();
+        })(event)
+      }
     >
       <input type="hidden" value={locale} {...register('locale')} />
 
