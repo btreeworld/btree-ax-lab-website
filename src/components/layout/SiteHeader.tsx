@@ -63,6 +63,8 @@ export function SiteHeader() {
 
   return (
     <header
+      // 페이지 전환 중에도 헤더는 그 자리에 고정된 채 남는다(motion.css의 site-header 규칙).
+      style={{ viewTransitionName: 'site-header' }}
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-colors duration-300',
         scrolled || open
